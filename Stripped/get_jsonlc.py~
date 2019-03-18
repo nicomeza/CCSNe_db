@@ -1,0 +1,35 @@
+import json as js
+import numpy as np
+import matplotlib.pyplot as pl
+
+
+snlist = [f.split()[0][:-1] for f in open('sndirs.dat','r').readlines()]
+
+
+for sn in snlist:
+
+    phot_list = json_sn['%s'%sn]['photometry']
+    bands = {}
+
+    for phot in phot_list:
+        
+        band = phot['band']
+
+        if band in bands:
+            bands[band].append((phot['time'],phot['magnitude'],phot['e_magnitude']))
+        else:
+            bands[band] = []
+
+
+    for key in iter(bands):
+    
+        print key
+        t,mag,magerr = np.asfarray(bands.get(key))[:,0],np.asfarray(bands.get(key))[:,1],np.asfarray(bands.get(key))[:,2]    
+        pl.errorbar(t,mag,yerr=magerr,marker='o',label=key)
+
+    pl.ylabel('mag')
+    pl.xlabel('MJD')
+    pl.title("%s"%sn)
+    pl.gca().invert_yaxis()
+    pl.legend()
+    pl.show()
