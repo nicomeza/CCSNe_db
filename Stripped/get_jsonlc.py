@@ -12,15 +12,21 @@ try :
         print sn
         os.chdir("%s/"%sn)
         json_sn = js.loads(open('%s.json'%sn).read())
+        
+        try:
 
-        phot_list = json_sn['%s'%sn]['photometry']
+            phot_list = json_sn['%s'%sn]['photometry']
+        except:
+            print "Wrong SN name or no photometry ?"
+            phot_list = json_sn['%s'%sn[2:]]['photometry']
         bands = {}
 
         for phot in phot_list:
         
         
             band = phot.get('band')
-            if band != None:
+            time = phot.get('time')
+            if band != None and time!= None:
             
                 if band in bands:
                     try:
