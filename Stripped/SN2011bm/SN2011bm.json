@@ -177,6 +177,15 @@
 				"source":"9"
 			}
 		],
+	        "hostredshift":[
+                        {
+                                "value":"0.021778",
+                                "e_value":"0.0002",
+                                "kind":"host",
+                                "source":""
+                        }
+                ],
+
 		"hostdec":[
 			{
 				"value":"+22:22:26",

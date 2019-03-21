@@ -206,6 +206,13 @@
 				"source":"13"
 			}
 		],
+		"hostredshift":[
+			{
+				"value":"0.009313",
+				"e_value":"0.000013",
+				"source":"NED"
+			}
+		],
 		"lumdist":[
 			{
 				"value":"41.51",
