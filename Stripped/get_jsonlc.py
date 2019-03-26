@@ -8,7 +8,7 @@ homedir = "/home/dustspeck/SN/CCSNe_db/Stripped/"
 sn_data = open('sn_data.dat','w')
 params = ['sn','host','hostredshift','hostlumdist','host_ebv']
 sn_data.write("%s \n"%"\t".join(params))
-uvot_bands=["U",'B','V']
+uvot_bands=['U','B','V','M2','W1','W2','UVW1','UVW2','UVM2']
 
 try :
     for sn in snlist:
@@ -53,16 +53,25 @@ try :
             
             if band in uvot_bands:
                 if teles == "Swift":
+                    
+                    if band == "UVW1":
+                        band = "W1"
+                    elif band == "UVW2":
+                        band = "W2"
+                    elif band == "UVM2":
+                        band = "M2"
+                    
                     band = "%s_uvot"%band
                     
             if band != None and time!= None:
             
                 if band in bands:
                     if phot['u_time'] != "MJD":
-                        print "NO MJD Here"
+                        print ("NO MJD Here")
                     try:
                         bands[band].append((phot['time'],phot['magnitude'],phot['e_magnitude']))
                     except:
+                        print "No error!"
                         bands[band].append((phot['time'],phot['magnitude'],"999"))
                 else:
                     
@@ -72,6 +81,7 @@ try :
                     try:
                         bands[band].append((phot['time'],phot['magnitude'],phot['e_magnitude']))
                     except:
+                        print ("No error!")
                         bands[band].append((phot['time'],phot['magnitude'],"999"))
             else:
             
@@ -79,19 +89,27 @@ try :
                 print phot
                 
         
+        os.system("rm mags_*.out")
         for key in iter(bands):
-    
+        
             print key
             try:
                 t,mag,magerr = np.asfarray(bands.get(key))[:,0],np.asfarray(bands.get(key))[:,1],np.asfarray(bands.get(key))[:,2]
-                with_err = np.where[magerr!=999][0]
-                pl.errorbar(t[with_err],mag[with_err],yerr=magerr[with_err],marker='o',label=key)
-                np.savetxt('mags_%s.out'%key, zip(t,mag,magererr),fmt="%5.3f") 
+                with_err = np.where(magerr!=999)[0]
+                no_err = np.where(magerr==999)[0]
+                if len(with_err)>0:
+                    pl.errorbar(t[with_err],mag[with_err],yerr=magerr[with_err],marker='o',label=key)
+                if len(no_err)>0:
+                    pl.errorbar(t[no_err],mag[no_err],marker='o',label="no err %s"%key,alpha=0.3)
+                np.savetxt('mags_%s.out'%key, zip(t,mag,magerr),fmt="%5.3f")
+                print 'Saved mags_%s.out'%key
+                #print mag
             except:
+                print "key : %s"%key
                 t,mag = np.asfarray(bands.get(key))[:,0],np.asfarray(bands.get(key))[:,1]    
                 pl.errorbar(t,mag,marker='o',label=key)
                 np.savetxt('mags_%s.out'%key, zip(t,mag),fmt='%5.3f')
-                
+                print 'Saved mags_%s.out'%key
         
         pl.ylabel('mag')
         pl.xlabel('MJD')
@@ -100,7 +118,7 @@ try :
         pl.legend()
         os.system("rm %s_phot.png"%sn)
         pl.savefig("%s_phot.png"%sn)
-        #pl.show()
+        pl.close()
         os.chdir(homedir)
 
 except:

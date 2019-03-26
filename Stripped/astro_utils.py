@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as pl
 import matplotlib.ticker as ticker
@@ -15,7 +16,7 @@ def linear_model(x,a,b):
 
 def bol_correction(color,color_mag): # From Pejcha-Prieto 2015
     
-    if color == "B-V":  # valid range:(−0.26, 1.27). rms = 0.023 Valid in all epochs ? 
+    if color == "B-V":  # valid range:(−0.26, 1.27). rms = 0.023 
         
         c_0 = -0.3716
         c_1 = 2.9669
