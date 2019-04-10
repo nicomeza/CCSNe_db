@@ -1,1 +1,3 @@
-sn	host	hostredshift	hostlumdist	host_ebv 
+#sn	host	hostredshift	hostlumdist[Mpc]	host_ebv[mag]	sn_z	t_0[MJD]
+SN2013df	"NGC4414"	0.002388	0.0	0.09	0.002388 	56447.299
+SN2005bf	"MCG+00-27-05"	0.018913 83.9 0.0384	0.018913	53457

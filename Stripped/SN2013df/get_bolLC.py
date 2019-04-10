@@ -85,7 +85,7 @@ for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
 # ---------------------LOAD PHOTOMETRY ---------------------------------------------------
 
 
-filters = {'W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','B','V','g','r','i'}
+filters = {'W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','B','V','g','r','i','J','H','K'}
 lcogt_filters = ['B','V','gp','rp','ip'][2:]
 lcogt_names = ('B','V','g','r','i')[2:]
 
