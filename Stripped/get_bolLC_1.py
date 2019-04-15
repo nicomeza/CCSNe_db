@@ -76,7 +76,7 @@ for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
 
 #------------------ UVOT ZERO POINT -------------------------------------
 
-AB_ZPs = np.genfromtxt('/home/dustspeck/SN/AB_zeropoints.dat',usecols=[0,1,2,3],dtype={'names':('filter','lambda','flux','ZP'),'formats':('S10','f8','f8','f8')})
+AB_ZPs = np.genfromtxt('/home/dustspeck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
 
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
@@ -92,35 +92,34 @@ SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_form
 
 current_dir = os.getcwd()
 print "Current directory : %s"%current_dir
+colormap = pl.cm.spectral
 
 
 
 filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K']
+filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
+        
+use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I']
 
-use_filters = ['M2_uvot','B_uvot','B','g','r']
-use_filters = filters[0:-4]
-
-for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
+for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print SN
     try: 
     
         os.chdir("%s/"%SN)
 
-        # ---------------------LOAD PHOTOMETRY ---------------------------------------------------
-
+        # ---------------------LOAD PHOTOMETRY ----------------------------------------------------
 
         for filter in zip(use_filters):
 
             filter_file = "mags_%s.out"%filter
             
-            
             if os.path.isfile(filter_file):
                 print filter_file,filter
                 try:
                     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file).T
-                    no_nebular = np.where(scope['jd_%s'%filter]<(t_0+80.))[0]
+                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+80.),scope['err_%s'%filter]<0.5))[0]
                     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
-                                        scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
+                                                                                          scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
                                                 
                 except:
                     
@@ -135,15 +134,17 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
         FILTER_ZPS = AB_ZPs[np.in1d(AB_ZPs['filter'],use_filters)]  
         print FILTER_ZPS['filter']
         
-        
-
         print "# ---------- FILTER_ZPS filters ----------------------------"
 
         tmin_max,tmax_min = 10000. , -1.0
         max_cadence,min_cadence = 0.,100.0
         min_cadence_filt,max_cadence_filt = None,None
         
+        pl.gca().set_color_cycle(filters_colors)
+        filters_cadence = []
+
         for filter in FILTER_ZPS:
+            
             
             lco_filter = filter['filter']
             lco_name = lco_filter#lcogt_names[lcogt_filters.index(lco_filter)]
@@ -154,13 +155,15 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
             R_x = (R_V*a_x(x0)+b_x(x0))
             try:
                 scope['mag_%s'%lco_name]
+                if len(scope['mag_%s'%lco_name])<=1:
+                    continue
             except:
                 continue
         
             mag = scope['mag_%s'%lco_name] - R_x*E_B_V   # Deredenned magnitudes 
             err = scope['err_%s'%lco_name]
-            t = scope['jd_%s'%lco_name] 
-    
+            t = scope['jd_%s'%lco_name]
+            
             pl.errorbar(t,mag,yerr=err,fmt='o',label=lco_filter)
 
             tmax,tmin = np.max(t),np.min(t)
@@ -173,8 +176,10 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
             scope['min_%s'%lco_filter] ,scope['max_%s'%lco_filter]  = tmin,tmax
             scope['cadence_%s'%lco_filter] = len(t)/dtmax
             scope['inter_%s'%lco_filter] = interp1d(t,mag,kind='linear')
-            pl.plot(t,scope['inter_%s'%lco_filter](t),label='%s inter'%lco_filter)
-    
+            pl.plot(t,scope['inter_%s'%lco_filter](t),color='k',linestyle='--')
+            
+            filters_cadence.append(len(t)/dtmax)
+            print len(t)/dtmax
             if max_cadence < len(t)/dtmax:
                 max_cadence_filt = lco_name
                 max_cadence = len(t)/dtmax
@@ -183,11 +188,10 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
                 min_cadence_filt = lco_name
                 min_cadence = len(t)/dtmax
         
-        pl.legend()
+        pl.legend(loc='best',ncol=2,prop={'size':9})
         pl.gca().invert_yaxis()
         pl.show()
     
-
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         inter_t = scope['jd_%s'%min_cadence_filt]
         where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.1 ,inter_t >= tmax_min - 0.1))[0]
@@ -206,9 +210,10 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
             except:
                 continue
                 print "Fail"
-
+                
+                
             err = scope['err_%s'%lco_name]
-            t = scope['jd_%s'%lco_name] 
+            t = scope['jd_%s'%lco_name]
             scope['inter_t_%s'%lco_name] = []
             scope['inter_mags_%s'%lco_name] = []
             scope['inter_err_%s'%lco_name] = []
@@ -233,18 +238,16 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
                     
                     # interpolar el resto de los filtros en la misma epoca    
 
-            #inter_mags = [ (filter,np.array(scope['inter_mags_%s'%filter]),np.array(scope['inter_err_%s'%filter])) \
-            #                  for filter in  FILTER_ZPS['filter'] if filter != min_cadence_filt]
-
+            
         inter_mags = [ (filter,np.array(scope['inter_mags_%s'%filter]),np.array(scope['inter_err_%s'%filter])) \
                    for filter in filters_used]
-
-        #inter_mags.append((min_cadence_filt,scope['mag_%s'%min_cadence_filt][where_inter],2.*scope['err_%s'%min_cadence_filt][where_inter]))
 
         sorted_mags = sorted(inter_mags,\
                                 key = lambda x : FILTER_ZPS['lambda'][np.where(FILTER_ZPS['filter']==x[0])[0]])
 
-        sorted_lambdas = np.sort(FILTER_ZPS['lambda'][np.in1d(FILTER_ZPS['filter'],filters_used)])
+        sorted_lambdas = np.sort(FILTER_ZPS['lambda_p'][np.in1d(FILTER_ZPS['filter'],filters_used)])
+        sorted_bands = [FILTER_ZPS['filter'][np.where(FILTER_ZPS['lambda_p']==lam)[0]][0] for lam in sorted_lambdas]
+
         fluxes = [[] for i in range(len(where_inter))]
         fluxes_err = [[] for i in range(len(where_inter))]
         
@@ -252,13 +255,14 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
             
             print filter
             index = filters_used.index(filter)
-            lambda_f = FILTER_ZPS['lambda'][index]
+            lambda_f = FILTER_ZPS['lambda_p'][index]
             ZP = FILTER_ZPS['ZP'][index]
             print lambda_f,ZP
-                
+            
+            # m_AB = -2.5log(f_AB) - 48.6 - ZP
             F_AB = 10**(-0.4*(48.6+mags+ZP)) # Jansky 
             F_err =  F_AB*0.4*errs*np.log(10)
-                
+            
             pl.errorbar(inter_t[where_inter],mags,yerr = errs,label=filter)
     
             for i,f in enumerate(zip(F_AB,F_err)):
@@ -267,11 +271,23 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
                 ferr = f[1]
                 fluxes[i].append(fab)
                 fluxes_err[i].append(np.asarray(ferr))
-
-
+                
+        
         pl.legend()
         pl.gca().invert_yaxis()
         pl.show()
+        
+        
+        print "# --------- Saving SEDs -------------------------------------"
+
+        d_SED = {}
+        d_SED['t'] = inter_t[where_inter]
+        d_SED['data'] = fluxes
+        d_SED['daterr'] = fluxes_err
+        d_SED['lambda'] = sorted_lambdas
+        d_SED['bands'] = sorted_bands 
+        np.savez( 'SED_%s.npz'%SN, **d_SED )
+        
         
         print "# --------- Plot SED's --------------------------------------"
     
@@ -283,15 +299,8 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
         fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9,len(where_inter))])
         
         filter_names = AB_ZPs['filter'][np.in1d(sorted_lambdas,AB_ZPs['lambda'])]
-        
-        #sorted_index = np.argsort(sorted_lambdas)
-        #fluxes,sorted_lambdas,sorted_names = fluxes[sorted_index],sorted_lambdas[sorted_index],filter_names[sorted_index]
-        
-        
         responses =  lcogt_responses
-        #print all_fluxes,all_lambdas
-
-
+        
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
             
             flux = np.asarray(flux)
@@ -301,7 +310,6 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
         ax.set_title(SN)
         ax.set_xlabel('Frequency [Hz]')
         ax.set_ylabel('Flux in ergs/s/cm2/Hz')
-        #ax.set_xlim(0.2,1.9)
         ax.legend(loc='best',ncol=2,prop={'size':9})
         fig.savefig('./SED_nu_%s.png'%R_V)
         pl.show()
@@ -312,23 +320,20 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
         colormap = pl.cm.spectral
         fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9, len(where_inter))])
 
-        
-
-        for epoch,flux,flux_err,band in zip(inter_t[where_inter],fluxes,fluxes_err,filter_names):
+        for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
+            
             flux = np.asarray(flux)
             ax.errorbar(sorted_lambdas,flux*c_cms/((sorted_lambdas*1e-4)**2.),\
                         yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.2f'%epoch)
             
-        
-        
         trans = ax.get_xaxis_transform()
         for lam,flux in zip(sorted_lambdas,fluxes[0]):
             flux = np.asarray(flux)
             max_flux = np.max(flux)*c_cms/((lam*1e-4)**2.)
-            band = FILTER_ZPS['filter'][np.where(FILTER_ZPS['lambda']==lam)[0]]
+            band = FILTER_ZPS['filter'][np.where(FILTER_ZPS['lambda_p']==lam)[0]]
             print band,lam,max_flux
             ax.axvline(lam,linestyle='--',color='k',alpha=0.4)
-            ax.annotate(str(band[0][0:2]),(lam+10,1.05),xycoords=trans,size=8,rotation=90)
+            ax.annotate(str(band[0][0:2]),(lam+5,1.05),xycoords=trans,size=8,rotation=90)
                 
         ax.set_title(SN)
         ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$')
@@ -337,7 +342,35 @@ for SN,z_SN,E_B_V,t_0 in SN_DATA[['sn','sn_z','sn_ebv','t_0']]:
         fig.savefig('./SED_lam_%s.png'%(str(R_V)))
         pl.show()
         pl.close()
+        
+        print "------------ Integrating SED -------------------------"
+        
+        fig = pl.figure(figsize=(10,6))
+        ax = fig.add_subplot(111)
 
+        from scipy.integrate import simps
+        L_bol = []
+        M_bol = []
+        Lfile = open('%s_Lbol.dat'%SN,'w')
+        
+        for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
+            
+            y,x = flux,c_cms/(sorted_lambdas*1e-8) 
+            I = -simps(y,x)
+            L = 4*pi * I * (d_L*1e6*pc_to_cm)**2.
+            print epoch,I,4*pi*I*(d_L*1e6*pc_to_cm)**2. 
+            L_bol.append(L)
+            ax.plot(epoch,L,marker='o',color='k')
+            Lfile.write("%s \t %s \n"%(epoch,L))
+            
+        Lfile.close()
+        ax.set_xlabel('t')
+        ax.set_ylabel('L  [erg/s]')
+        fig.savefig('./Lbol_%s.png'%(SN))
+        pl.show()
+        pl.close()
+        
+        
         try:
             os.chdir(current_dir)
             

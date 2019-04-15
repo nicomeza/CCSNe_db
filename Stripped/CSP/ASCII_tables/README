@@ -1,0 +1,17 @@
+These files correspond to tables published by the Carnegie Supernova Project. 
+Paper reference number: AA/2017/30842
+Title of the paper: The Carnegie Supernova Project~I: photometry data release of low-redshift stripped-envelope supernovae
+Author: M. D. Stritzinger et al. 
+Journal: A&A
+Keywords: supernovae: general, individual: SN~2004ew, SN~2004ex, SN~2004fe, SN~2004ff, SN~2004gq, SN~2004gt, SN~2004gv, SN~2005Q, SN~2005aw, SN~2005bf, SN~2005bj, SN~2005em, SN~2006T, SN~2006ba, SN~2006bf, SN~2006ep, SN~2006fo, SN~2006ir, SN~2006lc, SN~2007C, SN~2007Y, SN~2007ag, SN~2007hn, SN~2007kj, SN~2007rz, SN~2008aq, SN~2008gc, SN~2008hh, SN~2009K, SN~2009Z, SN~2009bb, SN~2009ca, SN~2009dp, SN~2009dt
+
+Tables are included are:
+Tab2.ascii.dat
+Tab3.ascii.dat
+Tab4.ascii.dat
+Tab5.ascii.dat
+Tab6.ascii.dat
+Tab7.ascii.dat
+Tab8.ascii.dat
+
+Each table has a header providing information of the contents and an identification of each column. 

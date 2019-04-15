@@ -1,0 +1,1122 @@
+\documentclass[12pt,preprint]{aastex}
+%\documentclass[11pt,preprint]{aastex}
+%\documentclass{aastex}
+%\usepackage{emulateapj5}
+
+%\documentclass{emulateapj}
+%\documentclass[onecolumn]{emulateapj}
+%\documentclass[apjl]{emulateapj}
+%\usepackage{apjfonts}
+%(see header for other options)
+
+% manuscript produces a one-column, double-spaced document:
+% \documentclass[manuscript]{aastex}
+
+\shorttitle{SN 1998bw}
+\shortauthors{Clocchiatti et al.}
+
+\slugcomment{Submitted to, and accepted by, Astronomical Journal}
+
+\begin{document}
+
+\title{The Ultimate Light Curve of SN 1998bw/GRB~980425}
+
+\author{
+Alejandro Clocchiatti,\altaffilmark{1}
+Nicholas B. Suntzeff,\altaffilmark{2,5}
+Ricardo Covarrubias,\altaffilmark{3,5}
+and
+Pablo Candia,\altaffilmark{4,5}
+}
+
+\altaffiltext{1}{Pontificia Universidad Cat\'{o}lica de Chile,
+Departamento de Astronom\'{\i}a y Astrof\'{\i}sica,
+Casilla 306, Santiago 22, Chile; {aclocchi@astro.puc.cl}}
+%
+\altaffiltext{2}{Department of Physics \& Astronomy, Mitchell Institute for Fundamental Physics \& Astronony, Texas A\&M University,
+College Station, TX 77843; {nsuntzeff@tamu.edu}}
+%
+\altaffiltext{3}{Australian Astronomical Observatory, P.O. Box 296, Epping, NSW 1710, Australia; {ricardo@aao.gov.au}}
+%
+%
+\altaffiltext{4}{Gemini Observatory, Casilla 603, La Serena, Chile;
+{pcandia@gemini.edu}}
+%
+\altaffiltext{5}{Staff astronomers, Cerro Tololo Inter-American Observatory, National
+Optical Astronomy Observatory, which are operated by the Association of
+Universities for Research in Astronomy, under contract with the National
+Science Foundation.}
+
+\begin{abstract}
+We present multicolor light curves of SN 1998bw which appeared
+in ESO184-G82 in close temporal and spacial association with GRB~980425.
+%
+They are based on observations done at Cerro Tololo
+Inter-American Observatory and data from the literature.
+%
+The CTIO photometry reaches $\sim$86 days after the GRB in $U$ and $\sim$160
+days after the GRB in $BV(RI)_C$.
+%
+The observations in $U$ extend by
+about 30 days the previously known coverage,
+and determine the slope of the early exponential tail.
+
+We calibrate a large set of local standards in common with those
+of previous studies and use them to transform published
+observations of the SN to our realization of the standard photometric system.
+%
+We show that the photometry from different sources merges smoothly and
+provide a unified set of 300 observations of the SN in five bands.
+%
+Using the extensive set of spectra in public domain we compute
+extinction and $K$ corrections, and build quasi-bolometric unreddened
+rest frame light curves.
+%
+We provide low degree piecewise spline fits to these light curves
+with daily sampling.
+%
+They reach
+$\sim$86 rest frame days after the GRB with $U$ band coverage, and 
+$\sim$498 rest frame days after the GRB without $U$.
+\end{abstract}
+
+\keywords{supernovae: general --- GRB: general ---
+supernovae: individual(\objectname{SN 1998bw})
+GRB: individual(\objectname{GRB 980425})
+}
+
+\section{Introduction}
+
+Stripped envelope core--collapse Supernovae (SNe) remain one of the open frontiers for basic observational work on SNe.
+%
+Without the appeal of Type Ia and Type~II SNe which, through different
+techniques can be used as distance estimators, their follow up is typically
+neglected when they are discovered in SN searches, unless they are particularly
+bright or display puzzling peculiarities.
+%
+As a consequence, progress in this area comes at a slower pace.
+
+After a peak in activity during 1993--1995, which resulted mainly
+from the impact of the bright and well observed SNe~1993J and 1994I, the field of these ``exotic''
+SNe entered a time of slower productivity.
+%
+In 1998, however, a long-duration $\gamma$--ray burst (GRB) provided a new insight
+into core--collapse SNe, and gave new incentives to justify their follow up.
+%
+The association of long-duration, soft-spectrum  GRBs with SNe has been explored
+in many publications \citep{wandb06, hartmann10, wanda10}.
+%
+It is now considered that most
+long-duration soft-spectrum GRBs are accompanied by massive stellar explosions.
+
+One of the events that made a significant contribution to establish
+the connection GRB-SNe was SN~1998bw / GRB980425 \citep{getal98}.
+%
+It was the target of extensive coverage both in terms of wavelength range
+and time span, and subject of many theoretical studies to understand the
+nature of the progenitor and details of the certainly asymmetric
+explosion.
+
+SN~1998bw was discovered after a search triggered by GRB980425, 1.6 arc-minutes
+away from the center of the 8 arc-minute error box of the Wide Field Camera of
+BeppoSAX \citep{getal98}.
+%
+After some initial confusion, it was recognized as a peculiar Type~Ib/c SNe
+\citep{setal98}.
+%
+It appeared superimposed on a complicated background, as became clear with the
+exquisite resolution of {\em HST} \citep{petal01}.
+%
+Hence, while simple aperture photometry, or Point Spread
+Function (PSF) fitting photometry, were reasonable approaches when the SN was bright,
+more sophisticated techniques became necessary, when it was fading on.
+%
+\citet{getal98} presented the first set of observations in the
+optical and near infrared passbands.
+%
+Their light curves start as early as $\sim$17 hours after the GRB, in $V$ and $R_C$, and
+extend up to $\sim$57 days after the GRB with $UBV(RI)_C$ coverage. They use simple aperture photometry
+to estimate the SN brightness.
+%
+\citet{mands99} present $BVI_C$ photometry, from $\sim$64 up to $\sim$187 days after the GRB.
+%
+\citet{petal01} present an extensive set of observations, including spectroscopy, spectropolarimetry, and photometry.
+%
+The later spans the range from 323 up to 426 days after the GRB, and the brightness is measured with Point Spread
+Function (PSF) fitting photometry using a software specifically designed for analyzing point sources superimposed
+on bright, spatially variable, backgrounds.
+%
+\citet{soetal02} present $BV(RI)_C$ photometry that extends from 140 up to more than 500 days after the GRB, and
+includes data from a reanalysis of the images used by \citet{petal01}. They
+estimate the SN brightness by doing PSF fitting photometry on images where the background light
+of the galaxy had been removed using very late, high quality images.
+%
+Finally, \citet{fetal00} analyze very late HST images of ESO184-G82 taken through non standard passbands, and provide
+estimates of the SN brightness more than 750 days after the GRB.
+
+The main purpose of this paper is to present an independent set of photometric
+observations done at Cerro Tololo Inter-American Observatory between June and
+October of 1998, from $\sim$40 up to 160 days after the GRB.
+%
+The CTIO observations overlap most of the data sets mentioned above, and
+our $U$ band observations reach about 30 days later than those published so far.
+
+We purposely calibrated our photometry with the same set of local standards
+used by \citet{getal98} for the early light curve, and \citet{soetal02} for
+the very late light curve.
+%
+Therefore, if $S$-corrections \citep{petal04} between the different realizations of the
+passbands are not large, these data sets could be straightforwardly merged.
+%
+This provides a secondary goal for this paper.
+%
+We merge our data with the earlier set of \citet{getal98} and later set of
+\citet{soetal02} providing an ensemble of 300 $UBV(RI)_C$ observations, spanning from about
+15 days before up to more than 500 days after maximum light, consistently calibrated with the
+sequence of local standards as defined by the CTIO realization of the standard photometric system.
+%
+Finally having this photometry available, it is possible to obtain
+multicolor, unreddened, rest frame light curves, as well as quasi-bolometric light curves.
+%
+We do so providing fits to the photometry that extend more than
+$\sim$80 days after the GRB with $UBV(RI)_C$ coverage, and close to 500 days
+after the GRB with only $BV(RI)_C$.
+
+In \S \ref{se:observations} we present our observations, in \S
+\ref{se:lcurves} we describe the comparison and merging of our data with those already published,
+and the computing of $K$ and extinction corrections to obtain the rest frame unreddened light
+curve of SN~1998bw, which we present interpolated with low degree piecewise splines.
+%
+Finally, in \S \ref{se:conclusions} we summarize our work.
+
+\section{Observations} \label{se:observations}
+
+The CTIO observations started $\sim$40 days after the GRB (about a month after maximum light).
+%
+The 0.9m telescope with a direct CCD camera attached was used.
+%
+The detector was a TEK~2048 CCD, with a pixel size of 24 $\mu$, providing
+a scale of 0.396 arc-seconds per pixel.
+%
+The passbands routinely used were the standard $UBV(RI)_C$ of the Johnson, Kron--Cousins photometric
+system \citep{kronsmith51, johnson55, cousins76}.
+%
+$BV(RI)_C$ images were taken on 15 nights while $U$ images were taken on 12.
+%
+Five of those nights appeared to be photometric, and extensive sets of standards from the lists of
+\citet{landolt92} were observed as well, to fit color terms for the instrument and extinction
+coefficients for the nights.
+
+Reduction of the images was done in the usual manner within the {\em IRAF}\footnote{The Image Reduction and
+Analysis Facility is developed and maintained by NOAO, under
+contract with the National Science Foundation.} environment.
+%
+Briefly, images were trimmed, bias-corrected, and flat-fielded.
+%
+A sequence of isolated stars with good signal to noise ratio was located and used to build a
+variable PSF for each image using the package DAOPhot \citep{stetson87}.
+%
+The PSF is later fitted to all the stars of the local photometric sequence indicated in Figure
+\ref{fi:sequence}, and the SN, to estimate their instrumental magnitudes.
+%
+Using the instrumental magnitudes, the
+$UBV(RI)_C$ magnitudes for the local sequence and the color terms for the instrument that had been
+measured in the photometric nights, we transformed the instrumental PSF magnitudes of the SN
+into calibrated magnitudes.
+
+After reduction, two of the five supposedly photometric nights gave larger than expected residuals for the photometric fits.
+%
+Then, they were used in the fitting of color terms, but not in the absolute calibration of the sequence of
+local standards.
+%
+The magnitudes of the local sequence of standards is given in Table~\ref{ta:sequence}.
+%
+The photometry of SN~1998bw is given in Table~\ref{ta:ctiophot}, under reference code (2), and plotted in Figure \ref{fi:phot}.
+
+\section{Light Curves} \label{se:lcurves}
+
+\subsection{Merged Photometry}
+
+The photometry presented above can be joined with data published elsewhere to build a well sampled and
+extended multicolor light curve of SN~1998bw.
+%
+After comparing our raw observations with those of \citet{getal98,mands99} and \citet{soetal02},
+we decided to join our data with those of \citet{getal98} and \citet{soetal02}.
+%
+At early times, the data of \citet{getal98} is unique, and must be considered.
+%
+At late times, the data of \citet{soetal02} include a reanalysis of the images used by \citet{petal01}, and
+corresponds to PSF photometry on images with the background subtracted.
+%
+An additional consideration is that \citet{getal98} and \citet{soetal02} calibrate the photometry using a common
+set of 15 local standards while \citet{mands99} use a different local sequence.
+
+After a careful comparison,
+we found phase dependent systematic differences between our photometry and that of \citet{mands99}.
+%
+They are probably the result of slightly different realizations of the photometric passbands combined with
+the non stellar character of the spectrum of SN~1998bw, the different set of local standards used, and the
+different technique applied to estimate the SN brightness (aperture versus PSF photometry).
+%
+The effects of bandpass differences causing large systematic errors in supernova photometry has
+been known for quite a while \citep{setal88}.
+%
+Since our earlier data are coincident in time with those of \citet{mands99}, and at late times our data merges
+already with those of \citet{soetal02} we decided not to use the observations of the former in our combined
+light curve.
+
+We also found small systematic differences between our photometry and that of \citet{getal98} and \citet{soetal02} as well.
+%
+Within the uncertainties, however, the differences were constant with SN phase.
+%
+We took this as an indication of negligible $S$-corrections between our photometry and those of either \citet{getal98} or \citet{soetal02}.
+%
+Since the three studies had in common a sequence of 15 local standards, it was possible to fit zero points and relative color terms
+between the two sets, and transform all the observations to the system defined by the magnitudes of the local standard set
+given in Table~\ref{ta:sequence}.
+%
+The transformed magnitudes merge very well.
+%
+The transformed photometry from different sources is consistent within the
+uncertainties.
+%
+It is particularly reassuring that they merge very well at our latest times
+in the passbands $R_C$ and $I_C$, which are those where the effect of
+the $S$-corrections are expected to be strongest (see Figure \ref{fi:join}).
+%
+Since \citet{soetal02}, who obtained the very late time photometry shown in the figure, did correct the observations for background light
+contamination and we did not, this
+means in addition, that as late as $\sim$160 days after the GRB, contamination by background light was not critically important, and that
+our PSF fitted photometry is not biased.
+
+The transformed photometry is given in Table \ref{ta:ctiophot} under reference codes (1) and (3), and plotted in Figure \ref{fi:phot}
+together with the new data presented here.
+%
+In addition to providing a consistently calibrated bridge between the photometry of \citet{getal98} and that of \citet{soetal02} the CTIO
+observations define the slope of the early exponential tail in $U$, which was not known.
+
+\subsection{The Unreddened Rest Frame Light curves}
+
+To compute the intrinsic light curve of SN~1998bw, it is necessary to correct the photometry for the effect of extinction by foreground material
+and apply $K$-corrections to transform it to the rest frame of ESO184-G82.
+%
+It is always a challenge to compute the extinction towards an object of exotic type, like SN~1998bw, because the intrinsic colors are not known.
+%
+All the indications, however, suggest that the amount of foreground matter between us and the SN is small.
+%
+The Galactic dust towards ESO184-G82 contributes $A_V \sim 0.2$, according to \citet{sfandd98}, up from the earlier value of $A_V \sim 0.05$
+given by \citet{bandh82}.
+%
+\citet{petal01} obtained high resolution spectra of SN~1998bw near maximum light. They did not find Na~D absorption lines neither at the redshift of
+ESO184-G82 nor zero, and set upper limits to the extinction consistent even with the higher estimate of \citet{sfandd98}.
+
+The peculiarities of the spectrum of SN~1998bw and the fact that it evolves in time prompted us to compute a time dependent extinction in each
+passbands using the excellent series of spectra of \citet{petal01}, which is publicly available.
+%
+We took the transmittance of the $BV(RI)_C$ passbands given by \citet{bessell90},
+transformed them from energy-based to photon-based units, convolved them with
+a typical CCD quantum efficiency, the spectral response of two aluminum coated surfaces, and a typical
+response of the sky telluric absorption bands, and used this combined sensitivity curves to compute the difference in magnitudes
+between the unreddened and reddened spectra of SN~1998bw.
+%
+The differences between the extinction computed in this way and a constant are small but they vary with time, allowing for small systematic
+changes in the trends of the light curves.
+
+The extinction law towards $\gamma$-ray bursts has deserved some attention \citep[see ][ and references therein]{landl10}. It has been found that, in
+some cases, the extinction estimated from the $\gamma$-ray burst spectrum is different from that of the Milky Way or Magellanic Clouds.
+%
+When there are differences, however, they are typically
+marked in the UV, at wavelengths below $\sim$2500 \AA, and modest at longer wavelengths.
+%
+This, together with the low estimate of the extinction towards SN~1998bw, make it
+reasonable to assume a typical Milky Way extinction law to unredden the lights curves presented here.
+%
+We take as a model the extinction curve of \citet{ccandm89} with $R_V = 3.1$.
+
+Similar considerations apply to the $K$-corrections, which, at the redshift of ESO184-G82 \citep[$z =$ 0.0087,][]{fetal06}, are expected to be small,
+but still variable in time.
+%
+We used the passbands of \citet{bessell90}, prepared as stated above and the spectra of \citet{petal01} to compute the
+time dependent $K$-corrections of SN~1998bw.
+
+Using the computed reddening and $K$ corrections unreddened and transformed to the rest frame the photometry of SN~1998bw
+given in Table~\ref{ta:ctiophot}.
+%
+The results, fitted with
+low-degree piecewise polinomial and/or spline fits to provide daily sampling, are presented in Table~\ref{ta:restframephot}.
+%
+The uncertainties given in the table are the result of combining in quadrature the uncertainties of photometry, reddening and $K$-corrections.
+
+Having the multicolor rest frame photometry it is possible to 
+convert the observed single-bandpass light curves into
+monochromatic fluxes at the effective wavelengths of the passbands,
+integrate them over frequency, and obtain quasi-bolometric light curves
+that include the energy output in all the observed bands
+\citep{sandb90}.
+%
+We used the zero-points of \citet{bessell00} and integrated the monochromatic fluxes using a trapezoid rule.
+%
+We did not extrapolate the flux beyond the limits of the $U$ (or $B$) and $I_C$ passbands.
+%
+The distance to ESO~184-G082 was taken to be $37.3 \pm 2.6$ Mpc, as computed by the NED database\footnote{http://nedwww.ipac.caltech.edu/}
+from the redshift measured by \citet{fetal06},
+a Hubble constant of 74.2 km s$^{-1}$ Mpc$^{-1}$ \citep{retal09}, and a the model of the local velocity field given by \citet{metal00}.
+%
+The $UBV(RI)_C$ and $BV(RI)_C$ luminosities have been included in Table~\ref{ta:restframephot}.
+
+\section{Conclusions} \label{se:conclusions}
+
+We present 72 new photometric observations of SN~1998bw in the $UBV(RI)_C$ bands, spanning from $\sim$40 up to $\sim$60 days after the GRB.
+%
+Our $U$ data extends by about 30 days the previously known coverage and sample the early exponential tail.
+
+We collect previously published photometry and transform it to our realization of the standard system using relative zero points and color
+terms measured from the common local standard sequence.
+%
+We show that data from different sources merges smoothly, providing a homogeneous set of 300 observations covering about 500 days since explosion.
+
+Finally, we use the extensive series of spectra in public domain to compute time dependent reddening and $K$ corrections and compute
+the unreddened rest frame multicolor and quasi-bolometric light curves. We fit them with low degree piecewise splines to provide daily sampling
+and give the results as a table.
+
+\acknowledgments
+
+We thank the staffs of the CTIO observatory for their assistance with the observations and
+Arlo Landolt for sending us his tables of photometric standards prior to publication.
+%
+AC acknowledges the support from grants P06-045-F (ICM, MIDEPLAN, Chile), Basal CATA PFB 06/09, and FONDAP No. 15010003.
+%
+This research has made use of the SUSPECT on-line database of SN spectra and of the NASA/IPAC
+Extragalactic Database (NED) which is operated by the Jet Propulsion Laboratory, California Institute
+of Technology, under contract with the National Aeronautics and Space Administration.
+
+\begin{thebibliography}{}
+\input bib.tex
+\end{thebibliography}
+
+\newpage
+
+\begin{figure}[t]
+\plotone{fig1.eps}
+\caption{Local Standard Sequence for SN~1998bw. The image was taken with CTIO 0.9m telescope on
+October 2, 1998, using the $I_{rm C}$ passband. Exposure time was 600 seconds.
+%
+North is up and East  is left. The width of the field in the East-West direction
+is approximately 6.6 arc-minutes.
+%
+Stars number 1 to 15 are the same local sequence of \citet{getal98}.
+\label{fi:sequence}}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[t]
+\includegraphics[angle=-90,scale=.70]{fig2.eps}
+\caption{Complete light curves of SN~1998bw. Open symbols display the observations of \citet{getal98} at early time and \citet{soetal02} at
+late times. Solid symbols bridging the two sets
+are the CTIO observations presented here. All the observations were transformed to the photometric system
+defined by the local standards in Table \ref{ta:sequence}. The solid lines are the fits used to build the intrinsic light curves given in Table \ref{ta:restframephot}.
+\label{fi:phot}}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[t]
+\includegraphics[angle=0,scale=0.7]{fig3.eps}
+\caption{Expanded view of the region of overlap between the CTIO observations and those of \citet{soetal02}. Solid symbols
+correspond to the last epochs of CTIO photometry (Table \ref{ta:ctiophot} under reference number 2), open symbols to the
+first epochs observed by \citet{soetal02}. For each passband, dotted straight lines connect the first and last observation plotted.
+\label{fi:join}}
+\end{figure}
+
+\clearpage
+
+
+\begin{deluxetable}{lccccc}
+%\rotate
+\tablewidth{0pt}
+\tablecaption{Local Standard Sequence for SN~1998bw\label{ta:sequence}}
+\tablehead{
+\colhead{ID\tablenotemark{a}} &
+\colhead{$V$}  &
+\colhead{$B-V$}  &
+\colhead{$U-B$}  &
+\colhead{$V-Rc$} &
+\colhead{$V-Ic$} 
+}
+\startdata
+  1 & 18.503  $\pm$   0.032 &  0.422  $\pm$   0.053 & -0.208  $\pm$   0.053 &  0.293  $\pm$   0.050 &  0.576  $\pm$   0.043 \\
+  2 & 17.696  $\pm$   0.006 &  1.161  $\pm$   0.044 &  0.964  $\pm$   0.179 &  0.717  $\pm$   0.010 &  1.309  $\pm$   0.007 \\
+  3 & 18.072  $\pm$   0.008 &  0.864  $\pm$   0.031 &  0.570  $\pm$   0.041 &  0.495  $\pm$   0.023 &  0.972  $\pm$   0.012 \\
+  4 & 17.792  $\pm$   0.022 &  0.696  $\pm$   0.024 &  0.085  $\pm$   0.039 &  0.399  $\pm$   0.023 &  0.780  $\pm$   0.025 \\
+  5 & 19.403  $\pm$   0.021 &  0.772  $\pm$   0.030 &         \nodata       &  0.435  $\pm$   0.029 &  0.855  $\pm$   0.041 \\
+  6 & 17.215  $\pm$   0.014 &  0.641  $\pm$   0.016 &  0.022  $\pm$   0.013 &  0.397  $\pm$   0.016 &  0.761  $\pm$   0.016 \\
+  7 & 17.489  $\pm$   0.021 &  0.831  $\pm$   0.022 &  0.315  $\pm$   0.016 &  0.524  $\pm$   0.022 &  1.024  $\pm$   0.021 \\
+  8 & 18.572  $\pm$   0.018 &  0.622  $\pm$   0.021 & -0.025  $\pm$   0.034 &  0.394  $\pm$   0.051 &  0.753  $\pm$   0.029 \\
+  9 & 17.983  $\pm$   0.017 &  0.909  $\pm$   0.029 &  0.560  $\pm$   0.034 &  0.524  $\pm$   0.018 &  0.983  $\pm$   0.027 \\
+ 10 & 17.496  $\pm$   0.021 &  0.840  $\pm$   0.038 &  0.410  $\pm$   0.034 &  0.484  $\pm$   0.024 &  0.911  $\pm$   0.022 \\
+ 11 & 15.561  $\pm$   0.002 &  0.999  $\pm$   0.013 &  0.556  $\pm$   0.019 &  0.550  $\pm$   0.007 &  1.059  $\pm$   0.002 \\
+ 12 & 16.740  $\pm$   0.035 &  0.599  $\pm$   0.039 &  0.009  $\pm$   0.017 &  0.370  $\pm$   0.045 &  0.746  $\pm$   0.036 \\
+ 13 & 16.676  $\pm$   0.004 &  0.762  $\pm$   0.008 &  0.317  $\pm$   0.030 &  0.444  $\pm$   0.007 &  0.826  $\pm$   0.005 \\
+ 14 & 14.070  $\pm$   0.012 &  0.755  $\pm$   0.019 &  0.335  $\pm$   0.018 &  0.429  $\pm$   0.023 &  0.833  $\pm$   0.019 \\
+ 15 & 14.515  $\pm$   0.014 &  0.665  $\pm$   0.021 &  0.151  $\pm$   0.019 &  0.380  $\pm$   0.025 &  0.752  $\pm$   0.021 \\
+ 16 & 15.204  $\pm$   0.004 &  0.845  $\pm$   0.006 &  0.533  $\pm$   0.020 &  0.457  $\pm$   0.005 &  0.846  $\pm$   0.005 \\
+ 17 & 17.190  $\pm$   0.005 &  0.849  $\pm$   0.011 &  0.418  $\pm$   0.027 &  0.482  $\pm$   0.006 &  0.931  $\pm$   0.006 \\
+ 18 & 16.701  $\pm$   0.005 &  0.640  $\pm$   0.006 &  0.014  $\pm$   0.020 &  0.403  $\pm$   0.005 &  0.811  $\pm$   0.006 \\
+ 19 & 17.569  $\pm$   0.007 &  0.952  $\pm$   0.014 &  0.624  $\pm$   0.039 &  0.572  $\pm$   0.009 &  1.081  $\pm$   0.007 \\
+ 20 & 17.886  $\pm$   0.007 &  1.052  $\pm$   0.013 &  0.818  $\pm$   0.035 &  0.575  $\pm$   0.009 &  1.059  $\pm$   0.008 \\
+ 21 & 17.516  $\pm$   0.005 &  0.669  $\pm$   0.008 &  0.130  $\pm$   0.022 &  0.381  $\pm$   0.006 &  0.755  $\pm$   0.009 \\
+ 22 & 17.710  $\pm$   0.008 &  0.998  $\pm$   0.010 &  0.712  $\pm$   0.028 &  0.586  $\pm$   0.009 &  1.101  $\pm$   0.008 \\
+ 23 & 16.046  $\pm$   0.005 &  1.349  $\pm$   0.006 &  1.244  $\pm$   0.023 &  0.866  $\pm$   0.005 &  1.688  $\pm$   0.005 \\
+ 24 & 17.973  $\pm$   0.007 &  0.654  $\pm$   0.009 &  0.007  $\pm$   0.024 &  0.394  $\pm$   0.008 &  0.759  $\pm$   0.011 \\
+ 25\tablenotemark{b} & 18.007  $\pm$   0.007 &  0.925  $\pm$   0.014 &  0.734  $\pm$   0.035 &  0.535  $\pm$   0.009 &  0.999  $\pm$   0.018 \\
+\enddata
+\tablenotetext{a}{Stars number 1 to 15 are the same as those of \citet{getal98}.}
+\tablenotetext{b}{Star number 25 falls outside the finding chart of Figure \ref{fi:sequence}.
+It is located 23.1 arc-seconds North and 20.6 arc-seconds East from star number 19.}
+\end{deluxetable}
+
+\clearpage
+
+
+\begin{deluxetable}{rcccccc}
+%\rotate
+\tablewidth{0pt}
+\tablecaption{Photometry of SN~1998bw transformed to CTIO System\label{ta:ctiophot}}
+\tablehead{
+\colhead{JD\tablenotemark{a}} &
+\colhead{$U$}  &
+\colhead{$B$}  &
+\colhead{$V$}  &
+\colhead{$Rc$} &
+\colhead{$Ic$} &
+\colhead{Ref.\tablenotemark{b}}
+}
+\startdata
+ 930.13 &               \nodata &               \nodata &   15.88 $\pm$    0.08 &   15.74 $\pm$    0.07 &               \nodata & (1) \\ 
+ 930.25 &               \nodata &               \nodata &               \nodata &   15.77 $\pm$    0.06 &               \nodata & (1) \\ 
+ 930.31 &               \nodata &               \nodata &   15.93 $\pm$    0.08 &   15.74 $\pm$    0.07 &               \nodata & (1) \\ 
+ 931.30 &               \nodata &   15.98 $\pm$    0.07 &               \nodata &   15.94 $\pm$    0.11 &               \nodata & (1) \\ 
+ 931.92 &               \nodata &               \nodata &               \nodata &   15.69 $\pm$    0.06 &               \nodata & (1) \\ 
+ 932.19 &               \nodata &               \nodata &   15.55 $\pm$    0.08 &   15.59 $\pm$    0.07 &               \nodata & (1) \\ 
+ 932.22 &               \nodata &               \nodata &               \nodata &   15.59 $\pm$    0.09 &               \nodata & (1) \\ 
+ 934.83 &               \nodata &               \nodata &               \nodata &   14.84 $\pm$    0.08 &               \nodata & (1) \\ 
+ 936.84 &               \nodata &   14.81 $\pm$    0.06 &   14.36 $\pm$    0.05 &   14.41 $\pm$    0.05 &               \nodata & (1) \\ 
+ 937.91 &   14.53 $\pm$    0.05 &   14.57 $\pm$    0.08 &   14.19 $\pm$    0.06 &   14.21 $\pm$    0.06 &   14.21 $\pm$    0.04 & (1) \\ 
+ 939.83 &   14.23 $\pm$    0.26 &   14.46 $\pm$    0.06 &   14.00 $\pm$    0.05 &   14.02 $\pm$    0.05 &   14.03 $\pm$    0.04 & (1) \\ 
+ 940.28 &               \nodata &   14.48 $\pm$    0.07 &   14.01 $\pm$    0.06 &   13.98 $\pm$    0.06 &   14.00 $\pm$    0.04 & (1) \\ 
+ 941.83 &   14.16 $\pm$    0.05 &   14.36 $\pm$    0.05 &   13.88 $\pm$    0.05 &   13.90 $\pm$    0.05 &   13.92 $\pm$    0.03 & (1) \\ 
+ 942.27 &               \nodata &   14.38 $\pm$    0.08 &   13.90 $\pm$    0.07 &   13.85 $\pm$    0.07 &   13.87 $\pm$    0.05 & (1) \\ 
+ 942.83 &   14.15 $\pm$    0.04 &   14.33 $\pm$    0.05 &   13.85 $\pm$    0.05 &   13.86 $\pm$    0.05 &   13.87 $\pm$    0.03 & (1) \\ 
+ 943.29 &               \nodata &   14.36 $\pm$    0.11 &   13.87 $\pm$    0.08 &   13.82 $\pm$    0.07 &   13.82 $\pm$    0.05 & (1) \\ 
+ 944.76 &   14.11 $\pm$    0.11 &   14.32 $\pm$    0.07 &   13.78 $\pm$    0.08 &   13.79 $\pm$    0.08 &   13.80 $\pm$    0.04 & (1) \\ 
+ 946.90 &               \nodata &               \nodata &   13.76 $\pm$    0.13 &   13.73 $\pm$    0.07 &               \nodata & (1) \\ 
+ 947.90 &               \nodata &               \nodata &   13.82 $\pm$    0.06 &               \nodata &               \nodata & (1) \\ 
+ 948.90 &   14.48 $\pm$    0.07 &   14.53 $\pm$    0.06 &   13.87 $\pm$    0.06 &   13.78 $\pm$    0.05 &   13.79 $\pm$    0.05 & (1) \\ 
+ 949.88 &               \nodata &               \nodata &   13.90 $\pm$    0.06 &               \nodata &               \nodata & (1) \\ 
+ 950.72 &               \nodata &   14.65 $\pm$    0.12 &   13.95 $\pm$    0.08 &   13.82 $\pm$    0.12 &               \nodata & (1) \\ 
+ 950.89 &   14.71 $\pm$    0.05 &   14.68 $\pm$    0.10 &   13.97 $\pm$    0.08 &   13.82 $\pm$    0.08 &   13.81 $\pm$    0.05 & (1) \\ 
+ 951.85 &   14.81 $\pm$    0.07 &   14.79 $\pm$    0.08 &   14.03 $\pm$    0.07 &   13.85 $\pm$    0.07 &   13.84 $\pm$    0.04 & (1) \\ 
+ 952.81 &   14.98 $\pm$    0.10 &   14.93 $\pm$    0.07 &   14.09 $\pm$    0.06 &   13.89 $\pm$    0.07 &   13.87 $\pm$    0.04 & (1) \\ 
+ 953.74 &   15.10 $\pm$    0.05 &   15.01 $\pm$    0.06 &   14.13 $\pm$    0.06 &   13.92 $\pm$    0.06 &   13.88 $\pm$    0.04 & (1) \\ 
+ 954.10 &               \nodata &               \nodata &   14.13 $\pm$    0.06 &   13.96 $\pm$    0.06 &   13.85 $\pm$    0.04 & (1) \\ 
+ 954.85 &               \nodata &               \nodata &   14.21 $\pm$    0.06 &   13.97 $\pm$    0.06 &               \nodata & (1) \\ 
+ 954.88 &   15.33 $\pm$    0.10 &   15.15 $\pm$    0.08 &   14.24 $\pm$    0.06 &   13.94 $\pm$    0.12 &   13.93 $\pm$    0.08 & (1) \\ 
+ 955.20 &   15.29 $\pm$    0.26 &   15.08 $\pm$    0.22 &   14.17 $\pm$    0.14 &   13.97 $\pm$    0.13 &   13.91 $\pm$    0.07 & (1) \\ 
+ 955.86 &               \nodata &               \nodata &               \nodata &   14.03 $\pm$    0.12 &               \nodata & (1) \\ 
+ 955.88 &   15.40 $\pm$    0.04 &   15.26 $\pm$    0.09 &   14.30 $\pm$    0.07 &   14.02 $\pm$    0.07 &   13.97 $\pm$    0.04 & (1) \\ 
+ 956.80 &   15.47 $\pm$    0.06 &   15.30 $\pm$    0.07 &   14.34 $\pm$    0.06 &   14.07 $\pm$    0.07 &   13.97 $\pm$    0.05 & (1) \\ 
+ 959.17 &   15.82 $\pm$    0.04 &   15.51 $\pm$    0.05 &   14.48 $\pm$    0.05 &   14.19 $\pm$    0.05 &   14.02 $\pm$    0.05 & (1) \\ 
+ 960.13 &   16.02 $\pm$    0.05 &   15.58 $\pm$    0.06 &   14.56 $\pm$    0.07 &   14.24 $\pm$    0.06 &   14.06 $\pm$    0.04 & (1) \\ 
+ 961.66 &   15.98 $\pm$    0.04 &   15.69 $\pm$    0.05 &   14.65 $\pm$    0.06 &   14.40 $\pm$    0.08 &   14.14 $\pm$    0.08 & (1) \\ 
+ 962.08 &   16.22 $\pm$    0.04 &   15.79 $\pm$    0.13 &               \nodata &   14.33 $\pm$    0.05 &               \nodata & (1) \\ 
+ 964.12 &               \nodata &   15.91 $\pm$    0.05 &   14.83 $\pm$    0.05 &   14.42 $\pm$    0.05 &   14.29 $\pm$    0.03 & (1) \\ 
+ 965.80 &   16.28 $\pm$    0.05 &   15.98 $\pm$    0.05 &   14.92 $\pm$    0.05 &   14.54 $\pm$    0.05 &   14.42 $\pm$    0.04 & (1) \\ 
+ 966.87 &   16.36 $\pm$    0.04 &   16.05 $\pm$    0.05 &   14.99 $\pm$    0.05 &   14.60 $\pm$    0.05 &   14.48 $\pm$    0.03 & (1) \\ 
+ 967.82 &   16.44 $\pm$    0.04 &   16.08 $\pm$    0.05 &   15.03 $\pm$    0.05 &   14.63 $\pm$    0.05 &   14.55 $\pm$    0.03 & (1) \\ 
+ 968.81 &   16.46 $\pm$    0.05 &   16.10 $\pm$    0.05 &   15.08 $\pm$    0.05 &   14.70 $\pm$    0.05 &   14.56 $\pm$    0.03 & (1) \\ 
+ 969.06 &               \nodata &               \nodata &   15.03 $\pm$    0.05 &   14.72 $\pm$    0.05 &   14.47 $\pm$    0.03 & (1) \\ 
+ 969.76 &   16.44 $\pm$    0.05 &   16.17 $\pm$    0.02 &   15.14 $\pm$    0.01 &   14.76 $\pm$    0.01 &   14.58 $\pm$    0.01 & (2) \\ 
+ 970.22 &               \nodata &   16.18 $\pm$    0.09 &   15.13 $\pm$    0.07 &   14.77 $\pm$    0.06 &   14.54 $\pm$    0.04 & (1) \\ 
+ 970.87 &   16.51 $\pm$    0.04 &   16.19 $\pm$    0.05 &   15.18 $\pm$    0.05 &   14.80 $\pm$    0.05 &   14.66 $\pm$    0.04 & (1) \\ 
+ 971.89 &   16.58 $\pm$    0.04 &   16.25 $\pm$    0.05 &   15.22 $\pm$    0.05 &   14.84 $\pm$    0.05 &   14.71 $\pm$    0.04 & (1) \\ 
+ 975.06 &               \nodata &   16.21 $\pm$    0.10 &               \nodata &   14.95 $\pm$    0.05 &               \nodata & (1) \\ 
+ 981.04 &               \nodata &   16.40 $\pm$    0.05 &               \nodata &   15.14 $\pm$    0.05 &               \nodata & (1) \\ 
+ 983.58 &   16.84 $\pm$    0.11 &   16.48 $\pm$    0.07 &   15.59 $\pm$    0.06 &   15.22 $\pm$    0.06 &   15.01 $\pm$    0.04 & (1) \\ 
+ 984.63 &   16.89 $\pm$    0.07 &   16.55 $\pm$    0.08 &   15.63 $\pm$    0.06 &   15.28 $\pm$    0.06 &   15.06 $\pm$    0.08 & (1) \\ 
+ 985.69 &   16.92 $\pm$    0.04 &   16.57 $\pm$    0.05 &   15.65 $\pm$    0.05 &   15.29 $\pm$    0.05 &   15.09 $\pm$    0.03 & (1) \\ 
+ 986.04 &               \nodata &               \nodata &               \nodata &   15.22 $\pm$    0.06 &               \nodata & (1) \\ 
+0988.83 &   16.87 $\pm$    0.05 &   16.62 $\pm$    0.01 &   15.74 $\pm$    0.00 &   15.38 $\pm$    0.01 &   15.11 $\pm$    0.01 & (2) \\ 
+0998.74 &   17.06 $\pm$    0.05 &   16.77 $\pm$    0.02 &   15.95 $\pm$    0.01 &   15.60 $\pm$    0.02 &   15.31 $\pm$    0.02 & (2) \\ 
+0999.73 &   17.03 $\pm$    0.05 &   16.78 $\pm$    0.01 &   15.98 $\pm$    0.01 &   15.64 $\pm$    0.01 &   15.34 $\pm$    0.01 & (2) \\ 
+1000.76 &   17.18 $\pm$    0.06 &   16.81 $\pm$    0.03 &   16.00 $\pm$    0.02 &   15.67 $\pm$    0.02 &   15.37 $\pm$    0.02 & (2) \\ 
+1001.70 &     \nodata           &   16.80 $\pm$    0.02 &   16.00 $\pm$    0.02 &   15.66 $\pm$    0.02 &   15.35 $\pm$    0.02 & (2) \\ 
+1003.69 &   17.13 $\pm$    0.05 &   16.85 $\pm$    0.02 &   16.06 $\pm$    0.01 &   15.73 $\pm$    0.01 &   15.42 $\pm$    0.01 & (2) \\ 
+1004.80 &   17.14 $\pm$    0.05 &   16.87 $\pm$    0.01 &   16.08 $\pm$    0.01 &   15.75 $\pm$    0.01 &   15.45 $\pm$    0.01 & (2) \\ 
+1005.70 &   17.16 $\pm$    0.05 &   16.87 $\pm$    0.02 &   16.10 $\pm$    0.01 &   15.78 $\pm$    0.01 &   15.46 $\pm$    0.01 & (2) \\ 
+1006.72 &   17.19 $\pm$    0.05 &   16.89 $\pm$    0.01 &   16.12 $\pm$    0.01 &   15.80 $\pm$    0.01 &   15.49 $\pm$    0.01 & (2) \\ 
+1007.60 &   17.22 $\pm$    0.04 &   16.90 $\pm$    0.01 &   16.14 $\pm$    0.01 &   15.82 $\pm$    0.01 &   15.51 $\pm$    0.01 & (2) \\ 
+1008.72 &   17.14 $\pm$    0.05 &   16.92 $\pm$    0.01 &   16.16 $\pm$    0.01 &   15.84 $\pm$    0.01 &   15.53 $\pm$    0.01 & (2) \\ 
+1015.57 &   17.32 $\pm$    0.04 &   17.02 $\pm$    0.01 &   16.29 $\pm$    0.01 &   15.99 $\pm$    0.01 &   15.67 $\pm$    0.01 & (2) \\ 
+1059.57 &     \nodata           &   17.71 $\pm$    0.02 &   17.14 $\pm$    0.01 &   16.85 $\pm$    0.01 &   16.60 $\pm$    0.02 & (2) \\ 
+1069.00 &               \nodata &               \nodata &   17.35 $\pm$    0.07 &   17.04 $\pm$    0.07 &   16.75 $\pm$    0.04 & (3) \\ 
+1088.55 &     \nodata           &   18.19 $\pm$    0.02 &   17.69 $\pm$    0.01 &   17.33 $\pm$    0.01 &   17.12 $\pm$    0.02 & (2) \\ 
+1143.00 &               \nodata &               \nodata &   18.72 $\pm$    0.07 &   18.12 $\pm$    0.07 &   17.93 $\pm$    0.06 & (3) \\ 
+1255.00 &               \nodata &   21.18 $\pm$    0.08 &   20.76 $\pm$    0.06 &   19.85 $\pm$    0.06 &   19.70 $\pm$    0.04 & (3) \\ 
+1276.00 &               \nodata &   21.53 $\pm$    0.05 &   21.11 $\pm$    0.05 &   20.19 $\pm$    0.04 &               \nodata & (3) \\ 
+1280.00 &               \nodata &               \nodata &               \nodata &               \nodata &   20.08 $\pm$    0.05 & (3) \\ 
+1285.00 &               \nodata &   21.63 $\pm$    0.10 &   21.26 $\pm$    0.08 &   20.24 $\pm$    0.07 &   20.01 $\pm$    0.05 & (3) \\ 
+1319.00 &               \nodata &   22.16 $\pm$    0.05 &   21.74 $\pm$    0.05 &   20.96 $\pm$    0.05 &   20.93 $\pm$    0.07 & (3) \\ 
+1342.00 &               \nodata &               \nodata &   22.08 $\pm$    0.08 &   21.16 $\pm$    0.08 &   21.01 $\pm$    0.05 & (3) \\ 
+1346.00 &               \nodata &   22.54 $\pm$    0.08 &   22.12 $\pm$    0.07 &   21.30 $\pm$    0.07 &   21.11 $\pm$    0.05 & (3) \\ 
+1399.00 &               \nodata &               \nodata &   22.82 $\pm$    0.09 &   22.18 $\pm$    0.09 &   22.06 $\pm$    0.11 & (3) \\ 
+1432.00 &               \nodata &   23.51 $\pm$    0.09 &   23.04 $\pm$    0.10 &   22.57 $\pm$    0.08 &   22.48 $\pm$    0.11 & (3) \\ 
+1467.00 &               \nodata &               \nodata &   23.40 $\pm$    0.38 &   23.03 $\pm$    0.21 &   23.23 $\pm$    0.48 & (3) \\ 
+\enddata
+\tablenotetext{a}{Mean Julian Date minus 2450000.}
+\tablenotetext{b}{References for photometry are: (1) \citet{getal98}, (2) This work, (3) \citet{soetal02}.}
+\end{deluxetable}
+
+\begin{deluxetable}{rrccccccc}
+\rotate
+\tablewidth{0pt}
+\tablecaption{Intrinsic Light Curve of SN~1998bw \label{ta:restframephot}}
+\tablehead{
+\colhead{JD\tablenotemark{a}} &
+\colhead{Phase\tablenotemark{b}} &
+\colhead{$U_0$}  &
+\colhead{$B_0$}  &
+\colhead{$V_0$}  &
+\colhead{$Rc_0$} &
+\colhead{$Ic_0$} &
+\colhead{$F_{UBV(RI)_C}$\tablenotemark{c}} &
+\colhead{$F_{BV(RI)_C}$\tablenotemark{c}}
+}
+\startdata
+938 & 8.5 & 14.20 $\pm$ 0.04 & 14.36 $\pm$ 0.12 & 13.98 $\pm$ 0.08 & 14.03 $\pm$ 0.08 & 14.05 $\pm$ 0.01 & 520.973 $\pm$ 39.134 & 403.065 $\pm$ 29.406 \\
+939 & 9.5 & 14.04 $\pm$ 0.04 & 14.25 $\pm$ 0.06 & 13.86 $\pm$ 0.06 & 13.91 $\pm$ 0.06 & 13.95 $\pm$ 0.01 & 581.517 $\pm$ 27.301 & 448.978 $\pm$ 21.199 \\
+940 & 10.5 & 13.91 $\pm$ 0.06 & 14.16 $\pm$ 0.01 & 13.76 $\pm$ 0.03 & 13.80 $\pm$ 0.05 & 13.87 $\pm$ 0.01 & 636.446 $\pm$ 17.171 & 491.197 $\pm$ 13.565 \\
+941 & 11.5 & 13.83 $\pm$ 0.02 & 14.10 $\pm$ 0.01 & 13.67 $\pm$ 0.01 & 13.72 $\pm$ 0.02 & 13.80 $\pm$ 0.01 & 683.884 $\pm$ 6.995 & 528.501 $\pm$ 5.135 \\
+942 & 12.5 & 13.78 $\pm$ 0.03 & 14.05 $\pm$ 0.01 & 13.61 $\pm$ 0.01 & 13.64 $\pm$ 0.01 & 13.75 $\pm$ 0.01 & 722.256 $\pm$ 6.137 & 559.822 $\pm$ 4.203 \\
+943 & 13.5 & 13.75 $\pm$ 0.04 & 14.02 $\pm$ 0.01 & 13.56 $\pm$ 0.03 & 13.59 $\pm$ 0.02 & 13.70 $\pm$ 0.01 & 749.795 $\pm$ 12.392 & 583.606 $\pm$ 9.806 \\
+944 & 14.5 & 13.76 $\pm$ 0.01 & 14.02 $\pm$ 0.01 & 13.53 $\pm$ 0.03 & 13.55 $\pm$ 0.02 & 13.67 $\pm$ 0.02 & 766.461 $\pm$ 13.486 & 600.031 $\pm$ 11.953 \\
+945 & 15.5 & 13.79 $\pm$ 0.03 & 14.03 $\pm$ 0.01 & 13.51 $\pm$ 0.01 & 13.52 $\pm$ 0.02 & 13.65 $\pm$ 0.01 & 772.324 $\pm$ 8.626 & 608.760 $\pm$ 6.209 \\
+946 & 16.5 & 13.85 $\pm$ 0.01 & 14.05 $\pm$ 0.01 & 13.51 $\pm$ 0.01 & 13.50 $\pm$ 0.02 & 13.63 $\pm$ 0.01 & 767.691 $\pm$ 9.791 & 609.733 $\pm$ 7.951 \\
+947 & 17.5 & 13.93 $\pm$ 0.02 & 14.10 $\pm$ 0.02 & 13.52 $\pm$ 0.02 & 13.49 $\pm$ 0.01 & 13.63 $\pm$ 0.01 & 754.239 $\pm$ 11.470 & 604.003 $\pm$ 8.560 \\
+948 & 18.4 & 14.02 $\pm$ 0.02 & 14.16 $\pm$ 0.01 & 13.55 $\pm$ 0.01 & 13.50 $\pm$ 0.02 & 13.63 $\pm$ 0.01 & 732.902 $\pm$ 8.147 & 592.157 $\pm$ 6.288 \\
+949 & 19.4 & 14.13 $\pm$ 0.01 & 14.23 $\pm$ 0.01 & 13.58 $\pm$ 0.02 & 13.51 $\pm$ 0.03 & 13.63 $\pm$ 0.01 & 705.803 $\pm$ 10.884 & 575.488 $\pm$ 10.127 \\
+950 & 20.4 & 14.25 $\pm$ 0.01 & 14.31 $\pm$ 0.02 & 13.63 $\pm$ 0.02 & 13.53 $\pm$ 0.03 & 13.64 $\pm$ 0.01 & 674.712 $\pm$ 11.467 & 555.124 $\pm$ 9.836 \\
+951 & 21.4 & 14.38 $\pm$ 0.02 & 14.40 $\pm$ 0.02 & 13.68 $\pm$ 0.04 & 13.56 $\pm$ 0.02 & 13.66 $\pm$ 0.01 & 640.630 $\pm$ 13.889 & 531.926 $\pm$ 11.899 \\
+952 & 22.4 & 14.52 $\pm$ 0.04 & 14.50 $\pm$ 0.01 & 13.74 $\pm$ 0.04 & 13.60 $\pm$ 0.02 & 13.68 $\pm$ 0.01 & 605.068 $\pm$ 13.494 & 506.774 $\pm$ 11.926 \\
+953 & 23.4 & 14.66 $\pm$ 0.02 & 14.60 $\pm$ 0.04 & 13.80 $\pm$ 0.03 & 13.64 $\pm$ 0.02 & 13.70 $\pm$ 0.02 & 569.122 $\pm$ 15.949 & 480.624 $\pm$ 12.868 \\
+954 & 24.4 & 14.80 $\pm$ 0.02 & 14.70 $\pm$ 0.03 & 13.87 $\pm$ 0.01 & 13.68 $\pm$ 0.03 & 13.72 $\pm$ 0.02 & 533.918 $\pm$ 9.466 & 454.446 $\pm$ 7.596 \\
+955 & 25.4 & 14.95 $\pm$ 0.03 & 14.81 $\pm$ 0.02 & 13.95 $\pm$ 0.01 & 13.73 $\pm$ 0.02 & 13.75 $\pm$ 0.01 & 499.760 $\pm$ 7.093 & 428.436 $\pm$ 5.743 \\
+956 & 26.4 & 15.08 $\pm$ 0.04 & 14.92 $\pm$ 0.04 & 14.02 $\pm$ 0.03 & 13.78 $\pm$ 0.01 & 13.79 $\pm$ 0.03 & 467.486 $\pm$ 11.242 & 403.412 $\pm$ 8.749 \\
+957 & 27.4 & 15.21 $\pm$ 0.07 & 15.03 $\pm$ 0.01 & 14.10 $\pm$ 0.01 & 13.84 $\pm$ 0.01 & 13.82 $\pm$ 0.01 & 437.264 $\pm$ 3.727 & 379.477 $\pm$ 2.291 \\
+958 & 28.4 & 15.34 $\pm$ 0.05 & 15.13 $\pm$ 0.02 & 14.18 $\pm$ 0.02 & 13.89 $\pm$ 0.01 & 13.86 $\pm$ 0.01 & 409.464 $\pm$ 5.847 & 357.084 $\pm$ 4.519 \\
+959 & 29.4 & 15.45 $\pm$ 0.02 & 15.22 $\pm$ 0.04 & 14.25 $\pm$ 0.03 & 13.95 $\pm$ 0.01 & 13.90 $\pm$ 0.04 & 384.201 $\pm$ 8.895 & 336.463 $\pm$ 7.511 \\
+960 & 30.3 & 15.55 $\pm$ 0.08 & 15.31 $\pm$ 0.04 & 14.32 $\pm$ 0.02 & 14.00 $\pm$ 0.01 & 13.94 $\pm$ 0.05 & 361.452 $\pm$ 9.245 & 317.610 $\pm$ 7.085 \\
+961 & 31.3 & 15.64 $\pm$ 0.01 & 15.39 $\pm$ 0.05 & 14.38 $\pm$ 0.03 & 14.06 $\pm$ 0.03 & 13.99 $\pm$ 0.03 & 340.896 $\pm$ 10.813 & 300.287 $\pm$ 9.252 \\
+962 & 32.3 & 15.72 $\pm$ 0.09 & 15.46 $\pm$ 0.01 & 14.45 $\pm$ 0.03 & 14.11 $\pm$ 0.01 & 14.04 $\pm$ 0.03 & 322.261 $\pm$ 6.691 & 284.383 $\pm$ 5.585 \\
+963 & 33.3 & 15.80 $\pm$ 0.07 & 15.53 $\pm$ 0.01 & 14.51 $\pm$ 0.01 & 14.16 $\pm$ 0.03 & 14.08 $\pm$ 0.02 & 305.460 $\pm$ 5.698 & 269.901 $\pm$ 4.896 \\
+964 & 34.3 & 15.87 $\pm$ 0.02 & 15.59 $\pm$ 0.01 & 14.57 $\pm$ 0.01 & 14.22 $\pm$ 0.04 & 14.13 $\pm$ 0.01 & 290.181 $\pm$ 5.308 & 256.543 $\pm$ 4.872 \\
+965 & 35.3 & 15.93 $\pm$ 0.02 & 15.64 $\pm$ 0.01 & 14.63 $\pm$ 0.01 & 14.27 $\pm$ 0.03 & 14.19 $\pm$ 0.02 & 276.104 $\pm$ 3.807 & 244.144 $\pm$ 3.467 \\
+966 & 36.3 & 15.98 $\pm$ 0.05 & 15.69 $\pm$ 0.01 & 14.68 $\pm$ 0.01 & 14.32 $\pm$ 0.01 & 14.24 $\pm$ 0.04 & 263.403 $\pm$ 2.617 & 232.846 $\pm$ 2.175 \\
+967 & 37.3 & 16.02 $\pm$ 0.02 & 15.73 $\pm$ 0.02 & 14.73 $\pm$ 0.02 & 14.37 $\pm$ 0.01 & 14.29 $\pm$ 0.05 & 251.911 $\pm$ 4.436 & 222.522 $\pm$ 3.936 \\
+968 & 38.3 & 16.07 $\pm$ 0.01 & 15.77 $\pm$ 0.01 & 14.78 $\pm$ 0.01 & 14.42 $\pm$ 0.01 & 14.34 $\pm$ 0.06 & 241.355 $\pm$ 4.164 & 213.009 $\pm$ 3.857 \\
+969 & 39.3 & 16.11 $\pm$ 0.01 & 15.80 $\pm$ 0.01 & 14.83 $\pm$ 0.03 & 14.46 $\pm$ 0.02 & 14.39 $\pm$ 0.06 & 231.624 $\pm$ 5.888 & 204.203 $\pm$ 5.692 \\
+970 & 40.3 & 16.14 $\pm$ 0.04 & 15.84 $\pm$ 0.04 & 14.87 $\pm$ 0.01 & 14.51 $\pm$ 0.03 & 14.44 $\pm$ 0.03 & 222.657 $\pm$ 5.377 & 196.032 $\pm$ 4.304 \\
+971 & 41.3 & 16.17 $\pm$ 0.02 & 15.87 $\pm$ 0.03 & 14.91 $\pm$ 0.03 & 14.55 $\pm$ 0.02 & 14.48 $\pm$ 0.03 & 214.466 $\pm$ 5.401 & 188.585 $\pm$ 4.692 \\
+972 & 42.2 & 16.20 $\pm$ 0.02 & 15.89 $\pm$ 0.06 & 14.95 $\pm$ 0.02 & 14.60 $\pm$ 0.01 & 14.53 $\pm$ 0.03 & 206.877 $\pm$ 4.491 & 181.655 $\pm$ 3.422 \\
+973 & 43.2 & 16.23 $\pm$ 0.01 & 15.92 $\pm$ 0.02 & 14.99 $\pm$ 0.02 & 14.64 $\pm$ 0.01 & 14.57 $\pm$ 0.02 & 199.771 $\pm$ 2.611 & 175.174 $\pm$ 2.237 \\
+974 & 44.2 & 16.26 $\pm$ 0.01 & 15.95 $\pm$ 0.03 & 15.03 $\pm$ 0.01 & 14.68 $\pm$ 0.01 & 14.61 $\pm$ 0.01 & 193.299 $\pm$ 1.719 & 169.267 $\pm$ 1.205 \\
+975 & 45.2 & 16.28 $\pm$ 0.01 & 15.97 $\pm$ 0.06 & 15.07 $\pm$ 0.01 & 14.72 $\pm$ 0.01 & 14.64 $\pm$ 0.01 & 187.186 $\pm$ 2.876 & 163.734 $\pm$ 1.791 \\
+976 & 46.2 & 16.31 $\pm$ 0.01 & 16.00 $\pm$ 0.06 & 15.11 $\pm$ 0.01 & 14.75 $\pm$ 0.01 & 14.67 $\pm$ 0.01 & 181.512 $\pm$ 3.121 & 158.605 $\pm$ 2.114 \\
+977 & 47.2 & 16.33 $\pm$ 0.01 & 16.02 $\pm$ 0.06 & 15.14 $\pm$ 0.01 & 14.79 $\pm$ 0.01 & 14.70 $\pm$ 0.02 & 176.157 $\pm$ 3.643 & 153.792 $\pm$ 2.701 \\
+978 & 48.2 & 16.35 $\pm$ 0.01 & 16.05 $\pm$ 0.06 & 15.18 $\pm$ 0.02 & 14.82 $\pm$ 0.01 & 14.73 $\pm$ 0.02 & 171.163 $\pm$ 3.805 & 149.312 $\pm$ 2.931 \\
+979 & 49.2 & 16.38 $\pm$ 0.01 & 16.08 $\pm$ 0.04 & 15.21 $\pm$ 0.01 & 14.86 $\pm$ 0.01 & 14.75 $\pm$ 0.02 & 166.472 $\pm$ 2.799 & 145.137 $\pm$ 2.133 \\
+980 & 50.2 & 16.40 $\pm$ 0.01 & 16.10 $\pm$ 0.04 & 15.24 $\pm$ 0.01 & 14.89 $\pm$ 0.01 & 14.78 $\pm$ 0.02 & 162.102 $\pm$ 2.726 & 141.253 $\pm$ 2.113 \\
+981 & 51.2 & 16.42 $\pm$ 0.01 & 16.13 $\pm$ 0.04 & 15.27 $\pm$ 0.02 & 14.92 $\pm$ 0.01 & 14.80 $\pm$ 0.02 & 157.888 $\pm$ 2.674 & 137.518 $\pm$ 2.132 \\
+982 & 52.2 & 16.44 $\pm$ 0.01 & 16.16 $\pm$ 0.03 & 15.30 $\pm$ 0.02 & 14.95 $\pm$ 0.01 & 14.82 $\pm$ 0.01 & 153.904 $\pm$ 2.382 & 133.984 $\pm$ 1.902 \\
+983 & 53.2 & 16.46 $\pm$ 0.01 & 16.18 $\pm$ 0.03 & 15.33 $\pm$ 0.02 & 14.98 $\pm$ 0.01 & 14.84 $\pm$ 0.01 & 150.227 $\pm$ 1.985 & 130.714 $\pm$ 1.578 \\
+984 & 54.1 & 16.48 $\pm$ 0.02 & 16.20 $\pm$ 0.01 & 15.35 $\pm$ 0.01 & 15.01 $\pm$ 0.01 & 14.86 $\pm$ 0.01 & 146.780 $\pm$ 0.930 & 127.662 $\pm$ 0.743 \\
+985 & 55.1 & 16.49 $\pm$ 0.05 & 16.23 $\pm$ 0.03 & 15.38 $\pm$ 0.01 & 15.04 $\pm$ 0.01 & 14.88 $\pm$ 0.03 & 143.401 $\pm$ 2.262 & 124.657 $\pm$ 1.720 \\
+986 & 56.1 & 16.51 $\pm$ 0.05 & 16.25 $\pm$ 0.01 & 15.41 $\pm$ 0.01 & 15.06 $\pm$ 0.06 & 14.90 $\pm$ 0.03 & 140.252 $\pm$ 3.882 & 121.858 $\pm$ 3.499 \\
+987 & 57.1 & 16.52 $\pm$ 0.02 & 16.27 $\pm$ 0.01 & 15.43 $\pm$ 0.01 & 15.09 $\pm$ 0.04 & 14.92 $\pm$ 0.02 & 137.216 $\pm$ 2.448 & 119.160 $\pm$ 2.239 \\
+988 & 58.1 & 16.54 $\pm$ 0.02 & 16.29 $\pm$ 0.01 & 15.46 $\pm$ 0.01 & 15.12 $\pm$ 0.02 & 14.94 $\pm$ 0.01 & 134.397 $\pm$ 1.298 & 116.638 $\pm$ 1.076 \\
+989 & 59.1 & 16.55 $\pm$ 0.05 & 16.31 $\pm$ 0.01 & 15.48 $\pm$ 0.01 & 15.14 $\pm$ 0.01 & 14.96 $\pm$ 0.01 & 131.634 $\pm$ 0.781 & 114.177 $\pm$ 0.552 \\
+990 & 60.1 & 16.57 $\pm$ 0.04 & 16.33 $\pm$ 0.01 & 15.50 $\pm$ 0.01 & 15.17 $\pm$ 0.01 & 14.98 $\pm$ 0.01 & 129.133 $\pm$ 0.923 & 111.935 $\pm$ 0.710 \\
+991 & 61.1 & 16.58 $\pm$ 0.04 & 16.34 $\pm$ 0.01 & 15.52 $\pm$ 0.01 & 15.20 $\pm$ 0.01 & 14.99 $\pm$ 0.01 & 126.646 $\pm$ 0.835 & 109.707 $\pm$ 0.634 \\
+992 & 62.1 & 16.60 $\pm$ 0.03 & 16.36 $\pm$ 0.01 & 15.54 $\pm$ 0.01 & 15.22 $\pm$ 0.01 & 15.01 $\pm$ 0.01 & 124.252 $\pm$ 0.542 & 107.542 $\pm$ 0.391 \\
+993 & 63.1 & 16.61 $\pm$ 0.02 & 16.37 $\pm$ 0.01 & 15.56 $\pm$ 0.01 & 15.24 $\pm$ 0.01 & 15.03 $\pm$ 0.01 & 121.987 $\pm$ 0.639 & 105.487 $\pm$ 0.484 \\
+994 & 64.1 & 16.62 $\pm$ 0.02 & 16.39 $\pm$ 0.01 & 15.58 $\pm$ 0.01 & 15.27 $\pm$ 0.01 & 15.05 $\pm$ 0.01 & 119.720 $\pm$ 0.629 & 103.442 $\pm$ 0.528 \\
+995 & 65.1 & 16.64 $\pm$ 0.01 & 16.40 $\pm$ 0.01 & 15.60 $\pm$ 0.01 & 15.29 $\pm$ 0.01 & 15.07 $\pm$ 0.01 & 117.509 $\pm$ 0.483 & 101.429 $\pm$ 0.385 \\
+996 & 66.0 & 16.65 $\pm$ 0.01 & 16.41 $\pm$ 0.01 & 15.62 $\pm$ 0.01 & 15.32 $\pm$ 0.01 & 15.09 $\pm$ 0.01 & 115.368 $\pm$ 0.562 & 99.494 $\pm$ 0.488 \\
+997 & 67.0 & 16.67 $\pm$ 0.01 & 16.43 $\pm$ 0.01 & 15.64 $\pm$ 0.01 & 15.35 $\pm$ 0.01 & 15.12 $\pm$ 0.01 & 113.273 $\pm$ 0.700 & 97.592 $\pm$ 0.627 \\
+998 & 68.0 & 16.68 $\pm$ 0.01 & 16.44 $\pm$ 0.01 & 15.66 $\pm$ 0.01 & 15.37 $\pm$ 0.02 & 15.14 $\pm$ 0.01 & 111.132 $\pm$ 0.863 & 95.672 $\pm$ 0.780 \\
+999 & 69.0 & 16.69 $\pm$ 0.01 & 16.46 $\pm$ 0.01 & 15.69 $\pm$ 0.01 & 15.39 $\pm$ 0.01 & 15.16 $\pm$ 0.01 & 109.092 $\pm$ 0.745 & 93.837 $\pm$ 0.674 \\
+1000 & 70.0 & 16.71 $\pm$ 0.01 & 16.47 $\pm$ 0.01 & 15.70 $\pm$ 0.02 & 15.42 $\pm$ 0.01 & 15.18 $\pm$ 0.01 & 107.135 $\pm$ 1.006 & 92.080 $\pm$ 0.936 \\
+1001 & 71.0 & 16.72 $\pm$ 0.10 & 16.49 $\pm$ 0.01 & 15.72 $\pm$ 0.01 & 15.44 $\pm$ 0.01 & 15.20 $\pm$ 0.01 & 105.174 $\pm$ 0.869 & 90.311 $\pm$ 0.437 \\
+1002 & 72.0 & 16.74 $\pm$ 0.06 & 16.50 $\pm$ 0.01 & 15.74 $\pm$ 0.01 & 15.46 $\pm$ 0.02 & 15.23 $\pm$ 0.02 & 103.192 $\pm$ 1.505 & 88.539 $\pm$ 1.191 \\
+1003 & 73.0 & 16.75 $\pm$ 0.03 & 16.52 $\pm$ 0.01 & 15.77 $\pm$ 0.01 & 15.49 $\pm$ 0.01 & 15.25 $\pm$ 0.01 & 101.277 $\pm$ 0.552 & 86.826 $\pm$ 0.401 \\
+1004 & 74.0 & 16.77 $\pm$ 0.01 & 16.53 $\pm$ 0.01 & 15.79 $\pm$ 0.01 & 15.51 $\pm$ 0.01 & 15.27 $\pm$ 0.01 & 99.432 $\pm$ 0.811 & 85.175 $\pm$ 0.677 \\
+1005 & 75.0 & 16.78 $\pm$ 0.01 & 16.55 $\pm$ 0.01 & 15.81 $\pm$ 0.01 & 15.53 $\pm$ 0.01 & 15.29 $\pm$ 0.01 & 97.597 $\pm$ 0.382 & 83.526 $\pm$ 0.288 \\
+1006 & 76.0 & 16.80 $\pm$ 0.02 & 16.56 $\pm$ 0.01 & 15.83 $\pm$ 0.01 & 15.56 $\pm$ 0.01 & 15.32 $\pm$ 0.01 & 95.826 $\pm$ 0.737 & 81.948 $\pm$ 0.655 \\
+1007 & 77.0 & 16.81 $\pm$ 0.03 & 16.58 $\pm$ 0.01 & 15.85 $\pm$ 0.01 & 15.58 $\pm$ 0.01 & 15.34 $\pm$ 0.01 & 94.051 $\pm$ 0.722 & 80.364 $\pm$ 0.575 \\
+1008 & 77.9 & 16.82 $\pm$ 0.01 & 16.59 $\pm$ 0.01 & 15.87 $\pm$ 0.01 & 15.60 $\pm$ 0.01 & 15.36 $\pm$ 0.01 & 92.386 $\pm$ 0.563 & 78.887 $\pm$ 0.509 \\
+1009 & 78.9 & 16.84 $\pm$ 0.05 & 16.61 $\pm$ 0.01 & 15.89 $\pm$ 0.01 & 15.62 $\pm$ 0.01 & 15.38 $\pm$ 0.01 & 90.750 $\pm$ 0.675 & 77.436 $\pm$ 0.461 \\
+1010 & 79.9 & 16.86 $\pm$ 0.05 & 16.62 $\pm$ 0.01 & 15.91 $\pm$ 0.01 & 15.65 $\pm$ 0.01 & 15.40 $\pm$ 0.01 & 89.093 $\pm$ 0.405 & 75.965 $\pm$ 0.225 \\
+1011 & 80.9 & 16.87 $\pm$ 0.03 & 16.64 $\pm$ 0.01 & 15.93 $\pm$ 0.01 & 15.67 $\pm$ 0.01 & 15.42 $\pm$ 0.01 & 87.517 $\pm$ 0.432 & 74.569 $\pm$ 0.284 \\
+1012 & 81.9 & 16.89 $\pm$ 0.02 & 16.65 $\pm$ 0.01 & 15.95 $\pm$ 0.01 & 15.69 $\pm$ 0.01 & 15.44 $\pm$ 0.01 & 85.956 $\pm$ 0.345 & 73.198 $\pm$ 0.260 \\
+1013 & 82.9 & 16.90 $\pm$ 0.01 & 16.67 $\pm$ 0.01 & 15.97 $\pm$ 0.01 & 15.71 $\pm$ 0.01 & 15.46 $\pm$ 0.01 & 84.437 $\pm$ 0.422 & 71.853 $\pm$ 0.325 \\
+1014 & 83.9 & 16.92 $\pm$ 0.01 & 16.68 $\pm$ 0.01 & 15.99 $\pm$ 0.01 & 15.73 $\pm$ 0.01 & 15.48 $\pm$ 0.01 & 82.977 $\pm$ 0.297 & 70.566 $\pm$ 0.251 \\
+1015 & 84.9 & 16.93 $\pm$ 0.02 & 16.70 $\pm$ 0.01 & 16.01 $\pm$ 0.01 & 15.75 $\pm$ 0.01 & 15.50 $\pm$ 0.01 & 81.519 $\pm$ 0.353 & 69.281 $\pm$ 0.253 \\
+1016 & 85.9 & 16.95 $\pm$ 0.02 & 16.71 $\pm$ 0.01 & 16.03 $\pm$ 0.01 & 15.77 $\pm$ 0.01 & 15.52 $\pm$ 0.01 & 80.130 $\pm$ 0.311 & 68.060 $\pm$ 0.222 \\
+1017 & 86.9 &      \nodata     & 16.73 $\pm$ 0.01 & 16.05 $\pm$ 0.01 & 15.79 $\pm$ 0.01 & 15.54 $\pm$ 0.01 &       \nodata      & 66.818 $\pm$ 0.224 \\
+1018 & 87.9 &      \nodata     & 16.74 $\pm$ 0.01 & 16.07 $\pm$ 0.01 & 15.81 $\pm$ 0.01 & 15.56 $\pm$ 0.01 &       \nodata      & 65.641 $\pm$ 0.195 \\
+1019 & 88.9 &      \nodata     & 16.76 $\pm$ 0.01 & 16.09 $\pm$ 0.01 & 15.84 $\pm$ 0.01 & 15.59 $\pm$ 0.01 &       \nodata      & 64.477 $\pm$ 0.216 \\
+1020 & 89.8 &      \nodata     & 16.77 $\pm$ 0.01 & 16.11 $\pm$ 0.01 & 15.86 $\pm$ 0.01 & 15.61 $\pm$ 0.01 &       \nodata      & 63.341 $\pm$ 0.188 \\
+1021 & 90.8 &      \nodata     & 16.79 $\pm$ 0.01 & 16.13 $\pm$ 0.01 & 15.88 $\pm$ 0.01 & 15.63 $\pm$ 0.01 &       \nodata      & 62.234 $\pm$ 0.364 \\
+1022 & 91.8 &      \nodata     & 16.80 $\pm$ 0.01 & 16.15 $\pm$ 0.01 & 15.89 $\pm$ 0.01 & 15.65 $\pm$ 0.01 &       \nodata      & 61.142 $\pm$ 0.332 \\
+1023 & 92.8 &      \nodata     & 16.82 $\pm$ 0.01 & 16.17 $\pm$ 0.01 & 15.91 $\pm$ 0.01 & 15.67 $\pm$ 0.01 &       \nodata      & 60.053 $\pm$ 0.350 \\
+1024 & 93.8 &      \nodata     & 16.83 $\pm$ 0.01 & 16.19 $\pm$ 0.01 & 15.93 $\pm$ 0.01 & 15.69 $\pm$ 0.01 &       \nodata      & 59.006 $\pm$ 0.343 \\
+1025 & 94.8 &      \nodata     & 16.85 $\pm$ 0.01 & 16.21 $\pm$ 0.01 & 15.95 $\pm$ 0.01 & 15.71 $\pm$ 0.01 &       \nodata      & 57.942 $\pm$ 0.326 \\
+1026 & 95.8 &      \nodata     & 16.86 $\pm$ 0.01 & 16.23 $\pm$ 0.01 & 15.97 $\pm$ 0.01 & 15.73 $\pm$ 0.01 &       \nodata      & 56.949 $\pm$ 0.285 \\
+1027 & 96.8 &      \nodata     & 16.88 $\pm$ 0.01 & 16.25 $\pm$ 0.01 & 15.99 $\pm$ 0.01 & 15.75 $\pm$ 0.01 &       \nodata      & 55.946 $\pm$ 0.263 \\
+1028 & 97.8 &      \nodata     & 16.90 $\pm$ 0.01 & 16.27 $\pm$ 0.01 & 16.01 $\pm$ 0.01 & 15.78 $\pm$ 0.01 &       \nodata      & 54.980 $\pm$ 0.240 \\
+1029 & 98.8 &      \nodata     & 16.91 $\pm$ 0.01 & 16.29 $\pm$ 0.01 & 16.03 $\pm$ 0.01 & 15.80 $\pm$ 0.01 &       \nodata      & 54.023 $\pm$ 0.237 \\
+1030 & 99.8 &      \nodata     & 16.93 $\pm$ 0.01 & 16.31 $\pm$ 0.01 & 16.05 $\pm$ 0.01 & 15.82 $\pm$ 0.01 &       \nodata      & 53.063 $\pm$ 0.238 \\
+1031 & 100.8 &      \nodata     & 16.94 $\pm$ 0.01 & 16.33 $\pm$ 0.01 & 16.07 $\pm$ 0.01 & 15.84 $\pm$ 0.01 &       \nodata      & 52.139 $\pm$ 0.180 \\
+1032 & 101.7 &      \nodata     & 16.96 $\pm$ 0.01 & 16.35 $\pm$ 0.01 & 16.09 $\pm$ 0.01 & 15.86 $\pm$ 0.01 &       \nodata      & 51.233 $\pm$ 0.173 \\
+1033 & 102.7 &      \nodata     & 16.97 $\pm$ 0.01 & 16.36 $\pm$ 0.01 & 16.11 $\pm$ 0.01 & 15.88 $\pm$ 0.01 &       \nodata      & 50.357 $\pm$ 0.149 \\
+1034 & 103.7 &      \nodata     & 16.99 $\pm$ 0.01 & 16.39 $\pm$ 0.01 & 16.13 $\pm$ 0.01 & 15.90 $\pm$ 0.01 &       \nodata      & 49.457 $\pm$ 0.160 \\
+1035 & 104.7 &      \nodata     & 17.00 $\pm$ 0.01 & 16.40 $\pm$ 0.01 & 16.16 $\pm$ 0.01 & 15.93 $\pm$ 0.01 &       \nodata      & 48.452 $\pm$ 0.290 \\
+1036 & 105.7 &      \nodata     & 17.02 $\pm$ 0.01 & 16.42 $\pm$ 0.01 & 16.18 $\pm$ 0.01 & 15.95 $\pm$ 0.01 &       \nodata      & 47.628 $\pm$ 0.331 \\
+1037 & 106.7 &      \nodata     & 17.04 $\pm$ 0.01 & 16.44 $\pm$ 0.01 & 16.20 $\pm$ 0.01 & 15.97 $\pm$ 0.01 &       \nodata      & 46.794 $\pm$ 0.322 \\
+1038 & 107.7 &      \nodata     & 17.05 $\pm$ 0.01 & 16.46 $\pm$ 0.01 & 16.22 $\pm$ 0.01 & 15.99 $\pm$ 0.01 &       \nodata      & 45.995 $\pm$ 0.284 \\
+1039 & 108.7 &      \nodata     & 17.07 $\pm$ 0.01 & 16.48 $\pm$ 0.01 & 16.24 $\pm$ 0.01 & 16.00 $\pm$ 0.01 &       \nodata      & 45.200 $\pm$ 0.221 \\
+1040 & 109.7 &      \nodata     & 17.08 $\pm$ 0.01 & 16.50 $\pm$ 0.01 & 16.26 $\pm$ 0.01 & 16.02 $\pm$ 0.01 &       \nodata      & 44.431 $\pm$ 0.179 \\
+1041 & 110.7 &      \nodata     & 17.10 $\pm$ 0.01 & 16.52 $\pm$ 0.01 & 16.28 $\pm$ 0.01 & 16.04 $\pm$ 0.01 &       \nodata      & 43.666 $\pm$ 0.176 \\
+1042 & 111.7 &      \nodata     & 17.12 $\pm$ 0.01 & 16.54 $\pm$ 0.01 & 16.30 $\pm$ 0.01 & 16.06 $\pm$ 0.01 &       \nodata      & 42.926 $\pm$ 0.146 \\
+1043 & 112.7 &      \nodata     & 17.13 $\pm$ 0.01 & 16.55 $\pm$ 0.01 & 16.32 $\pm$ 0.01 & 16.08 $\pm$ 0.01 &       \nodata      & 42.173 $\pm$ 0.137 \\
+1044 & 113.6 &      \nodata     & 17.15 $\pm$ 0.01 & 16.57 $\pm$ 0.01 & 16.33 $\pm$ 0.01 & 16.10 $\pm$ 0.01 &       \nodata      & 41.473 $\pm$ 0.159 \\
+1045 & 114.6 &      \nodata     & 17.16 $\pm$ 0.01 & 16.59 $\pm$ 0.01 & 16.35 $\pm$ 0.01 & 16.12 $\pm$ 0.01 &       \nodata      & 40.771 $\pm$ 0.127 \\
+1046 & 115.6 &      \nodata     & 17.18 $\pm$ 0.01 & 16.61 $\pm$ 0.01 & 16.37 $\pm$ 0.01 & 16.14 $\pm$ 0.01 &       \nodata      & 40.092 $\pm$ 0.205 \\
+1047 & 116.6 &      \nodata     & 17.20 $\pm$ 0.01 & 16.63 $\pm$ 0.01 & 16.39 $\pm$ 0.01 & 16.16 $\pm$ 0.01 &       \nodata      & 39.389 $\pm$ 0.176 \\
+1048 & 117.6 &      \nodata     & 17.21 $\pm$ 0.01 & 16.65 $\pm$ 0.01 & 16.41 $\pm$ 0.01 & 16.17 $\pm$ 0.01 &       \nodata      & 38.735 $\pm$ 0.202 \\
+1049 & 118.6 &      \nodata     & 17.23 $\pm$ 0.01 & 16.67 $\pm$ 0.01 & 16.43 $\pm$ 0.01 & 16.19 $\pm$ 0.01 &       \nodata      & 38.080 $\pm$ 0.201 \\
+1050 & 119.6 &      \nodata     & 17.25 $\pm$ 0.01 & 16.69 $\pm$ 0.01 & 16.45 $\pm$ 0.01 & 16.21 $\pm$ 0.01 &       \nodata      & 37.435 $\pm$ 0.187 \\
+1051 & 120.6 &      \nodata     & 17.26 $\pm$ 0.01 & 16.71 $\pm$ 0.01 & 16.47 $\pm$ 0.01 & 16.23 $\pm$ 0.01 &       \nodata      & 36.818 $\pm$ 0.195 \\
+1052 & 121.6 &      \nodata     & 17.28 $\pm$ 0.01 & 16.73 $\pm$ 0.01 & 16.49 $\pm$ 0.01 & 16.25 $\pm$ 0.01 &       \nodata      & 36.190 $\pm$ 0.164 \\
+1053 & 122.6 &      \nodata     & 17.30 $\pm$ 0.01 & 16.74 $\pm$ 0.01 & 16.50 $\pm$ 0.01 & 16.26 $\pm$ 0.01 &       \nodata      & 35.588 $\pm$ 0.192 \\
+1054 & 123.6 &      \nodata     & 17.31 $\pm$ 0.01 & 16.76 $\pm$ 0.01 & 16.52 $\pm$ 0.01 & 16.28 $\pm$ 0.01 &       \nodata      & 35.001 $\pm$ 0.192 \\
+1055 & 124.6 &      \nodata     & 17.33 $\pm$ 0.01 & 16.78 $\pm$ 0.01 & 16.54 $\pm$ 0.01 & 16.30 $\pm$ 0.01 &       \nodata      & 34.404 $\pm$ 0.209 \\
+1056 & 125.5 &      \nodata     & 17.35 $\pm$ 0.01 & 16.80 $\pm$ 0.01 & 16.56 $\pm$ 0.01 & 16.32 $\pm$ 0.02 &       \nodata      & 33.853 $\pm$ 0.245 \\
+1057 & 126.5 &      \nodata     & 17.36 $\pm$ 0.01 & 16.82 $\pm$ 0.01 & 16.58 $\pm$ 0.01 & 16.34 $\pm$ 0.03 &       \nodata      & 33.285 $\pm$ 0.302 \\
+1058 & 127.5 &      \nodata     & 17.38 $\pm$ 0.01 & 16.84 $\pm$ 0.01 & 16.60 $\pm$ 0.01 & 16.35 $\pm$ 0.03 &       \nodata      & 32.716 $\pm$ 0.325 \\
+1059 & 128.5 &      \nodata     & 17.40 $\pm$ 0.01 & 16.86 $\pm$ 0.01 & 16.61 $\pm$ 0.01 & 16.37 $\pm$ 0.03 &       \nodata      & 32.172 $\pm$ 0.358 \\
+1060 & 129.5 &      \nodata     & 17.41 $\pm$ 0.01 & 16.88 $\pm$ 0.01 & 16.63 $\pm$ 0.02 & 16.39 $\pm$ 0.03 &       \nodata      & 31.652 $\pm$ 0.371 \\
+1061 & 130.5 &      \nodata     & 17.43 $\pm$ 0.01 & 16.89 $\pm$ 0.01 & 16.65 $\pm$ 0.02 & 16.41 $\pm$ 0.02 &       \nodata      & 31.117 $\pm$ 0.377 \\
+1062 & 131.5 &      \nodata     & 17.45 $\pm$ 0.01 & 16.91 $\pm$ 0.01 & 16.67 $\pm$ 0.02 & 16.43 $\pm$ 0.02 &       \nodata      & 30.612 $\pm$ 0.385 \\
+1063 & 132.5 &      \nodata     & 17.46 $\pm$ 0.01 & 16.93 $\pm$ 0.02 & 16.69 $\pm$ 0.02 & 16.44 $\pm$ 0.01 &       \nodata      & 30.104 $\pm$ 0.452 \\
+1064 & 133.5 &      \nodata     & 17.48 $\pm$ 0.01 & 16.95 $\pm$ 0.02 & 16.70 $\pm$ 0.03 & 16.46 $\pm$ 0.02 &       \nodata      & 29.617 $\pm$ 0.506 \\
+1065 & 134.5 &      \nodata     & 17.50 $\pm$ 0.01 & 16.97 $\pm$ 0.02 & 16.72 $\pm$ 0.03 & 16.48 $\pm$ 0.02 &       \nodata      & 29.124 $\pm$ 0.516 \\
+1066 & 135.5 &      \nodata     & 17.52 $\pm$ 0.01 & 16.99 $\pm$ 0.02 & 16.74 $\pm$ 0.03 & 16.49 $\pm$ 0.01 &       \nodata      & 28.648 $\pm$ 0.502 \\
+1067 & 136.5 &      \nodata     & 17.53 $\pm$ 0.01 & 17.01 $\pm$ 0.03 & 16.76 $\pm$ 0.03 & 16.51 $\pm$ 0.01 &       \nodata      & 28.163 $\pm$ 0.625 \\
+1068 & 137.4 &      \nodata     & 17.55 $\pm$ 0.01 & 17.03 $\pm$ 0.03 & 16.77 $\pm$ 0.04 & 16.53 $\pm$ 0.01 &       \nodata      & 27.716 $\pm$ 0.610 \\
+1069 & 138.4 &      \nodata     & 17.57 $\pm$ 0.01 & 17.05 $\pm$ 0.03 & 16.79 $\pm$ 0.04 & 16.55 $\pm$ 0.01 &       \nodata      & 27.264 $\pm$ 0.633 \\
+1070 & 139.4 &      \nodata     & 17.58 $\pm$ 0.01 & 17.07 $\pm$ 0.03 & 16.81 $\pm$ 0.03 & 16.56 $\pm$ 0.01 &       \nodata      & 26.818 $\pm$ 0.598 \\
+1071 & 140.4 &      \nodata     & 17.60 $\pm$ 0.01 & 17.08 $\pm$ 0.02 & 16.83 $\pm$ 0.04 & 16.58 $\pm$ 0.01 &       \nodata      & 26.384 $\pm$ 0.528 \\
+1072 & 141.4 &      \nodata     & 17.62 $\pm$ 0.01 & 17.10 $\pm$ 0.02 & 16.84 $\pm$ 0.03 & 16.60 $\pm$ 0.01 &       \nodata      & 25.965 $\pm$ 0.484 \\
+1073 & 142.4 &      \nodata     & 17.63 $\pm$ 0.01 & 17.12 $\pm$ 0.03 & 16.86 $\pm$ 0.03 & 16.61 $\pm$ 0.01 &       \nodata      & 25.538 $\pm$ 0.525 \\
+1074 & 143.4 &      \nodata     & 17.65 $\pm$ 0.01 & 17.14 $\pm$ 0.03 & 16.88 $\pm$ 0.03 & 16.63 $\pm$ 0.01 &       \nodata      & 25.121 $\pm$ 0.433 \\
+1075 & 144.4 &      \nodata     & 17.67 $\pm$ 0.01 & 17.16 $\pm$ 0.02 & 16.90 $\pm$ 0.03 & 16.65 $\pm$ 0.01 &       \nodata      & 24.717 $\pm$ 0.380 \\
+1076 & 145.4 &      \nodata     & 17.68 $\pm$ 0.01 & 17.18 $\pm$ 0.02 & 16.91 $\pm$ 0.02 & 16.66 $\pm$ 0.01 &       \nodata      & 24.302 $\pm$ 0.351 \\
+1077 & 146.4 &      \nodata     & 17.70 $\pm$ 0.01 & 17.20 $\pm$ 0.02 & 16.93 $\pm$ 0.02 & 16.68 $\pm$ 0.01 &       \nodata      & 23.904 $\pm$ 0.374 \\
+1078 & 147.4 &      \nodata     & 17.72 $\pm$ 0.01 & 17.22 $\pm$ 0.02 & 16.95 $\pm$ 0.02 & 16.70 $\pm$ 0.01 &       \nodata      & 23.528 $\pm$ 0.343 \\
+1079 & 148.4 &      \nodata     & 17.74 $\pm$ 0.01 & 17.24 $\pm$ 0.01 & 16.96 $\pm$ 0.02 & 16.71 $\pm$ 0.02 &       \nodata      & 23.137 $\pm$ 0.306 \\
+1080 & 149.3 &      \nodata     & 17.75 $\pm$ 0.01 & 17.26 $\pm$ 0.01 & 16.98 $\pm$ 0.01 & 16.73 $\pm$ 0.02 &       \nodata      & 22.776 $\pm$ 0.269 \\
+1081 & 150.3 &      \nodata     & 17.77 $\pm$ 0.01 & 17.27 $\pm$ 0.01 & 17.00 $\pm$ 0.02 & 16.75 $\pm$ 0.02 &       \nodata      & 22.407 $\pm$ 0.322 \\
+1082 & 151.3 &      \nodata     & 17.79 $\pm$ 0.01 & 17.29 $\pm$ 0.01 & 17.01 $\pm$ 0.01 & 16.76 $\pm$ 0.02 &       \nodata      & 22.054 $\pm$ 0.283 \\
+1083 & 152.3 &      \nodata     & 17.80 $\pm$ 0.01 & 17.31 $\pm$ 0.01 & 17.03 $\pm$ 0.01 & 16.78 $\pm$ 0.02 &       \nodata      & 21.691 $\pm$ 0.207 \\
+1084 & 153.3 &      \nodata     & 17.82 $\pm$ 0.01 & 17.33 $\pm$ 0.01 & 17.05 $\pm$ 0.01 & 16.80 $\pm$ 0.02 &       \nodata      & 21.350 $\pm$ 0.206 \\
+1085 & 154.3 &      \nodata     & 17.84 $\pm$ 0.01 & 17.35 $\pm$ 0.01 & 17.06 $\pm$ 0.01 & 16.81 $\pm$ 0.02 &       \nodata      & 21.014 $\pm$ 0.224 \\
+1086 & 155.3 &      \nodata     & 17.86 $\pm$ 0.01 & 17.37 $\pm$ 0.01 & 17.08 $\pm$ 0.01 & 16.83 $\pm$ 0.03 &       \nodata      & 20.674 $\pm$ 0.192 \\
+1087 & 156.3 &      \nodata     & 17.87 $\pm$ 0.01 & 17.39 $\pm$ 0.01 & 17.10 $\pm$ 0.01 & 16.84 $\pm$ 0.03 &       \nodata      & 20.342 $\pm$ 0.207 \\
+1088 & 157.3 &      \nodata     & 17.89 $\pm$ 0.01 & 17.41 $\pm$ 0.01 & 17.11 $\pm$ 0.01 & 16.86 $\pm$ 0.03 &       \nodata      & 20.016 $\pm$ 0.170 \\
+1089 & 158.3 &      \nodata     & 17.91 $\pm$ 0.01 & 17.43 $\pm$ 0.01 & 17.13 $\pm$ 0.01 & 16.88 $\pm$ 0.03 &       \nodata      & 19.701 $\pm$ 0.191 \\
+1090 & 159.3 &      \nodata     & 17.92 $\pm$ 0.01 & 17.45 $\pm$ 0.01 & 17.15 $\pm$ 0.01 & 16.89 $\pm$ 0.03 &       \nodata      & 19.382 $\pm$ 0.133 \\
+1091 & 160.3 &      \nodata     & 17.94 $\pm$ 0.01 & 17.47 $\pm$ 0.01 & 17.16 $\pm$ 0.01 & 16.91 $\pm$ 0.03 &       \nodata      & 19.077 $\pm$ 0.179 \\
+1092 & 161.2 &      \nodata     & 17.96 $\pm$ 0.01 & 17.48 $\pm$ 0.01 & 17.18 $\pm$ 0.01 & 16.93 $\pm$ 0.02 &       \nodata      & 18.774 $\pm$ 0.129 \\
+1093 & 162.2 &      \nodata     & 17.98 $\pm$ 0.01 & 17.50 $\pm$ 0.01 & 17.20 $\pm$ 0.01 & 16.94 $\pm$ 0.03 &       \nodata      & 18.479 $\pm$ 0.161 \\
+1094 & 163.2 &      \nodata     & 17.99 $\pm$ 0.01 & 17.52 $\pm$ 0.01 & 17.21 $\pm$ 0.01 & 16.96 $\pm$ 0.02 &       \nodata      & 18.183 $\pm$ 0.111 \\
+1095 & 164.2 &      \nodata     & 18.01 $\pm$ 0.01 & 17.54 $\pm$ 0.01 & 17.23 $\pm$ 0.01 & 16.97 $\pm$ 0.02 &       \nodata      & 17.900 $\pm$ 0.138 \\
+1096 & 165.2 &      \nodata     & 18.03 $\pm$ 0.01 & 17.56 $\pm$ 0.01 & 17.24 $\pm$ 0.01 & 16.99 $\pm$ 0.01 &       \nodata      & 17.618 $\pm$ 0.109 \\
+1097 & 166.2 &      \nodata     & 18.05 $\pm$ 0.01 & 17.58 $\pm$ 0.01 & 17.26 $\pm$ 0.01 & 17.00 $\pm$ 0.02 &       \nodata      & 17.341 $\pm$ 0.128 \\
+1098 & 167.2 &      \nodata     & 18.06 $\pm$ 0.01 & 17.60 $\pm$ 0.01 & 17.28 $\pm$ 0.01 & 17.02 $\pm$ 0.01 &       \nodata      & 17.063 $\pm$ 0.084 \\
+1099 & 168.2 &      \nodata     & 18.08 $\pm$ 0.01 & 17.62 $\pm$ 0.01 & 17.29 $\pm$ 0.01 & 17.04 $\pm$ 0.01 &       \nodata      & 16.800 $\pm$ 0.118 \\
+1100 & 169.2 &      \nodata     & 18.10 $\pm$ 0.01 & 17.64 $\pm$ 0.01 & 17.31 $\pm$ 0.01 & 17.05 $\pm$ 0.01 &       \nodata      & 16.536 $\pm$ 0.086 \\
+1101 & 170.2 &      \nodata     & 18.11 $\pm$ 0.01 & 17.66 $\pm$ 0.01 & 17.32 $\pm$ 0.01 & 17.07 $\pm$ 0.01 &       \nodata      & 16.279 $\pm$ 0.117 \\
+1102 & 171.2 &      \nodata     & 18.13 $\pm$ 0.01 & 17.68 $\pm$ 0.01 & 17.34 $\pm$ 0.01 & 17.08 $\pm$ 0.01 &       \nodata      & 16.021 $\pm$ 0.091 \\
+1103 & 172.2 &      \nodata     & 18.15 $\pm$ 0.01 & 17.69 $\pm$ 0.01 & 17.35 $\pm$ 0.01 & 17.10 $\pm$ 0.01 &       \nodata      & 15.774 $\pm$ 0.113 \\
+1104 & 173.1 &      \nodata     & 18.17 $\pm$ 0.01 & 17.71 $\pm$ 0.01 & 17.37 $\pm$ 0.02 & 17.11 $\pm$ 0.01 &       \nodata      & 15.526 $\pm$ 0.136 \\
+1105 & 174.1 &      \nodata     & 18.18 $\pm$ 0.01 & 17.73 $\pm$ 0.01 & 17.39 $\pm$ 0.01 & 17.13 $\pm$ 0.01 &       \nodata      & 15.282 $\pm$ 0.118 \\
+1106 & 175.1 &      \nodata     & 18.20 $\pm$ 0.01 & 17.75 $\pm$ 0.01 & 17.40 $\pm$ 0.02 & 17.14 $\pm$ 0.01 &       \nodata      & 15.047 $\pm$ 0.123 \\
+1107 & 176.1 &      \nodata     & 18.22 $\pm$ 0.01 & 17.77 $\pm$ 0.01 & 17.42 $\pm$ 0.01 & 17.16 $\pm$ 0.01 &       \nodata      & 14.810 $\pm$ 0.113 \\
+1108 & 177.1 &      \nodata     & 18.24 $\pm$ 0.01 & 17.79 $\pm$ 0.01 & 17.43 $\pm$ 0.02 & 17.18 $\pm$ 0.01 &       \nodata      & 14.578 $\pm$ 0.128 \\
+1109 & 178.1 &      \nodata     & 18.26 $\pm$ 0.01 & 17.81 $\pm$ 0.01 & 17.45 $\pm$ 0.01 & 17.19 $\pm$ 0.01 &       \nodata      & 14.349 $\pm$ 0.123 \\
+1110 & 179.1 &      \nodata     & 18.27 $\pm$ 0.01 & 17.83 $\pm$ 0.01 & 17.46 $\pm$ 0.02 & 17.21 $\pm$ 0.01 &       \nodata      & 14.132 $\pm$ 0.144 \\
+1111 & 180.1 &      \nodata     & 18.29 $\pm$ 0.01 & 17.85 $\pm$ 0.01 & 17.48 $\pm$ 0.01 & 17.22 $\pm$ 0.01 &       \nodata      & 13.915 $\pm$ 0.135 \\
+1112 & 181.1 &      \nodata     & 18.31 $\pm$ 0.01 & 17.86 $\pm$ 0.01 & 17.49 $\pm$ 0.02 & 17.24 $\pm$ 0.01 &       \nodata      & 13.701 $\pm$ 0.147 \\
+1113 & 182.1 &      \nodata     & 18.33 $\pm$ 0.01 & 17.88 $\pm$ 0.01 & 17.51 $\pm$ 0.03 & 17.25 $\pm$ 0.02 &       \nodata      & 13.490 $\pm$ 0.177 \\
+1114 & 183.1 &      \nodata     & 18.34 $\pm$ 0.01 & 17.90 $\pm$ 0.01 & 17.52 $\pm$ 0.02 & 17.27 $\pm$ 0.01 &       \nodata      & 13.284 $\pm$ 0.146 \\
+1115 & 184.1 &      \nodata     & 18.36 $\pm$ 0.01 & 17.92 $\pm$ 0.01 & 17.54 $\pm$ 0.03 & 17.28 $\pm$ 0.02 &       \nodata      & 13.080 $\pm$ 0.178 \\
+1116 & 185.0 &      \nodata     & 18.38 $\pm$ 0.01 & 17.94 $\pm$ 0.01 & 17.55 $\pm$ 0.02 & 17.30 $\pm$ 0.02 &       \nodata      & 12.879 $\pm$ 0.137 \\
+1117 & 186.0 &      \nodata     & 18.40 $\pm$ 0.01 & 17.96 $\pm$ 0.01 & 17.57 $\pm$ 0.03 & 17.31 $\pm$ 0.02 &       \nodata      & 12.682 $\pm$ 0.168 \\
+1118 & 187.0 &      \nodata     & 18.41 $\pm$ 0.01 & 17.98 $\pm$ 0.01 & 17.58 $\pm$ 0.02 & 17.33 $\pm$ 0.02 &       \nodata      & 12.491 $\pm$ 0.142 \\
+1119 & 188.0 &      \nodata     & 18.43 $\pm$ 0.01 & 18.00 $\pm$ 0.01 & 17.60 $\pm$ 0.03 & 17.34 $\pm$ 0.02 &       \nodata      & 12.299 $\pm$ 0.180 \\
+1120 & 189.0 &      \nodata     & 18.45 $\pm$ 0.01 & 18.02 $\pm$ 0.01 & 17.61 $\pm$ 0.02 & 17.36 $\pm$ 0.02 &       \nodata      & 12.110 $\pm$ 0.146 \\
+1121 & 190.0 &      \nodata     & 18.47 $\pm$ 0.01 & 18.03 $\pm$ 0.01 & 17.63 $\pm$ 0.03 & 17.37 $\pm$ 0.03 &       \nodata      & 11.930 $\pm$ 0.172 \\
+1122 & 191.0 &      \nodata     & 18.48 $\pm$ 0.01 & 18.05 $\pm$ 0.01 & 17.64 $\pm$ 0.02 & 17.39 $\pm$ 0.02 &       \nodata      & 11.746 $\pm$ 0.140 \\
+1123 & 192.0 &      \nodata     & 18.50 $\pm$ 0.01 & 18.07 $\pm$ 0.01 & 17.66 $\pm$ 0.02 & 17.40 $\pm$ 0.03 &       \nodata      & 11.566 $\pm$ 0.171 \\
+1124 & 193.0 &      \nodata     & 18.52 $\pm$ 0.01 & 18.09 $\pm$ 0.01 & 17.67 $\pm$ 0.03 & 17.42 $\pm$ 0.02 &       \nodata      & 11.392 $\pm$ 0.182 \\
+1125 & 194.0 &      \nodata     & 18.54 $\pm$ 0.01 & 18.11 $\pm$ 0.01 & 17.69 $\pm$ 0.02 & 17.43 $\pm$ 0.03 &       \nodata      & 11.217 $\pm$ 0.162 \\
+1126 & 195.0 &      \nodata     & 18.56 $\pm$ 0.01 & 18.13 $\pm$ 0.01 & 17.70 $\pm$ 0.03 & 17.45 $\pm$ 0.03 &       \nodata      & 11.045 $\pm$ 0.170 \\
+1127 & 196.0 &      \nodata     & 18.57 $\pm$ 0.01 & 18.15 $\pm$ 0.01 & 17.72 $\pm$ 0.02 & 17.46 $\pm$ 0.03 &       \nodata      & 10.880 $\pm$ 0.162 \\
+1128 & 196.9 &      \nodata     & 18.59 $\pm$ 0.01 & 18.16 $\pm$ 0.01 & 17.73 $\pm$ 0.03 & 17.48 $\pm$ 0.03 &       \nodata      & 10.713 $\pm$ 0.172 \\
+1129 & 197.9 &      \nodata     & 18.61 $\pm$ 0.01 & 18.18 $\pm$ 0.01 & 17.75 $\pm$ 0.02 & 17.49 $\pm$ 0.03 &       \nodata      & 10.550 $\pm$ 0.170 \\
+1130 & 198.9 &      \nodata     & 18.63 $\pm$ 0.01 & 18.20 $\pm$ 0.01 & 17.76 $\pm$ 0.03 & 17.51 $\pm$ 0.03 &       \nodata      & 10.392 $\pm$ 0.162 \\
+1131 & 199.9 &      \nodata     & 18.65 $\pm$ 0.01 & 18.22 $\pm$ 0.01 & 17.78 $\pm$ 0.02 & 17.52 $\pm$ 0.03 &       \nodata      & 10.232 $\pm$ 0.152 \\
+1132 & 200.9 &      \nodata     & 18.66 $\pm$ 0.01 & 18.24 $\pm$ 0.01 & 17.79 $\pm$ 0.03 & 17.54 $\pm$ 0.03 &       \nodata      & 10.074 $\pm$ 0.161 \\
+1133 & 201.9 &      \nodata     & 18.68 $\pm$ 0.01 & 18.26 $\pm$ 0.01 & 17.80 $\pm$ 0.03 & 17.56 $\pm$ 0.04 &       \nodata      & 9.924 $\pm$ 0.184 \\
+1134 & 202.9 &      \nodata     & 18.70 $\pm$ 0.01 & 18.28 $\pm$ 0.01 & 17.82 $\pm$ 0.03 & 17.57 $\pm$ 0.03 &       \nodata      & 9.773 $\pm$ 0.163 \\
+1135 & 203.9 &      \nodata     & 18.72 $\pm$ 0.01 & 18.30 $\pm$ 0.01 & 17.84 $\pm$ 0.03 & 17.59 $\pm$ 0.04 &       \nodata      & 9.622 $\pm$ 0.172 \\
+1136 & 204.9 &      \nodata     & 18.74 $\pm$ 0.01 & 18.32 $\pm$ 0.01 & 17.85 $\pm$ 0.03 & 17.60 $\pm$ 0.03 &       \nodata      & 9.476 $\pm$ 0.151 \\
+1137 & 205.9 &      \nodata     & 18.75 $\pm$ 0.01 & 18.33 $\pm$ 0.01 & 17.86 $\pm$ 0.03 & 17.62 $\pm$ 0.04 &       \nodata      & 9.335 $\pm$ 0.176 \\
+1138 & 206.9 &      \nodata     & 18.77 $\pm$ 0.01 & 18.35 $\pm$ 0.01 & 17.88 $\pm$ 0.02 & 17.63 $\pm$ 0.03 &       \nodata      & 9.193 $\pm$ 0.152 \\
+1139 & 207.9 &      \nodata     & 18.79 $\pm$ 0.01 & 18.37 $\pm$ 0.01 & 17.89 $\pm$ 0.03 & 17.65 $\pm$ 0.04 &       \nodata      & 9.051 $\pm$ 0.173 \\
+1140 & 208.8 &      \nodata     & 18.81 $\pm$ 0.01 & 18.39 $\pm$ 0.01 & 17.91 $\pm$ 0.02 & 17.66 $\pm$ 0.04 &       \nodata      & 8.915 $\pm$ 0.141 \\
+1141 & 209.8 &      \nodata     & 18.83 $\pm$ 0.01 & 18.41 $\pm$ 0.01 & 17.92 $\pm$ 0.03 & 17.68 $\pm$ 0.04 &       \nodata      & 8.780 $\pm$ 0.160 \\
+1142 & 210.8 &      \nodata     & 18.85 $\pm$ 0.01 & 18.43 $\pm$ 0.01 & 17.94 $\pm$ 0.02 & 17.69 $\pm$ 0.04 &       \nodata      & 8.646 $\pm$ 0.139 \\
+1143 & 211.8 &      \nodata     & 18.86 $\pm$ 0.01 & 18.45 $\pm$ 0.01 & 17.95 $\pm$ 0.03 & 17.71 $\pm$ 0.04 &       \nodata      & 8.517 $\pm$ 0.159 \\
+1144 & 212.8 &      \nodata     & 18.88 $\pm$ 0.01 & 18.46 $\pm$ 0.01 & 17.97 $\pm$ 0.02 & 17.72 $\pm$ 0.04 &       \nodata      & 8.391 $\pm$ 0.139 \\
+1145 & 213.8 &      \nodata     & 18.90 $\pm$ 0.01 & 18.48 $\pm$ 0.01 & 17.98 $\pm$ 0.03 & 17.74 $\pm$ 0.04 &       \nodata      & 8.263 $\pm$ 0.146 \\
+1146 & 214.8 &      \nodata     & 18.92 $\pm$ 0.01 & 18.50 $\pm$ 0.01 & 18.00 $\pm$ 0.02 & 17.75 $\pm$ 0.04 &       \nodata      & 8.135 $\pm$ 0.128 \\
+1147 & 215.8 &      \nodata     & 18.94 $\pm$ 0.01 & 18.52 $\pm$ 0.01 & 18.01 $\pm$ 0.03 & 17.77 $\pm$ 0.04 &       \nodata      & 8.014 $\pm$ 0.144 \\
+1148 & 216.8 &      \nodata     & 18.95 $\pm$ 0.01 & 18.54 $\pm$ 0.01 & 18.02 $\pm$ 0.02 & 17.78 $\pm$ 0.04 &       \nodata      & 7.892 $\pm$ 0.125 \\
+1149 & 217.8 &      \nodata     & 18.97 $\pm$ 0.01 & 18.56 $\pm$ 0.01 & 18.04 $\pm$ 0.02 & 17.80 $\pm$ 0.04 &       \nodata      & 7.772 $\pm$ 0.142 \\
+1150 & 218.8 &      \nodata     & 18.99 $\pm$ 0.01 & 18.58 $\pm$ 0.01 & 18.05 $\pm$ 0.02 & 17.81 $\pm$ 0.04 &       \nodata      & 7.657 $\pm$ 0.115 \\
+1151 & 219.8 &      \nodata     & 19.01 $\pm$ 0.01 & 18.59 $\pm$ 0.01 & 18.07 $\pm$ 0.02 & 17.83 $\pm$ 0.04 &       \nodata      & 7.542 $\pm$ 0.119 \\
+1152 & 220.7 &      \nodata     & 19.03 $\pm$ 0.01 & 18.61 $\pm$ 0.01 & 18.08 $\pm$ 0.02 & 17.84 $\pm$ 0.04 &       \nodata      & 7.426 $\pm$ 0.115 \\
+1153 & 221.7 &      \nodata     & 19.05 $\pm$ 0.01 & 18.63 $\pm$ 0.01 & 18.10 $\pm$ 0.02 & 17.86 $\pm$ 0.04 &       \nodata      & 7.318 $\pm$ 0.117 \\
+1154 & 222.7 &      \nodata     & 19.06 $\pm$ 0.01 & 18.65 $\pm$ 0.01 & 18.11 $\pm$ 0.02 & 17.88 $\pm$ 0.04 &       \nodata      & 7.205 $\pm$ 0.112 \\
+1155 & 223.7 &      \nodata     & 19.08 $\pm$ 0.01 & 18.67 $\pm$ 0.01 & 18.12 $\pm$ 0.01 & 17.89 $\pm$ 0.04 &       \nodata      & 7.094 $\pm$ 0.086 \\
+1156 & 224.7 &      \nodata     & 19.10 $\pm$ 0.01 & 18.69 $\pm$ 0.01 & 18.14 $\pm$ 0.02 & 17.90 $\pm$ 0.03 &       \nodata      & 6.989 $\pm$ 0.092 \\
+1157 & 225.7 &      \nodata     & 19.12 $\pm$ 0.01 & 18.71 $\pm$ 0.01 & 18.15 $\pm$ 0.01 & 17.92 $\pm$ 0.04 &       \nodata      & 6.884 $\pm$ 0.091 \\
+1158 & 226.7 &      \nodata     & 19.14 $\pm$ 0.01 & 18.73 $\pm$ 0.01 & 18.17 $\pm$ 0.01 & 17.93 $\pm$ 0.03 &       \nodata      & 6.781 $\pm$ 0.093 \\
+1159 & 227.7 &      \nodata     & 19.16 $\pm$ 0.01 & 18.75 $\pm$ 0.01 & 18.18 $\pm$ 0.01 & 17.95 $\pm$ 0.04 &       \nodata      & 6.680 $\pm$ 0.084 \\
+1160 & 228.7 &      \nodata     & 19.17 $\pm$ 0.01 & 18.76 $\pm$ 0.01 & 18.20 $\pm$ 0.01 & 17.96 $\pm$ 0.03 &       \nodata      & 6.577 $\pm$ 0.083 \\
+1161 & 229.7 &      \nodata     & 19.19 $\pm$ 0.01 & 18.78 $\pm$ 0.01 & 18.21 $\pm$ 0.01 & 17.98 $\pm$ 0.04 &       \nodata      & 6.480 $\pm$ 0.075 \\
+1162 & 230.7 &      \nodata     & 19.21 $\pm$ 0.01 & 18.80 $\pm$ 0.01 & 18.23 $\pm$ 0.01 & 18.00 $\pm$ 0.03 &       \nodata      & 6.381 $\pm$ 0.079 \\
+1163 & 231.7 &      \nodata     & 19.23 $\pm$ 0.01 & 18.82 $\pm$ 0.01 & 18.24 $\pm$ 0.01 & 18.01 $\pm$ 0.03 &       \nodata      & 6.286 $\pm$ 0.072 \\
+1164 & 232.6 &      \nodata     & 19.25 $\pm$ 0.01 & 18.84 $\pm$ 0.01 & 18.26 $\pm$ 0.01 & 18.02 $\pm$ 0.04 &       \nodata      & 6.190 $\pm$ 0.085 \\
+1165 & 233.6 &      \nodata     & 19.27 $\pm$ 0.01 & 18.86 $\pm$ 0.01 & 18.27 $\pm$ 0.01 & 18.04 $\pm$ 0.03 &       \nodata      & 6.098 $\pm$ 0.064 \\
+1166 & 234.6 &      \nodata     & 19.28 $\pm$ 0.01 & 18.88 $\pm$ 0.01 & 18.29 $\pm$ 0.01 & 18.05 $\pm$ 0.04 &       \nodata      & 6.006 $\pm$ 0.062 \\
+1167 & 235.6 &      \nodata     & 19.30 $\pm$ 0.01 & 18.89 $\pm$ 0.01 & 18.30 $\pm$ 0.01 & 18.07 $\pm$ 0.03 &       \nodata      & 5.918 $\pm$ 0.057 \\
+1168 & 236.6 &      \nodata     & 19.32 $\pm$ 0.01 & 18.91 $\pm$ 0.01 & 18.31 $\pm$ 0.01 & 18.09 $\pm$ 0.03 &       \nodata      & 5.827 $\pm$ 0.049 \\
+1169 & 237.6 &      \nodata     & 19.34 $\pm$ 0.01 & 18.93 $\pm$ 0.01 & 18.33 $\pm$ 0.01 & 18.10 $\pm$ 0.03 &       \nodata      & 5.740 $\pm$ 0.063 \\
+1170 & 238.6 &      \nodata     & 19.36 $\pm$ 0.01 & 18.95 $\pm$ 0.01 & 18.34 $\pm$ 0.01 & 18.11 $\pm$ 0.03 &       \nodata      & 5.653 $\pm$ 0.057 \\
+1171 & 239.6 &      \nodata     & 19.37 $\pm$ 0.01 & 18.97 $\pm$ 0.01 & 18.36 $\pm$ 0.01 & 18.13 $\pm$ 0.03 &       \nodata      & 5.569 $\pm$ 0.058 \\
+1172 & 240.6 &      \nodata     & 19.39 $\pm$ 0.01 & 18.99 $\pm$ 0.01 & 18.37 $\pm$ 0.01 & 18.14 $\pm$ 0.03 &       \nodata      & 5.486 $\pm$ 0.050 \\
+1173 & 241.6 &      \nodata     & 19.41 $\pm$ 0.01 & 19.01 $\pm$ 0.01 & 18.39 $\pm$ 0.01 & 18.16 $\pm$ 0.03 &       \nodata      & 5.403 $\pm$ 0.053 \\
+1174 & 242.6 &      \nodata     & 19.43 $\pm$ 0.01 & 19.02 $\pm$ 0.01 & 18.40 $\pm$ 0.01 & 18.17 $\pm$ 0.03 &       \nodata      & 5.321 $\pm$ 0.061 \\
+1175 & 243.6 &      \nodata     & 19.45 $\pm$ 0.01 & 19.04 $\pm$ 0.01 & 18.42 $\pm$ 0.01 & 18.19 $\pm$ 0.02 &       \nodata      & 5.243 $\pm$ 0.053 \\
+1176 & 244.5 &      \nodata     & 19.47 $\pm$ 0.01 & 19.06 $\pm$ 0.01 & 18.43 $\pm$ 0.01 & 18.20 $\pm$ 0.03 &       \nodata      & 5.163 $\pm$ 0.053 \\
+1177 & 245.5 &      \nodata     & 19.48 $\pm$ 0.01 & 19.08 $\pm$ 0.01 & 18.45 $\pm$ 0.01 & 18.22 $\pm$ 0.02 &       \nodata      & 5.086 $\pm$ 0.053 \\
+1178 & 246.5 &      \nodata     & 19.50 $\pm$ 0.01 & 19.10 $\pm$ 0.01 & 18.46 $\pm$ 0.01 & 18.24 $\pm$ 0.03 &       \nodata      & 5.008 $\pm$ 0.047 \\
+1179 & 247.5 &      \nodata     & 19.52 $\pm$ 0.01 & 19.12 $\pm$ 0.01 & 18.48 $\pm$ 0.01 & 18.25 $\pm$ 0.02 &       \nodata      & 4.932 $\pm$ 0.051 \\
+1180 & 248.5 &      \nodata     & 19.54 $\pm$ 0.01 & 19.14 $\pm$ 0.01 & 18.49 $\pm$ 0.01 & 18.27 $\pm$ 0.03 &       \nodata      & 4.858 $\pm$ 0.058 \\
+1181 & 249.5 &      \nodata     & 19.56 $\pm$ 0.01 & 19.16 $\pm$ 0.01 & 18.50 $\pm$ 0.01 & 18.28 $\pm$ 0.02 &       \nodata      & 4.784 $\pm$ 0.057 \\
+1182 & 250.5 &      \nodata     & 19.58 $\pm$ 0.01 & 19.17 $\pm$ 0.01 & 18.52 $\pm$ 0.01 & 18.30 $\pm$ 0.02 &       \nodata      & 4.713 $\pm$ 0.043 \\
+1183 & 251.5 &      \nodata     & 19.59 $\pm$ 0.01 & 19.19 $\pm$ 0.01 & 18.53 $\pm$ 0.01 & 18.31 $\pm$ 0.02 &       \nodata      & 4.643 $\pm$ 0.051 \\
+1184 & 252.5 &      \nodata     & 19.61 $\pm$ 0.01 & 19.21 $\pm$ 0.01 & 18.55 $\pm$ 0.01 & 18.33 $\pm$ 0.02 &       \nodata      & 4.571 $\pm$ 0.042 \\
+1185 & 253.5 &      \nodata     & 19.63 $\pm$ 0.01 & 19.23 $\pm$ 0.01 & 18.56 $\pm$ 0.01 & 18.34 $\pm$ 0.02 &       \nodata      & 4.502 $\pm$ 0.049 \\
+1186 & 254.5 &      \nodata     & 19.65 $\pm$ 0.01 & 19.25 $\pm$ 0.01 & 18.58 $\pm$ 0.01 & 18.36 $\pm$ 0.02 &       \nodata      & 4.433 $\pm$ 0.047 \\
+1187 & 255.5 &      \nodata     & 19.67 $\pm$ 0.01 & 19.27 $\pm$ 0.01 & 18.59 $\pm$ 0.01 & 18.37 $\pm$ 0.01 &       \nodata      & 4.368 $\pm$ 0.047 \\
+1188 & 256.4 &      \nodata     & 19.68 $\pm$ 0.01 & 19.28 $\pm$ 0.01 & 18.61 $\pm$ 0.02 & 18.39 $\pm$ 0.02 &       \nodata      & 4.303 $\pm$ 0.056 \\
+1189 & 257.4 &      \nodata     & 19.70 $\pm$ 0.01 & 19.30 $\pm$ 0.01 & 18.62 $\pm$ 0.01 & 18.41 $\pm$ 0.01 &       \nodata      & 4.238 $\pm$ 0.046 \\
+1190 & 258.4 &      \nodata     & 19.72 $\pm$ 0.01 & 19.32 $\pm$ 0.01 & 18.64 $\pm$ 0.02 & 18.42 $\pm$ 0.02 &       \nodata      & 4.173 $\pm$ 0.054 \\
+1191 & 259.4 &      \nodata     & 19.74 $\pm$ 0.01 & 19.34 $\pm$ 0.02 & 18.65 $\pm$ 0.01 & 18.44 $\pm$ 0.01 &       \nodata      & 4.110 $\pm$ 0.049 \\
+1192 & 260.4 &      \nodata     & 19.76 $\pm$ 0.01 & 19.36 $\pm$ 0.01 & 18.67 $\pm$ 0.02 & 18.45 $\pm$ 0.02 &       \nodata      & 4.049 $\pm$ 0.057 \\
+1193 & 261.4 &      \nodata     & 19.77 $\pm$ 0.01 & 19.38 $\pm$ 0.01 & 18.68 $\pm$ 0.01 & 18.47 $\pm$ 0.01 &       \nodata      & 3.988 $\pm$ 0.043 \\
+1194 & 262.4 &      \nodata     & 19.79 $\pm$ 0.01 & 19.39 $\pm$ 0.01 & 18.70 $\pm$ 0.02 & 18.48 $\pm$ 0.01 &       \nodata      & 3.927 $\pm$ 0.048 \\
+1195 & 263.4 &      \nodata     & 19.81 $\pm$ 0.01 & 19.41 $\pm$ 0.01 & 18.71 $\pm$ 0.01 & 18.50 $\pm$ 0.02 &       \nodata      & 3.869 $\pm$ 0.042 \\
+1196 & 264.4 &      \nodata     & 19.83 $\pm$ 0.01 & 19.43 $\pm$ 0.01 & 18.73 $\pm$ 0.02 & 18.51 $\pm$ 0.01 &       \nodata      & 3.811 $\pm$ 0.042 \\
+1197 & 265.4 &      \nodata     & 19.85 $\pm$ 0.01 & 19.45 $\pm$ 0.02 & 18.74 $\pm$ 0.01 & 18.53 $\pm$ 0.02 &       \nodata      & 3.753 $\pm$ 0.045 \\
+1198 & 266.4 &      \nodata     & 19.87 $\pm$ 0.01 & 19.47 $\pm$ 0.01 & 18.76 $\pm$ 0.02 & 18.54 $\pm$ 0.01 &       \nodata      & 3.696 $\pm$ 0.045 \\
+1199 & 267.4 &      \nodata     & 19.88 $\pm$ 0.01 & 19.49 $\pm$ 0.01 & 18.77 $\pm$ 0.02 & 18.56 $\pm$ 0.01 &       \nodata      & 3.640 $\pm$ 0.050 \\
+1200 & 268.3 &      \nodata     & 19.90 $\pm$ 0.01 & 19.50 $\pm$ 0.01 & 18.79 $\pm$ 0.02 & 18.57 $\pm$ 0.01 &       \nodata      & 3.585 $\pm$ 0.044 \\
+1201 & 269.3 &      \nodata     & 19.92 $\pm$ 0.01 & 19.52 $\pm$ 0.01 & 18.80 $\pm$ 0.02 & 18.59 $\pm$ 0.01 &       \nodata      & 3.532 $\pm$ 0.044 \\
+1202 & 270.3 &      \nodata     & 19.94 $\pm$ 0.01 & 19.54 $\pm$ 0.02 & 18.82 $\pm$ 0.02 & 18.61 $\pm$ 0.01 &       \nodata      & 3.478 $\pm$ 0.047 \\
+1203 & 271.3 &      \nodata     & 19.96 $\pm$ 0.01 & 19.56 $\pm$ 0.01 & 18.83 $\pm$ 0.02 & 18.62 $\pm$ 0.01 &       \nodata      & 3.426 $\pm$ 0.045 \\
+1204 & 272.3 &      \nodata     & 19.98 $\pm$ 0.01 & 19.58 $\pm$ 0.01 & 18.85 $\pm$ 0.01 & 18.64 $\pm$ 0.01 &       \nodata      & 3.374 $\pm$ 0.043 \\
+1205 & 273.3 &      \nodata     & 19.99 $\pm$ 0.01 & 19.59 $\pm$ 0.01 & 18.86 $\pm$ 0.02 & 18.65 $\pm$ 0.01 &       \nodata      & 3.324 $\pm$ 0.043 \\
+1206 & 274.3 &      \nodata     & 20.01 $\pm$ 0.01 & 19.61 $\pm$ 0.01 & 18.88 $\pm$ 0.01 & 18.67 $\pm$ 0.01 &       \nodata      & 3.273 $\pm$ 0.032 \\
+1207 & 275.3 &      \nodata     & 20.03 $\pm$ 0.01 & 19.63 $\pm$ 0.01 & 18.89 $\pm$ 0.02 & 18.68 $\pm$ 0.01 &       \nodata      & 3.224 $\pm$ 0.037 \\
+1208 & 276.3 &      \nodata     & 20.05 $\pm$ 0.01 & 19.65 $\pm$ 0.01 & 18.91 $\pm$ 0.01 & 18.70 $\pm$ 0.01 &       \nodata      & 3.175 $\pm$ 0.034 \\
+1209 & 277.3 &      \nodata     & 20.06 $\pm$ 0.01 & 19.67 $\pm$ 0.01 & 18.93 $\pm$ 0.02 & 18.71 $\pm$ 0.01 &       \nodata      & 3.128 $\pm$ 0.042 \\
+1210 & 278.3 &      \nodata     & 20.08 $\pm$ 0.01 & 19.68 $\pm$ 0.01 & 18.94 $\pm$ 0.01 & 18.73 $\pm$ 0.01 &       \nodata      & 3.080 $\pm$ 0.031 \\
+1211 & 279.3 &      \nodata     & 20.10 $\pm$ 0.01 & 19.70 $\pm$ 0.01 & 18.96 $\pm$ 0.02 & 18.74 $\pm$ 0.01 &       \nodata      & 3.034 $\pm$ 0.036 \\
+1212 & 280.2 &      \nodata     & 20.12 $\pm$ 0.01 & 19.72 $\pm$ 0.01 & 18.97 $\pm$ 0.02 & 18.76 $\pm$ 0.01 &       \nodata      & 2.989 $\pm$ 0.037 \\
+1213 & 281.2 &      \nodata     & 20.14 $\pm$ 0.01 & 19.74 $\pm$ 0.01 & 18.99 $\pm$ 0.02 & 18.77 $\pm$ 0.01 &       \nodata      & 2.943 $\pm$ 0.034 \\
+1214 & 282.2 &      \nodata     & 20.15 $\pm$ 0.01 & 19.76 $\pm$ 0.01 & 19.00 $\pm$ 0.02 & 18.79 $\pm$ 0.01 &       \nodata      & 2.899 $\pm$ 0.040 \\
+1215 & 283.2 &      \nodata     & 20.17 $\pm$ 0.01 & 19.77 $\pm$ 0.01 & 19.02 $\pm$ 0.02 & 18.81 $\pm$ 0.01 &       \nodata      & 2.855 $\pm$ 0.032 \\
+1216 & 284.2 &      \nodata     & 20.19 $\pm$ 0.01 & 19.79 $\pm$ 0.01 & 19.03 $\pm$ 0.02 & 18.82 $\pm$ 0.01 &       \nodata      & 2.811 $\pm$ 0.034 \\
+1217 & 285.2 &      \nodata     & 20.21 $\pm$ 0.01 & 19.81 $\pm$ 0.01 & 19.05 $\pm$ 0.01 & 18.84 $\pm$ 0.01 &       \nodata      & 2.769 $\pm$ 0.025 \\
+1218 & 286.2 &      \nodata     & 20.23 $\pm$ 0.01 & 19.83 $\pm$ 0.01 & 19.06 $\pm$ 0.02 & 18.85 $\pm$ 0.01 &       \nodata      & 2.728 $\pm$ 0.029 \\
+1219 & 287.2 &      \nodata     & 20.24 $\pm$ 0.01 & 19.85 $\pm$ 0.01 & 19.08 $\pm$ 0.01 & 18.87 $\pm$ 0.01 &       \nodata      & 2.685 $\pm$ 0.029 \\
+1220 & 288.2 &      \nodata     & 20.26 $\pm$ 0.01 & 19.87 $\pm$ 0.01 & 19.09 $\pm$ 0.02 & 18.88 $\pm$ 0.01 &       \nodata      & 2.645 $\pm$ 0.032 \\
+1221 & 289.2 &      \nodata     & 20.28 $\pm$ 0.01 & 19.88 $\pm$ 0.01 & 19.11 $\pm$ 0.01 & 18.90 $\pm$ 0.01 &       \nodata      & 2.606 $\pm$ 0.023 \\
+1222 & 290.2 &      \nodata     & 20.30 $\pm$ 0.01 & 19.90 $\pm$ 0.01 & 19.13 $\pm$ 0.02 & 18.91 $\pm$ 0.01 &       \nodata      & 2.566 $\pm$ 0.026 \\
+1223 & 291.2 &      \nodata     & 20.31 $\pm$ 0.01 & 19.92 $\pm$ 0.01 & 19.14 $\pm$ 0.02 & 18.93 $\pm$ 0.01 &       \nodata      & 2.527 $\pm$ 0.028 \\
+1224 & 292.1 &      \nodata     & 20.33 $\pm$ 0.01 & 19.94 $\pm$ 0.01 & 19.16 $\pm$ 0.02 & 18.95 $\pm$ 0.01 &       \nodata      & 2.489 $\pm$ 0.025 \\
+1225 & 293.1 &      \nodata     & 20.35 $\pm$ 0.01 & 19.95 $\pm$ 0.01 & 19.17 $\pm$ 0.02 & 18.96 $\pm$ 0.01 &       \nodata      & 2.452 $\pm$ 0.031 \\
+1226 & 294.1 &      \nodata     & 20.37 $\pm$ 0.01 & 19.97 $\pm$ 0.01 & 19.19 $\pm$ 0.01 & 18.98 $\pm$ 0.01 &       \nodata      & 2.414 $\pm$ 0.022 \\
+1227 & 295.1 &      \nodata     & 20.38 $\pm$ 0.01 & 19.99 $\pm$ 0.01 & 19.21 $\pm$ 0.02 & 18.99 $\pm$ 0.01 &       \nodata      & 2.378 $\pm$ 0.025 \\
+1228 & 296.1 &      \nodata     & 20.40 $\pm$ 0.01 & 20.01 $\pm$ 0.01 & 19.22 $\pm$ 0.01 & 19.01 $\pm$ 0.01 &       \nodata      & 2.342 $\pm$ 0.020 \\
+1229 & 297.1 &      \nodata     & 20.42 $\pm$ 0.01 & 20.03 $\pm$ 0.01 & 19.24 $\pm$ 0.02 & 19.02 $\pm$ 0.01 &       \nodata      & 2.307 $\pm$ 0.025 \\
+1230 & 298.1 &      \nodata     & 20.44 $\pm$ 0.01 & 20.04 $\pm$ 0.01 & 19.25 $\pm$ 0.01 & 19.04 $\pm$ 0.01 &       \nodata      & 2.271 $\pm$ 0.018 \\
+1231 & 299.1 &      \nodata     & 20.45 $\pm$ 0.01 & 20.06 $\pm$ 0.01 & 19.27 $\pm$ 0.01 & 19.05 $\pm$ 0.01 &       \nodata      & 2.237 $\pm$ 0.020 \\
+1232 & 300.1 &      \nodata     & 20.47 $\pm$ 0.01 & 20.08 $\pm$ 0.01 & 19.29 $\pm$ 0.01 & 19.07 $\pm$ 0.01 &       \nodata      & 2.204 $\pm$ 0.017 \\
+1233 & 301.1 &      \nodata     & 20.49 $\pm$ 0.01 & 20.10 $\pm$ 0.01 & 19.30 $\pm$ 0.01 & 19.08 $\pm$ 0.01 &       \nodata      & 2.170 $\pm$ 0.020 \\
+1234 & 302.1 &      \nodata     & 20.51 $\pm$ 0.01 & 20.11 $\pm$ 0.01 & 19.32 $\pm$ 0.02 & 19.10 $\pm$ 0.01 &       \nodata      & 2.138 $\pm$ 0.024 \\
+1235 & 303.1 &      \nodata     & 20.52 $\pm$ 0.01 & 20.13 $\pm$ 0.01 & 19.33 $\pm$ 0.01 & 19.11 $\pm$ 0.01 &       \nodata      & 2.106 $\pm$ 0.017 \\
+1236 & 304.0 &      \nodata     & 20.54 $\pm$ 0.01 & 20.15 $\pm$ 0.01 & 19.35 $\pm$ 0.02 & 19.13 $\pm$ 0.01 &       \nodata      & 2.074 $\pm$ 0.020 \\
+1237 & 305.0 &      \nodata     & 20.56 $\pm$ 0.01 & 20.17 $\pm$ 0.01 & 19.36 $\pm$ 0.01 & 19.14 $\pm$ 0.02 &       \nodata      & 2.043 $\pm$ 0.018 \\
+1238 & 306.0 &      \nodata     & 20.57 $\pm$ 0.01 & 20.18 $\pm$ 0.01 & 19.38 $\pm$ 0.01 & 19.16 $\pm$ 0.01 &       \nodata      & 2.012 $\pm$ 0.019 \\
+1239 & 307.0 &      \nodata     & 20.59 $\pm$ 0.01 & 20.20 $\pm$ 0.01 & 19.40 $\pm$ 0.01 & 19.18 $\pm$ 0.01 &       \nodata      & 1.981 $\pm$ 0.016 \\
+1240 & 308.0 &      \nodata     & 20.61 $\pm$ 0.01 & 20.22 $\pm$ 0.01 & 19.41 $\pm$ 0.01 & 19.19 $\pm$ 0.01 &       \nodata      & 1.951 $\pm$ 0.018 \\
+1241 & 309.0 &      \nodata     & 20.63 $\pm$ 0.01 & 20.24 $\pm$ 0.01 & 19.43 $\pm$ 0.01 & 19.21 $\pm$ 0.01 &       \nodata      & 1.923 $\pm$ 0.016 \\
+1242 & 310.0 &      \nodata     & 20.64 $\pm$ 0.01 & 20.25 $\pm$ 0.01 & 19.45 $\pm$ 0.01 & 19.22 $\pm$ 0.01 &       \nodata      & 1.893 $\pm$ 0.013 \\
+1243 & 311.0 &      \nodata     & 20.66 $\pm$ 0.01 & 20.27 $\pm$ 0.01 & 19.46 $\pm$ 0.01 & 19.24 $\pm$ 0.01 &       \nodata      & 1.865 $\pm$ 0.012 \\
+1244 & 312.0 &      \nodata     & 20.68 $\pm$ 0.01 & 20.29 $\pm$ 0.01 & 19.48 $\pm$ 0.01 & 19.25 $\pm$ 0.02 &       \nodata      & 1.837 $\pm$ 0.017 \\
+1245 & 313.0 &      \nodata     & 20.70 $\pm$ 0.01 & 20.31 $\pm$ 0.01 & 19.49 $\pm$ 0.01 & 19.27 $\pm$ 0.01 &       \nodata      & 1.809 $\pm$ 0.018 \\
+1246 & 314.0 &      \nodata     & 20.71 $\pm$ 0.01 & 20.32 $\pm$ 0.01 & 19.51 $\pm$ 0.01 & 19.28 $\pm$ 0.02 &       \nodata      & 1.781 $\pm$ 0.017 \\
+1247 & 315.0 &      \nodata     & 20.73 $\pm$ 0.01 & 20.34 $\pm$ 0.01 & 19.53 $\pm$ 0.01 & 19.30 $\pm$ 0.01 &       \nodata      & 1.755 $\pm$ 0.014 \\
+1248 & 315.9 &      \nodata     & 20.75 $\pm$ 0.01 & 20.36 $\pm$ 0.01 & 19.54 $\pm$ 0.01 & 19.32 $\pm$ 0.02 &       \nodata      & 1.728 $\pm$ 0.013 \\
+1249 & 316.9 &      \nodata     & 20.76 $\pm$ 0.01 & 20.38 $\pm$ 0.01 & 19.56 $\pm$ 0.01 & 19.33 $\pm$ 0.02 &       \nodata      & 1.702 $\pm$ 0.017 \\
+1250 & 317.9 &      \nodata     & 20.78 $\pm$ 0.01 & 20.39 $\pm$ 0.02 & 19.58 $\pm$ 0.01 & 19.35 $\pm$ 0.01 &       \nodata      & 1.676 $\pm$ 0.016 \\
+1251 & 318.9 &      \nodata     & 20.80 $\pm$ 0.01 & 20.41 $\pm$ 0.02 & 19.59 $\pm$ 0.01 & 19.36 $\pm$ 0.02 &       \nodata      & 1.651 $\pm$ 0.018 \\
+1252 & 319.9 &      \nodata     & 20.82 $\pm$ 0.01 & 20.43 $\pm$ 0.02 & 19.61 $\pm$ 0.01 & 19.38 $\pm$ 0.01 &       \nodata      & 1.626 $\pm$ 0.018 \\
+1253 & 320.9 &      \nodata     & 20.83 $\pm$ 0.01 & 20.45 $\pm$ 0.01 & 19.62 $\pm$ 0.01 & 19.39 $\pm$ 0.02 &       \nodata      & 1.602 $\pm$ 0.015 \\
+1254 & 321.9 &      \nodata     & 20.85 $\pm$ 0.01 & 20.46 $\pm$ 0.02 & 19.64 $\pm$ 0.01 & 19.41 $\pm$ 0.01 &       \nodata      & 1.578 $\pm$ 0.016 \\
+1255 & 322.9 &      \nodata     & 20.86 $\pm$ 0.01 & 20.48 $\pm$ 0.02 & 19.66 $\pm$ 0.01 & 19.42 $\pm$ 0.02 &       \nodata      & 1.554 $\pm$ 0.017 \\
+1256 & 323.9 &      \nodata     & 20.88 $\pm$ 0.02 & 20.50 $\pm$ 0.02 & 19.67 $\pm$ 0.01 & 19.44 $\pm$ 0.02 &       \nodata      & 1.530 $\pm$ 0.020 \\
+1257 & 324.9 &      \nodata     & 20.90 $\pm$ 0.01 & 20.51 $\pm$ 0.02 & 19.69 $\pm$ 0.01 & 19.45 $\pm$ 0.02 &       \nodata      & 1.508 $\pm$ 0.016 \\
+1258 & 325.9 &      \nodata     & 20.91 $\pm$ 0.01 & 20.53 $\pm$ 0.02 & 19.71 $\pm$ 0.01 & 19.47 $\pm$ 0.02 &       \nodata      & 1.485 $\pm$ 0.017 \\
+1259 & 326.9 &      \nodata     & 20.93 $\pm$ 0.02 & 20.55 $\pm$ 0.02 & 19.72 $\pm$ 0.01 & 19.49 $\pm$ 0.01 &       \nodata      & 1.463 $\pm$ 0.019 \\
+1260 & 327.8 &      \nodata     & 20.95 $\pm$ 0.01 & 20.57 $\pm$ 0.02 & 19.74 $\pm$ 0.01 & 19.50 $\pm$ 0.02 &       \nodata      & 1.440 $\pm$ 0.015 \\
+1261 & 328.8 &      \nodata     & 20.96 $\pm$ 0.01 & 20.58 $\pm$ 0.02 & 19.76 $\pm$ 0.01 & 19.52 $\pm$ 0.01 &       \nodata      & 1.419 $\pm$ 0.014 \\
+1262 & 329.8 &      \nodata     & 20.98 $\pm$ 0.02 & 20.60 $\pm$ 0.02 & 19.77 $\pm$ 0.01 & 19.53 $\pm$ 0.02 &       \nodata      & 1.397 $\pm$ 0.019 \\
+1263 & 330.8 &      \nodata     & 21.00 $\pm$ 0.01 & 20.62 $\pm$ 0.01 & 19.79 $\pm$ 0.01 & 19.55 $\pm$ 0.01 &       \nodata      & 1.377 $\pm$ 0.013 \\
+1264 & 331.8 &      \nodata     & 21.01 $\pm$ 0.01 & 20.63 $\pm$ 0.02 & 19.81 $\pm$ 0.01 & 19.57 $\pm$ 0.02 &       \nodata      & 1.356 $\pm$ 0.014 \\
+1265 & 332.8 &      \nodata     & 21.03 $\pm$ 0.02 & 20.65 $\pm$ 0.02 & 19.82 $\pm$ 0.01 & 19.58 $\pm$ 0.01 &       \nodata      & 1.336 $\pm$ 0.017 \\
+1266 & 333.8 &      \nodata     & 21.05 $\pm$ 0.01 & 20.67 $\pm$ 0.01 & 19.84 $\pm$ 0.01 & 19.60 $\pm$ 0.02 &       \nodata      & 1.315 $\pm$ 0.013 \\
+1267 & 334.8 &      \nodata     & 21.06 $\pm$ 0.01 & 20.68 $\pm$ 0.02 & 19.86 $\pm$ 0.01 & 19.61 $\pm$ 0.01 &       \nodata      & 1.296 $\pm$ 0.016 \\
+1268 & 335.8 &      \nodata     & 21.08 $\pm$ 0.02 & 20.70 $\pm$ 0.02 & 19.87 $\pm$ 0.01 & 19.63 $\pm$ 0.01 &       \nodata      & 1.276 $\pm$ 0.016 \\
+1269 & 336.8 &      \nodata     & 21.09 $\pm$ 0.01 & 20.72 $\pm$ 0.01 & 19.89 $\pm$ 0.01 & 19.64 $\pm$ 0.01 &       \nodata      & 1.257 $\pm$ 0.010 \\
+1270 & 337.8 &      \nodata     & 21.11 $\pm$ 0.02 & 20.73 $\pm$ 0.02 & 19.91 $\pm$ 0.01 & 19.66 $\pm$ 0.01 &       \nodata      & 1.238 $\pm$ 0.015 \\
+1271 & 338.8 &      \nodata     & 21.13 $\pm$ 0.02 & 20.75 $\pm$ 0.02 & 19.92 $\pm$ 0.01 & 19.67 $\pm$ 0.01 &       \nodata      & 1.220 $\pm$ 0.014 \\
+1272 & 339.7 &      \nodata     & 21.14 $\pm$ 0.01 & 20.77 $\pm$ 0.01 & 19.94 $\pm$ 0.01 & 19.69 $\pm$ 0.01 &       \nodata      & 1.202 $\pm$ 0.011 \\
+1273 & 340.7 &      \nodata     & 21.16 $\pm$ 0.02 & 20.78 $\pm$ 0.02 & 19.95 $\pm$ 0.01 & 19.71 $\pm$ 0.01 &       \nodata      & 1.183 $\pm$ 0.014 \\
+1274 & 341.7 &      \nodata     & 21.18 $\pm$ 0.02 & 20.80 $\pm$ 0.02 & 19.97 $\pm$ 0.01 & 19.72 $\pm$ 0.01 &       \nodata      & 1.166 $\pm$ 0.015 \\
+1275 & 342.7 &      \nodata     & 21.19 $\pm$ 0.01 & 20.82 $\pm$ 0.02 & 19.99 $\pm$ 0.01 & 19.74 $\pm$ 0.01 &       \nodata      & 1.148 $\pm$ 0.014 \\
+1276 & 343.7 &      \nodata     & 21.21 $\pm$ 0.02 & 20.83 $\pm$ 0.02 & 20.00 $\pm$ 0.01 & 19.76 $\pm$ 0.01 &       \nodata      & 1.131 $\pm$ 0.014 \\
+1277 & 344.7 &      \nodata     & 21.22 $\pm$ 0.01 & 20.85 $\pm$ 0.02 & 20.02 $\pm$ 0.02 & 19.77 $\pm$ 0.01 &       \nodata      & 1.113 $\pm$ 0.016 \\
+1278 & 345.7 &      \nodata     & 21.24 $\pm$ 0.01 & 20.87 $\pm$ 0.02 & 20.04 $\pm$ 0.67 & 19.79 $\pm$ 0.01 &       \nodata      & 1.096 $\pm$ 0.287 \\
+1279 & 346.7 &      \nodata     & 21.25 $\pm$ 0.01 & 20.88 $\pm$ 0.02 & 20.05 $\pm$ 0.67 & 19.81 $\pm$ 0.01 &       \nodata      & 1.080 $\pm$ 0.282 \\
+1280 & 347.7 &      \nodata     & 21.27 $\pm$ 0.01 & 20.90 $\pm$ 0.02 & 20.07 $\pm$ 0.67 & 19.82 $\pm$ 0.01 &       \nodata      & 1.064 $\pm$ 0.279 \\
+1281 & 348.7 &      \nodata     & 21.29 $\pm$ 0.01 & 20.91 $\pm$ 0.02 & 20.09 $\pm$ 0.67 & 19.84 $\pm$ 0.02 &       \nodata      & 1.047 $\pm$ 0.277 \\
+1282 & 349.7 &      \nodata     & 21.30 $\pm$ 0.01 & 20.93 $\pm$ 0.02 & 20.11 $\pm$ 0.67 & 19.86 $\pm$ 0.06 &       \nodata      & 1.032 $\pm$ 0.280 \\
+1283 & 350.7 &      \nodata     & 21.32 $\pm$ 0.01 & 20.95 $\pm$ 0.03 & 20.12 $\pm$ 0.67 & 19.88 $\pm$ 0.08 &       \nodata      & 1.017 $\pm$ 0.283 \\
+1284 & 351.6 &      \nodata     & 21.33 $\pm$ 0.02 & 20.96 $\pm$ 0.02 & 20.14 $\pm$ 0.67 & 19.89 $\pm$ 0.12 &       \nodata      & 1.001 $\pm$ 0.285 \\
+1285 & 352.6 &      \nodata     & 21.35 $\pm$ 0.02 & 20.98 $\pm$ 0.02 & 20.16 $\pm$ 0.67 & 19.91 $\pm$ 0.14 &       \nodata      & 0.986 $\pm$ 0.287 \\
+1286 & 353.6 &      \nodata     & 21.36 $\pm$ 0.02 & 21.00 $\pm$ 0.02 & 20.17 $\pm$ 0.67 & 19.93 $\pm$ 0.13 &       \nodata      & 0.971 $\pm$ 0.278 \\
+1287 & 354.6 &      \nodata     & 21.38 $\pm$ 0.03 & 21.01 $\pm$ 0.02 & 20.19 $\pm$ 0.67 & 19.94 $\pm$ 0.13 &       \nodata      & 0.957 $\pm$ 0.275 \\
+1288 & 355.6 &      \nodata     & 21.39 $\pm$ 0.02 & 21.03 $\pm$ 0.01 & 20.21 $\pm$ 0.67 & 19.96 $\pm$ 0.11 &       \nodata      & 0.943 $\pm$ 0.266 \\
+1289 & 356.6 &      \nodata     & 21.41 $\pm$ 0.03 & 21.04 $\pm$ 0.02 & 20.22 $\pm$ 0.67 & 19.98 $\pm$ 0.10 &       \nodata      & 0.928 $\pm$ 0.261 \\
+1290 & 357.6 &      \nodata     & 21.43 $\pm$ 0.02 & 21.06 $\pm$ 0.01 & 20.24 $\pm$ 0.67 & 19.99 $\pm$ 0.08 &       \nodata      & 0.914 $\pm$ 0.252 \\
+1291 & 358.6 &      \nodata     & 21.44 $\pm$ 0.03 & 21.07 $\pm$ 0.01 & 20.26 $\pm$ 0.67 & 20.01 $\pm$ 0.08 &       \nodata      & 0.901 $\pm$ 0.247 \\
+1292 & 359.6 &      \nodata     & 21.45 $\pm$ 0.02 & 21.09 $\pm$ 0.01 & 20.27 $\pm$ 0.67 & 20.03 $\pm$ 0.07 &       \nodata      & 0.887 $\pm$ 0.241 \\
+1293 & 360.6 &      \nodata     & 21.47 $\pm$ 0.03 & 21.11 $\pm$ 0.01 & 20.29 $\pm$ 0.67 & 20.04 $\pm$ 0.05 &       \nodata      & 0.874 $\pm$ 0.235 \\
+1294 & 361.6 &      \nodata     & 21.48 $\pm$ 0.02 & 21.12 $\pm$ 0.01 & 20.31 $\pm$ 0.67 & 20.06 $\pm$ 0.05 &       \nodata      & 0.861 $\pm$ 0.231 \\
+1295 & 362.6 &      \nodata     & 21.50 $\pm$ 0.02 & 21.14 $\pm$ 0.01 & 20.32 $\pm$ 0.67 & 20.08 $\pm$ 0.03 &       \nodata      & 0.848 $\pm$ 0.224 \\
+1296 & 363.5 &      \nodata     & 21.52 $\pm$ 0.02 & 21.15 $\pm$ 0.01 & 20.34 $\pm$ 0.67 & 20.09 $\pm$ 0.02 &       \nodata      & 0.836 $\pm$ 0.219 \\
+1297 & 364.5 &      \nodata     & 21.53 $\pm$ 0.02 & 21.17 $\pm$ 0.01 & 20.36 $\pm$ 0.67 & 20.11 $\pm$ 0.02 &       \nodata      & 0.823 $\pm$ 0.214 \\
+1298 & 365.5 &      \nodata     & 21.54 $\pm$ 0.02 & 21.18 $\pm$ 0.01 & 20.37 $\pm$ 0.67 & 20.13 $\pm$ 0.01 &       \nodata      & 0.811 $\pm$ 0.210 \\
+1299 & 366.5 &      \nodata     & 21.56 $\pm$ 0.02 & 21.20 $\pm$ 0.01 & 20.39 $\pm$ 0.67 & 20.15 $\pm$ 0.01 &       \nodata      & 0.799 $\pm$ 0.207 \\
+1300 & 367.5 &      \nodata     & 21.57 $\pm$ 0.02 & 21.21 $\pm$ 0.01 & 20.41 $\pm$ 0.04 & 20.16 $\pm$ 0.03 &       \nodata      & 0.787 $\pm$ 0.019 \\
+1301 & 368.5 &      \nodata     & 21.59 $\pm$ 0.02 & 21.23 $\pm$ 0.01 & 20.42 $\pm$ 0.04 & 20.18 $\pm$ 0.03 &       \nodata      & 0.776 $\pm$ 0.018 \\
+1302 & 369.5 &      \nodata     & 21.60 $\pm$ 0.01 & 21.25 $\pm$ 0.01 & 20.44 $\pm$ 0.04 & 20.20 $\pm$ 0.04 &       \nodata      & 0.764 $\pm$ 0.018 \\
+1303 & 370.5 &      \nodata     & 21.62 $\pm$ 0.02 & 21.26 $\pm$ 0.01 & 20.46 $\pm$ 0.03 & 20.21 $\pm$ 0.06 &       \nodata      & 0.753 $\pm$ 0.021 \\
+1304 & 371.5 &      \nodata     & 21.63 $\pm$ 0.01 & 21.28 $\pm$ 0.01 & 20.47 $\pm$ 0.03 & 20.23 $\pm$ 0.06 &       \nodata      & 0.742 $\pm$ 0.019 \\
+1305 & 372.5 &      \nodata     & 21.65 $\pm$ 0.02 & 21.29 $\pm$ 0.01 & 20.49 $\pm$ 0.03 & 20.25 $\pm$ 0.08 &       \nodata      & 0.731 $\pm$ 0.021 \\
+1306 & 373.5 &      \nodata     & 21.66 $\pm$ 0.01 & 21.31 $\pm$ 0.01 & 20.51 $\pm$ 0.02 & 20.27 $\pm$ 0.09 &       \nodata      & 0.720 $\pm$ 0.020 \\
+1307 & 374.5 &      \nodata     & 21.68 $\pm$ 0.02 & 21.32 $\pm$ 0.01 & 20.52 $\pm$ 0.01 & 20.28 $\pm$ 0.10 &       \nodata      & 0.710 $\pm$ 0.020 \\
+1308 & 375.4 &      \nodata     & 21.69 $\pm$ 0.01 & 21.34 $\pm$ 0.02 & 20.54 $\pm$ 0.01 & 20.30 $\pm$ 0.11 &       \nodata      & 0.700 $\pm$ 0.020 \\
+1309 & 376.4 &      \nodata     & 21.70 $\pm$ 0.01 & 21.35 $\pm$ 0.01 & 20.56 $\pm$ 0.01 & 20.32 $\pm$ 0.12 &       \nodata      & 0.689 $\pm$ 0.020 \\
+1310 & 377.4 &      \nodata     & 21.72 $\pm$ 0.01 & 21.37 $\pm$ 0.02 & 20.57 $\pm$ 0.01 & 20.33 $\pm$ 0.14 &       \nodata      & 0.679 $\pm$ 0.022 \\
+1311 & 378.4 &      \nodata     & 21.73 $\pm$ 0.01 & 21.38 $\pm$ 0.01 & 20.59 $\pm$ 0.01 & 20.35 $\pm$ 0.14 &       \nodata      & 0.669 $\pm$ 0.021 \\
+1312 & 379.4 &      \nodata     & 21.75 $\pm$ 0.01 & 21.40 $\pm$ 0.02 & 20.61 $\pm$ 0.01 & 20.37 $\pm$ 0.15 &       \nodata      & 0.659 $\pm$ 0.024 \\
+1313 & 380.4 &      \nodata     & 21.76 $\pm$ 0.01 & 21.41 $\pm$ 0.01 & 20.62 $\pm$ 0.01 & 20.39 $\pm$ 0.17 &       \nodata      & 0.650 $\pm$ 0.025 \\
+1314 & 381.4 &      \nodata     & 21.77 $\pm$ 0.01 & 21.43 $\pm$ 0.02 & 20.64 $\pm$ 0.01 & 20.40 $\pm$ 0.17 &       \nodata      & 0.640 $\pm$ 0.027 \\
+1315 & 382.4 &      \nodata     & 21.79 $\pm$ 0.01 & 21.44 $\pm$ 0.02 & 20.66 $\pm$ 0.03 & 20.42 $\pm$ 0.18 &       \nodata      & 0.631 $\pm$ 0.032 \\
+1316 & 383.4 &      \nodata     & 21.80 $\pm$ 0.01 & 21.45 $\pm$ 0.02 & 20.67 $\pm$ 0.03 & 20.44 $\pm$ 0.20 &       \nodata      & 0.622 $\pm$ 0.033 \\
+1317 & 384.4 &      \nodata     & 21.82 $\pm$ 0.01 & 21.47 $\pm$ 0.02 & 20.69 $\pm$ 0.03 & 20.45 $\pm$ 0.21 &       \nodata      & 0.613 $\pm$ 0.035 \\
+1318 & 385.4 &      \nodata     & 21.83 $\pm$ 0.01 & 21.48 $\pm$ 0.02 & 20.71 $\pm$ 0.04 & 20.47 $\pm$ 0.21 &       \nodata      & 0.604 $\pm$ 0.035 \\
+1319 & 386.4 &      \nodata     & 21.84 $\pm$ 0.01 & 21.50 $\pm$ 0.02 & 20.72 $\pm$ 0.04 & 20.49 $\pm$ 0.23 &       \nodata      & 0.595 $\pm$ 0.038 \\
+1320 & 387.3 &      \nodata     & 21.86 $\pm$ 0.01 & 21.51 $\pm$ 0.03 & 20.74 $\pm$ 0.04 & 20.51 $\pm$ 0.21 &       \nodata      & 0.587 $\pm$ 0.035 \\
+1321 & 388.3 &      \nodata     & 21.87 $\pm$ 0.01 & 21.53 $\pm$ 0.02 & 20.76 $\pm$ 0.03 & 20.52 $\pm$ 0.21 &       \nodata      & 0.579 $\pm$ 0.032 \\
+1322 & 389.3 &      \nodata     & 21.89 $\pm$ 0.01 & 21.54 $\pm$ 0.03 & 20.77 $\pm$ 0.02 & 20.54 $\pm$ 0.19 &       \nodata      & 0.570 $\pm$ 0.029 \\
+1323 & 390.3 &      \nodata     & 21.90 $\pm$ 0.01 & 21.56 $\pm$ 0.02 & 20.79 $\pm$ 0.01 & 20.56 $\pm$ 0.17 &       \nodata      & 0.562 $\pm$ 0.023 \\
+1324 & 391.3 &      \nodata     & 21.91 $\pm$ 0.01 & 21.57 $\pm$ 0.02 & 20.81 $\pm$ 0.01 & 20.57 $\pm$ 0.17 &       \nodata      & 0.554 $\pm$ 0.022 \\
+1325 & 392.3 &      \nodata     & 21.93 $\pm$ 0.01 & 21.59 $\pm$ 0.02 & 20.82 $\pm$ 0.01 & 20.59 $\pm$ 0.15 &       \nodata      & 0.546 $\pm$ 0.020 \\
+1326 & 393.3 &      \nodata     & 21.94 $\pm$ 0.01 & 21.60 $\pm$ 0.02 & 20.84 $\pm$ 0.01 & 20.61 $\pm$ 0.14 &       \nodata      & 0.539 $\pm$ 0.020 \\
+1327 & 394.3 &      \nodata     & 21.95 $\pm$ 0.01 & 21.61 $\pm$ 0.02 & 20.86 $\pm$ 0.02 & 20.62 $\pm$ 0.13 &       \nodata      & 0.531 $\pm$ 0.020 \\
+1328 & 395.3 &      \nodata     & 21.97 $\pm$ 0.01 & 21.63 $\pm$ 0.02 & 20.87 $\pm$ 0.03 & 20.64 $\pm$ 0.11 &       \nodata      & 0.524 $\pm$ 0.020 \\
+1329 & 396.3 &      \nodata     & 21.98 $\pm$ 0.01 & 21.64 $\pm$ 0.02 & 20.89 $\pm$ 0.03 & 20.65 $\pm$ 0.10 &       \nodata      & 0.516 $\pm$ 0.018 \\
+1330 & 397.3 &      \nodata     & 22.00 $\pm$ 0.01 & 21.66 $\pm$ 0.02 & 20.90 $\pm$ 0.04 & 20.67 $\pm$ 0.09 &       \nodata      & 0.509 $\pm$ 0.019 \\
+1331 & 398.3 &      \nodata     & 22.01 $\pm$ 0.01 & 21.67 $\pm$ 0.01 & 20.92 $\pm$ 0.67 & 20.69 $\pm$ 0.07 &       \nodata      & 0.502 $\pm$ 0.133 \\
+1332 & 399.2 &      \nodata     & 22.02 $\pm$ 0.01 & 21.69 $\pm$ 0.02 & 20.94 $\pm$ 0.67 & 20.70 $\pm$ 0.07 &       \nodata      & 0.495 $\pm$ 0.131 \\
+1333 & 400.2 &      \nodata     & 22.04 $\pm$ 0.01 & 21.70 $\pm$ 0.01 & 20.95 $\pm$ 0.67 & 20.72 $\pm$ 0.05 &       \nodata      & 0.488 $\pm$ 0.127 \\
+1334 & 401.2 &      \nodata     & 22.05 $\pm$ 0.01 & 21.71 $\pm$ 0.02 & 20.97 $\pm$ 0.67 & 20.73 $\pm$ 0.04 &       \nodata      & 0.481 $\pm$ 0.124 \\
+1335 & 402.2 &      \nodata     & 22.06 $\pm$ 0.01 & 21.73 $\pm$ 0.01 & 20.99 $\pm$ 0.67 & 20.75 $\pm$ 0.03 &       \nodata      & 0.474 $\pm$ 0.122 \\
+1336 & 403.2 &      \nodata     & 22.08 $\pm$ 0.01 & 21.74 $\pm$ 0.01 & 21.00 $\pm$ 0.67 & 20.77 $\pm$ 0.01 &       \nodata      & 0.468 $\pm$ 0.119 \\
+1337 & 404.2 &      \nodata     & 22.09 $\pm$ 0.01 & 21.75 $\pm$ 0.01 & 21.02 $\pm$ 0.67 & 20.78 $\pm$ 0.01 &       \nodata      & 0.462 $\pm$ 0.116 \\
+1338 & 405.2 &      \nodata     & 22.10 $\pm$ 0.01 & 21.77 $\pm$ 0.01 & 21.03 $\pm$ 0.67 & 20.80 $\pm$ 0.01 &       \nodata      & 0.455 $\pm$ 0.115 \\
+1339 & 406.2 &      \nodata     & 22.11 $\pm$ 0.01 & 21.78 $\pm$ 0.01 & 21.05 $\pm$ 0.67 & 20.82 $\pm$ 0.03 &       \nodata      & 0.449 $\pm$ 0.114 \\
+1340 & 407.2 &      \nodata     & 22.13 $\pm$ 0.02 & 21.80 $\pm$ 0.01 & 21.07 $\pm$ 0.67 & 20.83 $\pm$ 0.04 &       \nodata      & 0.443 $\pm$ 0.114 \\
+1341 & 408.2 &      \nodata     & 22.14 $\pm$ 0.02 & 21.81 $\pm$ 0.01 & 21.08 $\pm$ 0.67 & 20.85 $\pm$ 0.05 &       \nodata      & 0.437 $\pm$ 0.113 \\
+1342 & 409.2 &      \nodata     & 22.16 $\pm$ 0.01 & 21.82 $\pm$ 0.01 & 21.10 $\pm$ 0.67 & 20.87 $\pm$ 0.07 &       \nodata      & 0.431 $\pm$ 0.113 \\
+1343 & 410.2 &      \nodata     & 22.17 $\pm$ 0.02 & 21.84 $\pm$ 0.01 & 21.11 $\pm$ 0.67 & 20.88 $\pm$ 0.06 &       \nodata      & 0.425 $\pm$ 0.111 \\
+1344 & 411.1 &      \nodata     & 22.18 $\pm$ 0.02 & 21.85 $\pm$ 0.01 & 21.13 $\pm$ 0.67 & 20.90 $\pm$ 0.05 &       \nodata      & 0.419 $\pm$ 0.109 \\
+1345 & 412.1 &      \nodata     & 22.19 $\pm$ 0.02 & 21.86 $\pm$ 0.02 & 21.14 $\pm$ 0.67 & 20.91 $\pm$ 0.04 &       \nodata      & 0.414 $\pm$ 0.107 \\
+1346 & 413.1 &      \nodata     & 22.21 $\pm$ 0.02 & 21.88 $\pm$ 0.02 & 21.16 $\pm$ 0.67 & 20.93 $\pm$ 0.03 &       \nodata      & 0.408 $\pm$ 0.105 \\
+1347 & 414.1 &      \nodata     & 22.22 $\pm$ 0.02 & 21.89 $\pm$ 0.02 & 21.18 $\pm$ 0.05 & 20.95 $\pm$ 0.03 &       \nodata      & 0.402 $\pm$ 0.013 \\
+1348 & 415.1 &      \nodata     & 22.23 $\pm$ 0.01 & 21.90 $\pm$ 0.02 & 21.19 $\pm$ 0.67 & 20.97 $\pm$ 0.03 &       \nodata      & 0.397 $\pm$ 0.101 \\
+1349 & 416.1 &      \nodata     & 22.25 $\pm$ 0.01 & 21.92 $\pm$ 0.02 & 21.21 $\pm$ 0.67 & 20.98 $\pm$ 0.03 &       \nodata      & 0.392 $\pm$ 0.100 \\
+1350 & 417.1 &      \nodata     & 22.26 $\pm$ 0.02 & 21.93 $\pm$ 0.02 & 21.22 $\pm$ 0.67 & 21.00 $\pm$ 0.03 &       \nodata      & 0.386 $\pm$ 0.099 \\
+1351 & 418.1 &      \nodata     & 22.27 $\pm$ 0.02 & 21.94 $\pm$ 0.02 & 21.24 $\pm$ 0.67 & 21.02 $\pm$ 0.03 &       \nodata      & 0.381 $\pm$ 0.097 \\
+1352 & 419.1 &      \nodata     & 22.28 $\pm$ 0.01 & 21.96 $\pm$ 0.02 & 21.25 $\pm$ 0.67 & 21.03 $\pm$ 0.02 &       \nodata      & 0.376 $\pm$ 0.095 \\
+1353 & 420.1 &      \nodata     & 22.30 $\pm$ 0.01 & 21.97 $\pm$ 0.02 & 21.27 $\pm$ 0.05 & 21.05 $\pm$ 0.02 &       \nodata      & 0.371 $\pm$ 0.010 \\
+1354 & 421.1 &      \nodata     & 22.31 $\pm$ 0.01 & 21.98 $\pm$ 0.01 & 21.29 $\pm$ 0.67 & 21.06 $\pm$ 0.03 &       \nodata      & 0.366 $\pm$ 0.092 \\
+1355 & 422.1 &      \nodata     & 22.32 $\pm$ 0.01 & 22.00 $\pm$ 0.02 & 21.30 $\pm$ 0.67 & 21.08 $\pm$ 0.02 &       \nodata      & 0.361 $\pm$ 0.091 \\
+1356 & 423.0 &      \nodata     & 22.33 $\pm$ 0.01 & 22.01 $\pm$ 0.02 & 21.32 $\pm$ 0.67 & 21.10 $\pm$ 0.02 &       \nodata      & 0.357 $\pm$ 0.090 \\
+1357 & 424.0 &      \nodata     & 22.34 $\pm$ 0.01 & 22.02 $\pm$ 0.01 & 21.33 $\pm$ 0.67 & 21.11 $\pm$ 0.01 &       \nodata      & 0.352 $\pm$ 0.088 \\
+1358 & 425.0 &      \nodata     & 22.36 $\pm$ 0.01 & 22.03 $\pm$ 0.02 & 21.35 $\pm$ 0.67 & 21.13 $\pm$ 0.01 &       \nodata      & 0.347 $\pm$ 0.086 \\
+1359 & 426.0 &      \nodata     & 22.37 $\pm$ 0.01 & 22.05 $\pm$ 0.02 & 21.36 $\pm$ 0.67 & 21.15 $\pm$ 0.02 &       \nodata      & 0.343 $\pm$ 0.086 \\
+1360 & 427.0 &      \nodata     & 22.38 $\pm$ 0.01 & 22.06 $\pm$ 0.02 & 21.38 $\pm$ 0.67 & 21.16 $\pm$ 0.01 &       \nodata      & 0.338 $\pm$ 0.084 \\
+1361 & 428.0 &      \nodata     & 22.39 $\pm$ 0.01 & 22.07 $\pm$ 0.01 & 21.39 $\pm$ 0.67 & 21.18 $\pm$ 0.01 &       \nodata      & 0.334 $\pm$ 0.083 \\
+1362 & 429.0 &      \nodata     & 22.41 $\pm$ 0.01 & 22.08 $\pm$ 0.02 & 21.41 $\pm$ 0.04 & 21.20 $\pm$ 0.01 &       \nodata      & 0.329 $\pm$ 0.006 \\
+1363 & 430.0 &      \nodata     & 22.42 $\pm$ 0.01 & 22.10 $\pm$ 0.02 & 21.42 $\pm$ 0.67 & 21.21 $\pm$ 0.01 &       \nodata      & 0.325 $\pm$ 0.081 \\
+1364 & 431.0 &      \nodata     & 22.43 $\pm$ 0.01 & 22.11 $\pm$ 0.01 & 21.44 $\pm$ 0.04 & 21.23 $\pm$ 0.01 &       \nodata      & 0.321 $\pm$ 0.006 \\
+1365 & 432.0 &      \nodata     & 22.44 $\pm$ 0.01 & 22.12 $\pm$ 0.01 & 21.45 $\pm$ 0.03 & 21.25 $\pm$ 0.01 &       \nodata      & 0.317 $\pm$ 0.005 \\
+1366 & 433.0 &      \nodata     & 22.45 $\pm$ 0.01 & 22.13 $\pm$ 0.02 & 21.47 $\pm$ 0.04 & 21.26 $\pm$ 0.01 &       \nodata      & 0.313 $\pm$ 0.006 \\
+1367 & 434.0 &      \nodata     & 22.47 $\pm$ 0.01 & 22.14 $\pm$ 0.01 & 21.48 $\pm$ 0.03 & 21.28 $\pm$ 0.01 &       \nodata      & 0.309 $\pm$ 0.005 \\
+1368 & 434.9 &      \nodata     & 22.48 $\pm$ 0.01 & 22.16 $\pm$ 0.01 & 21.50 $\pm$ 0.03 & 21.29 $\pm$ 0.01 &       \nodata      & 0.305 $\pm$ 0.004 \\
+1369 & 435.9 &      \nodata     & 22.49 $\pm$ 0.01 & 22.17 $\pm$ 0.01 & 21.52 $\pm$ 0.03 & 21.31 $\pm$ 0.01 &       \nodata      & 0.301 $\pm$ 0.005 \\
+1370 & 436.9 &      \nodata     & 22.50 $\pm$ 0.01 & 22.18 $\pm$ 0.01 & 21.53 $\pm$ 0.03 & 21.33 $\pm$ 0.01 &       \nodata      & 0.297 $\pm$ 0.004 \\
+1371 & 437.9 &      \nodata     & 22.51 $\pm$ 0.01 & 22.19 $\pm$ 0.01 & 21.55 $\pm$ 0.02 & 21.34 $\pm$ 0.01 &       \nodata      & 0.293 $\pm$ 0.004 \\
+1372 & 438.9 &      \nodata     & 22.52 $\pm$ 0.01 & 22.20 $\pm$ 0.01 & 21.56 $\pm$ 0.03 & 21.36 $\pm$ 0.01 &       \nodata      & 0.290 $\pm$ 0.004 \\
+1373 & 439.9 &      \nodata     & 22.54 $\pm$ 0.01 & 22.22 $\pm$ 0.01 & 21.57 $\pm$ 0.02 & 21.38 $\pm$ 0.01 &       \nodata      & 0.286 $\pm$ 0.004 \\
+1374 & 440.9 &      \nodata     & 22.55 $\pm$ 0.01 & 22.23 $\pm$ 0.01 & 21.59 $\pm$ 0.03 & 21.39 $\pm$ 0.01 &       \nodata      & 0.282 $\pm$ 0.004 \\
+1375 & 441.9 &      \nodata     & 22.56 $\pm$ 0.01 & 22.24 $\pm$ 0.01 & 21.60 $\pm$ 0.02 & 21.41 $\pm$ 0.01 &       \nodata      & 0.279 $\pm$ 0.004 \\
+1376 & 442.9 &      \nodata     & 22.57 $\pm$ 0.01 & 22.25 $\pm$ 0.01 & 21.62 $\pm$ 0.01 & 21.43 $\pm$ 0.02 &       \nodata      & 0.275 $\pm$ 0.003 \\
+1377 & 443.9 &      \nodata     & 22.58 $\pm$ 0.01 & 22.26 $\pm$ 0.01 & 21.63 $\pm$ 0.02 & 21.44 $\pm$ 0.02 &       \nodata      & 0.272 $\pm$ 0.004 \\
+1378 & 444.9 &      \nodata     & 22.59 $\pm$ 0.01 & 22.28 $\pm$ 0.01 & 21.65 $\pm$ 0.01 & 21.46 $\pm$ 0.01 &       \nodata      & 0.269 $\pm$ 0.003 \\
+1379 & 445.9 &      \nodata     & 22.61 $\pm$ 0.01 & 22.29 $\pm$ 0.01 & 21.66 $\pm$ 0.01 & 21.48 $\pm$ 0.02 &       \nodata      & 0.265 $\pm$ 0.003 \\
+1380 & 446.8 &      \nodata     & 22.62 $\pm$ 0.01 & 22.30 $\pm$ 0.01 & 21.68 $\pm$ 0.01 & 21.49 $\pm$ 0.02 &       \nodata      & 0.262 $\pm$ 0.004 \\
+1381 & 447.8 &      \nodata     & 22.63 $\pm$ 0.01 & 22.31 $\pm$ 0.01 & 21.69 $\pm$ 0.01 & 21.51 $\pm$ 0.03 &       \nodata      & 0.259 $\pm$ 0.003 \\
+1382 & 448.8 &      \nodata     & 22.64 $\pm$ 0.01 & 22.32 $\pm$ 0.02 & 21.71 $\pm$ 0.01 & 21.52 $\pm$ 0.03 &       \nodata      & 0.256 $\pm$ 0.004 \\
+1383 & 449.8 &      \nodata     & 22.65 $\pm$ 0.01 & 22.33 $\pm$ 0.02 & 21.72 $\pm$ 0.01 & 21.54 $\pm$ 0.02 &       \nodata      & 0.252 $\pm$ 0.003 \\
+1384 & 450.8 &      \nodata     & 22.66 $\pm$ 0.01 & 22.34 $\pm$ 0.02 & 21.73 $\pm$ 0.01 & 21.56 $\pm$ 0.03 &       \nodata      & 0.249 $\pm$ 0.003 \\
+1385 & 451.8 &      \nodata     & 22.68 $\pm$ 0.01 & 22.36 $\pm$ 0.03 & 21.75 $\pm$ 0.01 & 21.57 $\pm$ 0.03 &       \nodata      & 0.246 $\pm$ 0.004 \\
+1386 & 452.8 &      \nodata     & 22.69 $\pm$ 0.01 & 22.37 $\pm$ 0.02 & 21.76 $\pm$ 0.01 & 21.59 $\pm$ 0.03 &       \nodata      & 0.243 $\pm$ 0.004 \\
+1387 & 453.8 &      \nodata     & 22.70 $\pm$ 0.01 & 22.38 $\pm$ 0.02 & 21.78 $\pm$ 0.01 & 21.61 $\pm$ 0.03 &       \nodata      & 0.240 $\pm$ 0.004 \\
+1388 & 454.8 &      \nodata     & 22.71 $\pm$ 0.01 & 22.39 $\pm$ 0.02 & 21.79 $\pm$ 0.01 & 21.62 $\pm$ 0.03 &       \nodata      & 0.238 $\pm$ 0.004 \\
+1389 & 455.8 &      \nodata     & 22.72 $\pm$ 0.01 & 22.40 $\pm$ 0.03 & 21.80 $\pm$ 0.01 & 21.64 $\pm$ 0.03 &       \nodata      & 0.235 $\pm$ 0.005 \\
+1390 & 456.8 &      \nodata     & 22.73 $\pm$ 0.01 & 22.41 $\pm$ 0.03 & 21.82 $\pm$ 0.01 & 21.66 $\pm$ 0.04 &       \nodata      & 0.232 $\pm$ 0.005 \\
+1391 & 457.8 &      \nodata     & 22.74 $\pm$ 0.01 & 22.42 $\pm$ 0.03 & 21.83 $\pm$ 0.02 & 21.67 $\pm$ 0.04 &       \nodata      & 0.229 $\pm$ 0.005 \\
+1392 & 458.7 &      \nodata     & 22.75 $\pm$ 0.01 & 22.43 $\pm$ 0.04 & 21.85 $\pm$ 0.02 & 21.69 $\pm$ 0.04 &       \nodata      & 0.226 $\pm$ 0.005 \\
+1393 & 459.7 &      \nodata     & 22.77 $\pm$ 0.01 & 22.44 $\pm$ 0.04 & 21.86 $\pm$ 0.02 & 21.70 $\pm$ 0.04 &       \nodata      & 0.224 $\pm$ 0.006 \\
+1394 & 460.7 &      \nodata     & 22.78 $\pm$ 0.01 & 22.45 $\pm$ 0.04 & 21.88 $\pm$ 0.03 & 21.72 $\pm$ 0.04 &       \nodata      & 0.221 $\pm$ 0.006 \\
+1395 & 461.7 &      \nodata     & 22.79 $\pm$ 0.01 & 22.46 $\pm$ 0.05 & 21.89 $\pm$ 0.03 & 21.74 $\pm$ 0.05 &       \nodata      & 0.219 $\pm$ 0.007 \\
+1396 & 462.7 &      \nodata     & 22.80 $\pm$ 0.01 & 22.47 $\pm$ 0.05 & 21.90 $\pm$ 0.03 & 21.75 $\pm$ 0.05 &       \nodata      & 0.216 $\pm$ 0.007 \\
+1397 & 463.7 &      \nodata     & 22.81 $\pm$ 0.01 & 22.48 $\pm$ 0.04 & 21.92 $\pm$ 0.04 & 21.77 $\pm$ 0.04 &       \nodata      & 0.213 $\pm$ 0.007 \\
+1398 & 464.7 &      \nodata     & 22.82 $\pm$ 0.01 & 22.50 $\pm$ 0.05 & 21.93 $\pm$ 0.03 & 21.79 $\pm$ 0.05 &       \nodata      & 0.211 $\pm$ 0.007 \\
+1399 & 465.7 &      \nodata     & 22.83 $\pm$ 0.01 & 22.50 $\pm$ 0.05 & 21.95 $\pm$ 0.04 & 21.80 $\pm$ 0.05 &       \nodata      & 0.208 $\pm$ 0.008 \\
+1400 & 466.7 &      \nodata     & 22.84 $\pm$ 0.01 & 22.52 $\pm$ 0.05 & 21.96 $\pm$ 0.04 & 21.82 $\pm$ 0.04 &       \nodata      & 0.206 $\pm$ 0.007 \\
+1401 & 467.7 &      \nodata     & 22.85 $\pm$ 0.01 & 22.53 $\pm$ 0.04 & 21.97 $\pm$ 0.03 & 21.83 $\pm$ 0.05 &       \nodata      & 0.204 $\pm$ 0.007 \\
+1402 & 468.7 &      \nodata     & 22.86 $\pm$ 0.01 & 22.54 $\pm$ 0.04 & 21.99 $\pm$ 0.04 & 21.85 $\pm$ 0.04 &       \nodata      & 0.201 $\pm$ 0.007 \\
+1403 & 469.7 &      \nodata     & 22.88 $\pm$ 0.01 & 22.55 $\pm$ 0.04 & 22.00 $\pm$ 0.04 & 21.87 $\pm$ 0.04 &       \nodata      & 0.199 $\pm$ 0.006 \\
+1404 & 470.6 &      \nodata     & 22.89 $\pm$ 0.01 & 22.56 $\pm$ 0.03 & 22.01 $\pm$ 0.03 & 21.88 $\pm$ 0.03 &       \nodata      & 0.197 $\pm$ 0.005 \\
+1405 & 471.6 &      \nodata     & 22.90 $\pm$ 0.01 & 22.57 $\pm$ 0.03 & 22.03 $\pm$ 0.03 & 21.90 $\pm$ 0.03 &       \nodata      & 0.195 $\pm$ 0.005 \\
+1406 & 472.6 &      \nodata     & 22.91 $\pm$ 0.01 & 22.58 $\pm$ 0.03 & 22.04 $\pm$ 0.02 & 21.91 $\pm$ 0.03 &       \nodata      & 0.192 $\pm$ 0.004 \\
+1407 & 473.6 &      \nodata     & 22.92 $\pm$ 0.01 & 22.59 $\pm$ 0.02 & 22.05 $\pm$ 0.02 & 21.93 $\pm$ 0.02 &       \nodata      & 0.190 $\pm$ 0.004 \\
+1408 & 474.6 &      \nodata     & 22.93 $\pm$ 0.01 & 22.60 $\pm$ 0.02 & 22.07 $\pm$ 0.03 & 21.95 $\pm$ 0.02 &       \nodata      & 0.188 $\pm$ 0.004 \\
+1409 & 475.6 &      \nodata     & 22.94 $\pm$ 0.01 & 22.61 $\pm$ 0.02 & 22.08 $\pm$ 0.02 & 21.96 $\pm$ 0.02 &       \nodata      & 0.186 $\pm$ 0.004 \\
+1410 & 476.6 &      \nodata     & 22.95 $\pm$ 0.01 & 22.62 $\pm$ 0.01 & 22.09 $\pm$ 0.02 & 21.98 $\pm$ 0.01 &       \nodata      & 0.184 $\pm$ 0.003 \\
+1411 & 477.6 &      \nodata     & 22.96 $\pm$ 0.01 & 22.63 $\pm$ 0.02 & 22.11 $\pm$ 0.02 & 22.00 $\pm$ 0.01 &       \nodata      & 0.182 $\pm$ 0.003 \\
+1412 & 478.6 &      \nodata     & 22.97 $\pm$ 0.01 & 22.64 $\pm$ 0.02 & 22.12 $\pm$ 0.01 & 22.01 $\pm$ 0.01 &       \nodata      & 0.180 $\pm$ 0.002 \\
+1413 & 479.6 &      \nodata     & 22.98 $\pm$ 0.01 & 22.64 $\pm$ 0.01 & 22.13 $\pm$ 0.02 & 22.03 $\pm$ 0.01 &       \nodata      & 0.178 $\pm$ 0.002 \\
+1414 & 480.6 &      \nodata     & 22.99 $\pm$ 0.01 & 22.65 $\pm$ 0.01 & 22.15 $\pm$ 0.02 & 22.04 $\pm$ 0.01 &       \nodata      & 0.176 $\pm$ 0.002 \\
+1415 & 481.6 &      \nodata     & 23.00 $\pm$ 0.01 & 22.66 $\pm$ 0.01 & 22.16 $\pm$ 0.01 & 22.06 $\pm$ 0.01 &       \nodata      & 0.174 $\pm$ 0.002 \\
+1416 & 482.5 &      \nodata     & 23.02 $\pm$ 0.01 & 22.67 $\pm$ 0.01 & 22.17 $\pm$ 0.01 & 22.07 $\pm$ 0.01 &       \nodata      & 0.172 $\pm$ 0.002 \\
+1417 & 483.5 &      \nodata     & 23.02 $\pm$ 0.01 & 22.68 $\pm$ 0.01 & 22.19 $\pm$ 0.01 & 22.09 $\pm$ 0.01 &       \nodata      & 0.170 $\pm$ 0.002 \\
+1418 & 484.5 &      \nodata     & 23.04 $\pm$ 0.01 & 22.69 $\pm$ 0.01 & 22.20 $\pm$ 0.01 & 22.11 $\pm$ 0.02 &       \nodata      & 0.168 $\pm$ 0.002 \\
+1419 & 485.5 &      \nodata     & 23.05 $\pm$ 0.01 & 22.70 $\pm$ 0.01 & 22.21 $\pm$ 0.01 & 22.12 $\pm$ 0.02 &       \nodata      & 0.166 $\pm$ 0.002 \\
+1420 & 486.5 &      \nodata     & 23.06 $\pm$ 0.01 & 22.71 $\pm$ 0.01 & 22.23 $\pm$ 0.01 & 22.14 $\pm$ 0.02 &       \nodata      & 0.165 $\pm$ 0.002 \\
+1421 & 487.5 &      \nodata     & 23.07 $\pm$ 0.01 & 22.72 $\pm$ 0.01 & 22.24 $\pm$ 0.01 & 22.15 $\pm$ 0.02 &       \nodata      & 0.163 $\pm$ 0.002 \\
+1422 & 488.5 &      \nodata     & 23.08 $\pm$ 0.01 & 22.73 $\pm$ 0.02 & 22.25 $\pm$ 0.01 & 22.17 $\pm$ 0.03 &       \nodata      & 0.161 $\pm$ 0.002 \\
+1423 & 489.5 &      \nodata     & 23.09 $\pm$ 0.01 & 22.74 $\pm$ 0.02 & 22.27 $\pm$ 0.01 & 22.19 $\pm$ 0.03 &       \nodata      & 0.159 $\pm$ 0.002 \\
+1424 & 490.5 &      \nodata     & 23.10 $\pm$ 0.01 & 22.75 $\pm$ 0.02 & 22.28 $\pm$ 0.01 & 22.20 $\pm$ 0.03 &       \nodata      & 0.158 $\pm$ 0.002 \\
+1425 & 491.5 &      \nodata     & 23.11 $\pm$ 0.01 & 22.76 $\pm$ 0.03 & 22.29 $\pm$ 0.01 & 22.22 $\pm$ 0.04 &       \nodata      & 0.156 $\pm$ 0.003 \\
+1426 & 492.5 &      \nodata     & 23.12 $\pm$ 0.01 & 22.77 $\pm$ 0.03 & 22.30 $\pm$ 0.01 & 22.23 $\pm$ 0.04 &       \nodata      & 0.154 $\pm$ 0.003 \\
+1427 & 493.5 &      \nodata     & 23.13 $\pm$ 0.01 & 22.77 $\pm$ 0.03 & 22.32 $\pm$ 0.01 & 22.25 $\pm$ 0.04 &       \nodata      & 0.152 $\pm$ 0.003 \\
+1428 & 494.4 &      \nodata     & 23.14 $\pm$ 0.01 & 22.78 $\pm$ 0.03 & 22.33 $\pm$ 0.01 & 22.26 $\pm$ 0.04 &       \nodata      & 0.151 $\pm$ 0.003 \\
+1429 & 495.4 &      \nodata     & 23.15 $\pm$ 0.01 & 22.79 $\pm$ 0.03 & 22.34 $\pm$ 0.01 & 22.28 $\pm$ 0.05 &       \nodata      & 0.149 $\pm$ 0.003 \\
+1430 & 496.4 &      \nodata     & 23.16 $\pm$ 0.01 & 22.80 $\pm$ 0.03 & 22.36 $\pm$ 0.01 & 22.30 $\pm$ 0.06 &       \nodata      & 0.148 $\pm$ 0.003 \\
+1431 & 497.4 &      \nodata     & 23.18 $\pm$ 0.01 & 22.81 $\pm$ 0.04 & 22.37 $\pm$ 0.01 & 22.31 $\pm$ 0.05 &       \nodata      & 0.146 $\pm$ 0.004 \\
+1432 & 498.4 &      \nodata     & 23.18 $\pm$ 0.01 & 22.82 $\pm$ 0.04 & 22.38 $\pm$ 0.01 & 22.33 $\pm$ 0.06 &       \nodata      & 0.145 $\pm$ 0.004 \\
+\enddata
+\tablenotetext{a}{Mean Julian Date minus 2450000.}
+\tablenotetext{b}{Rest frame days after $\gamma$-ray burst.}
+\tablenotetext{c}{Units are $10^{40}$ erg cm$^{-2}$ s$^{-1}$. Uncertainty does not include the $\sim$7\% uncertainty in the distance.}
+\end{deluxetable}
+\end{document}
+
+\noindent Bessell, M., 1979, PASP, 91, 589
+
+\noindent Clocchiatti, A., et al., 1996, ApJ, 446, 637
+
+\noindent Clocchiatti, A., et al., 1997a, ApJ, 483, 675 
+
+\noindent Clocchiatti, A., \& Wheeler, J.C., 1997b, ApJ, 491, 375 
+
+\noindent \hangindent 0.2in Clocchiatti, A., \& Wheeler, J.C., 1997c, {Thermonuclear Supernovae}, P. Ruiz--Lapuente et al., eds., (Dordrecht: Kluwer), 863
+
+\noindent Ensman, L. M., \& Woosley, S. E., 1988, ApJ, 333, 754
+
+\noindent Galama et al., 1998, Nature, 395, 670
+
+\noindent Iwamoto, K., et. al., 1994, ApJ, 437, L115 
+
+\noindent Phillips \& Davies, 1995, 
+
+\noindent Richmond, M., et al., 1994, AJ, 107, 1022
+
+\noindent Saddler, E.M., Stathakis, R.A., Boyle, B.J., Ekers, R.D.,
+1998, IAU Circ., 6901
+
+\noindent Woosley, S.E., Eastman, R.G., \& Schmidt, B.P., 1999, ApJ, 516, 788           
+

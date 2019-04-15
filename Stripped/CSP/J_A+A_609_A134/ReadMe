@@ -1,0 +1,255 @@
+J/A+A/609/A134      CSP-I photometry for 34 supernovae      (Stritzinger+, 2018)
+================================================================================
+The Carnegie Supernova Project I:
+photometry data release of low-redshift stripped-envelope supernovae.
+    Stritzinger M.D., Anderson J.P., Contreras C., Heinrich-Josties E.,
+    Morrell N., Phillips M.M., Anais J., Boldt L., Busta L., Burns C.R.,
+    Campillay A., Corco C., Castellon S., Folatelli G., Gonzalez C., Holmbo S.,
+    Hsiao E.Y., Krzeminski W., Salgado F., Seron J., Torres-Robledo S.,
+    Freedman W.L., Hamuy M., Krisciunas K., Madore B.F., Persson S.E., Roth M.,
+    Suntzeff N.B., Taddia F., Li W., Filippenko A.V.
+    <Astron. Astrophys. 609, A134 (2018)>
+    =2018A&A...609A.134S        (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Supernovae ; Photometry
+Keywords: supernovae: general
+
+Abstract:
+    The first phase of the Carnegie Supernova Project (CSP-I) was a
+    dedicated supernova follow-up program based at the Las Campanas
+    Observatory that collected science data of young, low-redshift
+    supernovae between 2004 and 2009. Presented in this paper is the CSP-I
+    photometric data release of low-redshift stripped-envelope
+    core-collapse supernovae. The data consist of optical (uBgV ri)
+    photometry of 34 objects, with a subset of 26 having near-infrared
+    (YJH) photometry. Twenty objects have optical pre-maximum coverage
+    with a subset of 12 beginning at least five days prior to the epoch of
+    B-band maximum brightness. In the near-infrared, 17 objects have
+    pre-maximum observations with a subset of 14 beginning at least five
+    days prior to the epoch of J-band maximum brightness. Analysis of this
+    photometric data release is presented in companion papers focusing on
+    techniques to estimate host-galaxy extinction (Stritzinger et al.,
+    submitted) and the light-curve and progenitor star properties of the
+    sample (Taddia et al., submitted). The analysis of an accompanying
+    visual-wavelength spectroscopy sample of ~150 spectra will be the
+    subject of a future paper.
+
+Description:
+    The majority of imaging of the CSP-I SE SN sample was performed by the
+    LCO Swope 1 m telescope equipped with a direct CCD camera named after
+    its detector "SITe3" and a NIR imager specifically built for the
+    CSP-I named "RetroCam". A significant amount of NIR imaging was
+    also performed by the LCO Irenee du Pont 2.5m telescope equipped
+    with the Wide Field IR Camera (WIRC), and a small amount of optical
+    imaging was performed with the facility Tek5 CCD camera using the same
+    filter set used with the Swope+SITe3 telescope.
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+table1.dat       149       34   General properties of 34 Type Ibc and Type IIb
+                                 supernovae
+table2.dat       119      612   Optical photometry of the local sequences in
+                                 the standard system (for 34 SN)
+table3.dat        78      548   NIR photometry of the local sequences in the
+                                 standard system (for 25 SN)
+table4.dat       101      597   Optical photometry of SE SNe in the
+                                 Swope natural system (for 34 SN)
+table5.dat       101       10   Optical photometry of SE SNe in the
+                                 du Pont natural system (for 5 SN)
+table6.dat        59      178   NIR photometry of SE SNe in the
+                                 Swope natural system (for 13 SN)
+table7.dat        59       68   NIR photometry of SE SNe in the
+                                 Swope natural system (for  5 SN)
+table8.dat        59      164   NIR photometry of SE SNe in the
+                                 du Pont natural system (for 23 SN)
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table1.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8-  9  I2    h       RAh       Right ascension (J2000)
+  11- 12  I2    min     RAm       Right ascension (J2000)
+  14- 18  F5.2  s       RAs       Right ascension (J2000)
+      20  A1    ---     DE-       Declination sign (J2000)
+  21- 22  I2    deg     DEd       Declination (J2000)
+  24- 25  I2    arcmin  DEm       Declination (J2000)
+  27- 30  F4.1  arcsec  DEs       Declination (J2000)
+  32- 54  A23   ---     Host      Host galaxy name
+  56- 74  A19   ---     Morph     Morphology (1)
+  76- 81  F6.4  ---     z         Heliocentric redshift
+      82  A1    ---   n_z         [y] Note on z (2)
+  84- 92  A9    ---     RDisc     Discovery reference
+  94-111  A18   ---     Disc      Discovery group (3)
+ 113-118  A6    ---     Type      Spectral type
+ 120-122  I3    ---     Phase1    Phase range
+ 124-127  I4    ---     Phase2    Phase range
+ 129-135  F7.2  d       T(B)max   Time of maximum brightness
+ 137-140  F4.2  d     e_T(B)max   rms uncertainty on T(B)max
+     141  A1    ---   n_T(B)max   [d] Note on T(B)max (4)
+     143  I1    ---     T5        ? indicates optical photometry in du Pont
+                                     natural system (in table5)
+     145  I1    ---     T6        ? indicates NIR photometry in Swope natural
+                                     system (in table6)
+     147  I1    ---     T7        ? indicates NIR photometry in Swope natural
+                                     system (in table7)
+     149  I1    ---     T8        ? indicates NIR photometry in du Pont natural
+                                     system (in table8)
+--------------------------------------------------------------------------------
+Note (1): Morphologies are as listed in the NASA/IPAC Extragalactic
+   Database (NED).
+Note (2): Heliocentric redshifts are as given in NED or if not listed in NED,
+   as determined through host galaxy emission lines in visual-wavelength
+   spectra of the SN. Measurements made by the authors are indicated with
+   the y symbol.
+Note (3): References/URLs as:
+    LOSS      = see Filippenko 2005, in The Fate of the Most Massive Stars,
+                 ed. R. Humphreys & K. Stanek (San Francisco: ASP), p. 33,
+                 and references therein
+    Puckett   = http://www.cometwatch.com
+    SDSS-II   = SDSS-II SN survey (Frieman et al., 2008AJ....135..338F)
+    SNFactory = http://snfactory.lbl.gov/
+    CHASE     = http://www.das.uchile.cl/proyectoCHASE
+Note (4): d when obtained from the relation shown in Fig. 3 of
+           Taddia et al. (2018A&A...609A.134F).
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table2.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8-  9  I2    ---     ID        ID sequence number
+  12- 13  I2    h       RAh       Right ascension (J2000)
+  15- 16  I2    min     RAm       Right ascension (J2000)
+  18- 22  F5.2  s       RAs       Right ascension (J2000)
+      25  A1    ---     DE-       Declination sign (J2000)
+  26- 27  I2    deg     DEd       Declination (J2000)
+  29- 30  I2    arcmin  DEm       Declination (J2000)
+  32- 35  F4.1  arcsec  DEs       Declination (J2000)
+  38- 43  F6.3  mag     umag      ?=- u magnitude
+  45- 49  F5.3  mag   e_umag      ?=- rms uncertainty on umag
+  52- 57  F6.3  mag     gmag      ?=- g magnitude
+  59- 63  F5.3  mag   e_gmag      ?=- rms uncertainty on gmag
+  66- 71  F6.3  mag     rmag      ?=- r magnitude
+  73- 77  F5.3  mag   e_rmag      ?=- rms uncertainty on rmag
+  80- 85  F6.3  mag     imag      ?=- i magnitude
+  87- 91  F5.3  mag   e_imag      ?=- rms uncertainty on imag
+  94- 99  F6.3  mag     Bmag      ?=- B magnitude
+ 101-105  F5.3  mag   e_Bmag      ?=- rms uncertainty on Bmag
+ 108-113  F6.3  mag     Vmag      ?=- V magnitude
+ 115-119  F5.3  mag   e_Vmag      ?=- rms uncertainty on Vmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table3.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 10  I3    ---     ID        ID sequence number
+  13- 14  I2    h       RAh       Right ascension (J2000)
+  16- 17  I2    min     RAm       Right ascension (J2000)
+  19- 23  F5.2  s       RAs       Right ascension (J2000)
+      26  A1    ---     DE-       Declination sign (J2000)
+  27- 28  I2    deg     DEd       Declination (J2000)
+  30- 31  I2    arcmin  DEm       Declination (J2000)
+  33- 36  F4.1  arcsec  DEs       Declination (J2000)
+  39- 44  F6.3  mag     Ymag      ?=- Y magnitude
+  46- 50  F5.3  mag   e_Ymag      ?=- rms uncertainty on Ymag
+  53- 58  F6.3  mag     Jmag      ?=- J magnitude
+  60- 64  F5.3  mag   e_Jmag      ?=- rms uncertainty on Jmag
+  67- 72  F6.3  mag     Hmag      ?=- H magnitude
+  74- 78  F5.3  mag   e_Hmag      ?=- rms uncertainty on Hmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table4.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 17  F10.2 d       JD        Julian date
+  20- 25  F6.3  mag     umag      ?=- u magnitude
+  27- 31  F5.3  mag   e_umag      ?=- rms uncertainty on umag
+  34- 39  F6.3  mag     gmag      ?=- g magnitude
+  41- 45  F5.3  mag   e_gmag      ?=- rms uncertainty on gmag
+  48- 53  F6.3  mag     rmag      ?=- r magnitude
+  55- 59  F5.3  mag   e_rmag      ?=- rms uncertainty on rmag
+  62- 67  F6.3  mag     imag      ?=- i magnitude
+  69- 73  F5.3  mag   e_imag      ?=- rms uncertainty on imag
+  76- 81  F6.3  mag     Bmag      ?=- B magnitude
+  83- 87  F5.3  mag   e_Bmag      ?=- rms uncertainty on Bmag
+  90- 95  F6.3  mag     Vmag      ?=- V magnitude
+  97-101  F5.3  mag   e_Vmag      ?=- rms uncertainty on Vmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table5.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 17  F10.2 d       JD        Julian date
+  20- 25  F6.3  mag     umag      ?=- u magnitude
+  27- 31  F5.3  mag   e_umag      ?=- rms uncertainty on umag
+  34- 39  F6.3  mag     gmag      ?=- g magnitude
+  41- 45  F5.3  mag   e_gmag      ?=- rms uncertainty on gmag
+  48- 53  F6.3  mag     rmag      ?=- r magnitude
+  55- 59  F5.3  mag   e_rmag      ?=- rms uncertainty on rmag
+  62- 67  F6.3  mag     imag      ?=- i magnitude
+  69- 73  F5.3  mag   e_imag      ?=- rms uncertainty on imag
+  76- 81  F6.3  mag     Bmag      ?=- B magnitude
+  83- 87  F5.3  mag   e_Bmag      ?=- rms uncertainty on Bmag
+  90- 95  F6.3  mag     Vmag      ?=- V magnitude
+  97-101  F5.3  mag   e_Vmag      ?=- rms uncertainty on Vmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table6.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 17  F10.2 d       JD        Julian date
+  20- 25  F6.3  mag     Ymag      ?=- Y magnitude
+  27- 31  F5.3  mag   e_Ymag      ?=- rms uncertainty on Ymag
+  34- 39  F6.3  mag     Jmag      ?=- J(RC1) magnitude
+  41- 45  F5.3  mag   e_Jmag      ?=- rms uncertainty on Jmag
+  48- 53  F6.3  mag     Hmag      ?=- H magnitude
+  55- 59  F5.3  mag   e_Hmag      ?=- rms uncertainty on Hmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table7.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 17  F10.2 d       JD        Julian date
+  20- 25  F6.3  mag     Ymag      ?=- Y magnitude
+  27- 31  F5.3  mag   e_Ymag      ?=- rms uncertainty on Ymag
+  34- 39  F6.3  mag     Jmag      ?=- J(RC2) magnitude
+  41- 45  F5.3  mag   e_Jmag      ?=- rms uncertainty on Jmag
+  48- 53  F6.3  mag     Hmag      ?=- H magnitude
+  55- 59  F5.3  mag   e_Hmag      ?=- rms uncertainty on Hmag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table8.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  6  A6    ---     SN        SN name
+   8- 17  F10.2 d       JD        Julian date
+  20- 25  F6.3  mag     Ymag      ?=- Y(dw) magnitude
+  27- 31  F5.3  mag   e_Ymag      ?=- rms uncertainty on Ymag
+  34- 39  F6.3  mag     Jmag      ?=- J magnitude
+  41- 45  F5.3  mag   e_Jmag      ?=- rms uncertainty on Jmag
+  48- 53  F6.3  mag     Hmag      ?=- H magnitude
+  55- 59  F5.3  mag   e_Hmag      ?=- rms uncertainty on Hmag
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+    Maximilian Stritzinger, max(at)phys.au.dk
+
+================================================================================
+(End)                                        Patricia Vannier [CDS]  22-Aug-2017
