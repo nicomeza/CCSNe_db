@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as pl
 import os 
 
-snlist = [f.split()[0][:-1] for f in open('sndirs.dat','r').readlines()]
+snlist = [f.split()[0][:-1] for f in open('sn_dirs.dat','r').readlines()]
 homedir = "/home/dustspeck/SN/CCSNe_db/Stripped/"
-sn_data = open('sn_data.dat','w')
+#sn_data = open('sn_data.dat','w')
 params = ['sn','host','hostredshift','hostlumdist','host_ebv']
-sn_data.write("%s \n"%"\t".join(params))
+#sn_data.write("%s \n"%"\t".join(params))
 uvot_bands=['U','B','V','M2','W1','W2','UVW1','UVW2','UVM2']
-
+no_bands = ['F475W','F625W','F775W','C','G']
 try :
     for sn in snlist:
     
@@ -25,15 +25,20 @@ try :
             phot_list = json_sn['%s'%sn[2:]]['photometry']
             sn = sn[2:]
 
-        host_str = ','.join([x['value'] for x in json_sn['%s'%sn]['host']])
-        host_z = ','.join([x['value'] for x in json_sn['%s'%sn]['hostredshift']])
         try:
-            host_dL = ','.join(["%s [%s]"%(x['value'],x['u_value']) for x in json_sn['%s'%sn]['hostlumdist']])
-        except:
-            host_dL = ','.join(["%s [%s]"%(x['value'],x['u_value']) for x in json_sn['%s'%sn]['lumdist']])
             
-        host_ebv = ','.join([x['value'] for x in json_sn['%s'%sn]['ebv']])
-        print sn,host_str,host_z,host_dL,host_ebv
+            host_str = ','.join([x['value'] for x in json_sn['%s'%sn]['host']])
+            host_z = ','.join([x['value'] for x in json_sn['%s'%sn]['hostredshift']])
+            try:
+                host_dL = ','.join(["%s [%s]"%(x['value'],x['u_value']) for x in json_sn['%s'%sn]['hostlumdist']])
+            except:
+                host_dL = ','.join(["%s [%s]"%(x['value'],x['u_value']) for x in json_sn['%s'%sn]['lumdist']])
+            host_ebv = ','.join([x['value'] for x in json_sn['%s'%sn]['ebv']])
+            print sn,host_str,host_z,host_dL,host_ebv
+        
+        except:
+            print "no host information ?"
+            
         #sn_data.write("%s \n"%("\t".join((sn,host_str,host_z,host_dL,host_ebv))))
 
         try:
@@ -63,7 +68,7 @@ try :
                     
                     band = "%s_uvot"%band
                     
-            if band != None and time!= None:
+            if band != None and time!= None and not (band in no_bands):
             
                 if band in bands:
                     if phot['u_time'] != "MJD":
@@ -126,6 +131,6 @@ except:
     print "FATAL ERROR"
     os.chdir(homedir)
     pl.close()
-    sn_data.close()
+#    sn_data.close()
 
-sn_data.close()
+#sn_data.close()

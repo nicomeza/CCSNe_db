@@ -175,8 +175,8 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         
             scope['min_%s'%lco_filter] ,scope['max_%s'%lco_filter]  = tmin,tmax
             scope['cadence_%s'%lco_filter] = len(t)/dtmax
-            scope['inter_%s'%lco_filter] = interp1d(t,mag,kind='linear')
-            pl.plot(t,scope['inter_%s'%lco_filter](t),color='k',linestyle='--')
+            #scope['inter_%s'%lco_filter] = interp1d(t,mag,kind='linear')
+            #pl.plot(t,scope['inter_%s'%lco_filter](t),color='k',linestyle='--')
             
             filters_cadence.append(len(t)/dtmax)
             print len(t)/dtmax
@@ -192,8 +192,10 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.gca().invert_yaxis()
         pl.show()
     
+        
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
-        inter_t = scope['jd_%s'%min_cadence_filt]
+        #inter_t = scope['jd_%s'%min_cadence_filt]
+        inter_t = scope['jd_%s'%max_cadence_filt]
         where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.1 ,inter_t >= tmax_min - 0.1))[0]
         filters_used = []
 
@@ -224,15 +226,15 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 nearest_t = np.where(np.abs(t-t_inter)<0.25)[0]
          
                 if len(nearest_t)>0:
-
-                    scope['inter_t_%s'%lco_name].append(t[nearest_t[0]])
-                    scope['inter_mags_%s'%lco_name].append(mag[nearest_t[0]])
-                    scope['inter_err_%s'%lco_name].append(err[nearest_t[0]])
+                    nearest_t = np.argmin(np.abs(t-t_inter)) 
+                    scope['inter_t_%s'%lco_name].append(t[nearest_t])
+                    scope['inter_mags_%s'%lco_name].append(mag[nearest_t])
+                    scope['inter_err_%s'%lco_name].append(err[nearest_t])
             
                 else:
                     
                     scope['inter_t_%s'%lco_name].append(t_inter)
-                    inter,inter_err = inter_sample(t_inter,t,mag,yerr=err,n_sample=1000,plot=False,confidence=False)
+                    inter,inter_err = inter_sample(t_inter,t,mag,yerr=err,n_sample=500,plot=False,confidence=False)
                     scope['inter_mags_%s'%lco_name].append(inter)
                     scope['inter_err_%s'%lco_name].append(inter_err)
                     
