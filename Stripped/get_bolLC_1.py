@@ -30,18 +30,18 @@ scope = globals()
 
 #--------------DECAM FILTERS-----------------------------------------------  
 
-f_name=('lambda','u','g','r','i','z','Y','atm')
-DECAM_filters = ('u','g','r','i','z','Y')                                                             
-f_format = ('f8','f8','f8','f8','f8','f8','f8','S8')
-DECAM = np.genfromtxt('/home/dustspeck/SN/DECAM_Filters.dat',dtype={'names':f_name,'formats':f_format})
-DECAM['lambda']*=10
+#f_name=('lambda','u','g','r','i','z','Y','atm')
+#DECAM_filters = ('u','g','r','i','z','Y')                                                             
+#f_format = ('f8','f8','f8','f8','f8','f8','f8','S8')
+#DECAM = np.genfromtxt('/home/dust_speck/SN/DECAM_Filters.dat',dtype={'names':f_name,'formats':f_format})
+#DECAM['lambda']*=10
 
 # ------------- LCOGT FILTERS ----------------------------------------------
 
 LCOGT_filters = ('B','V','gp','rp','ip')
 LCOGT_filters = ('gp','rp','ip')
 
-LCOGT_DIR = "/home/dustspeck/SN/lcogt_filters"
+LCOGT_DIR = "/home/dust_speck/SN/lcogt_filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
 lcogt_responses = []
@@ -62,7 +62,7 @@ LCOGT_data=  np.genfromtxt("%s/LCOGT_filters.dat"%(LCOGT_DIR),dtype={'names':f_n
 
 UVOT = ('UVW2','UVM2','UVW1','U','B','V')
 UVOT_names = ('W2','M2','W1','U','B','V')
-UVOT_DIR = "/home/dustspeck/SN/SWIFT/filters"
+UVOT_DIR = "/home/dust_speck/SN/SWIFT/filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
 uvot_responses = []
@@ -76,7 +76,7 @@ for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
 
 #------------------ UVOT ZERO POINT -------------------------------------
 
-AB_ZPs = np.genfromtxt('/home/dustspeck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
+AB_ZPs = np.genfromtxt('/home/dust_speck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
 
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
