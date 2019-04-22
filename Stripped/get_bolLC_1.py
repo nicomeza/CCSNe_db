@@ -96,13 +96,13 @@ colormap = pl.cm.spectral
 
 
 
-filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K']
+filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K','Ks']
 filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
         
 use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I']
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
-    print SN
+    print "####### %s ########## \n"
     try: 
     
         os.chdir("%s/"%SN)
@@ -112,7 +112,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         for filter in zip(use_filters):
 
             filter_file = "mags_%s.out"%filter
-            
+            scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = None,None,None
             if os.path.isfile(filter_file):
                 print filter_file,filter
                 try:
@@ -142,7 +142,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         
         pl.gca().set_color_cycle(filters_colors)
         filters_cadence = []
-
+        offset = 0.0
         for filter in FILTER_ZPS:
             
             
@@ -153,6 +153,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             
             x0 = 1/(filter['lambda']*1e-4)
             R_x = (R_V*a_x(x0)+b_x(x0))
+            
             try:
                 scope['mag_%s'%lco_name]
                 if len(scope['mag_%s'%lco_name])<=1:
@@ -164,8 +165,8 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             err = scope['err_%s'%lco_name]
             t = scope['jd_%s'%lco_name]
             
-            pl.errorbar(t,mag,yerr=err,fmt='o',label=lco_filter)
-
+            pl.errorbar(t,mag+offset,yerr=err,fmt='o',label=lco_filter)
+            offset += 1.0
             tmax,tmin = np.max(t),np.min(t)
             dtmax = tmax-tmin
             if tmin >= tmax_min:
@@ -188,15 +189,19 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 min_cadence_filt = lco_name
                 min_cadence = len(t)/dtmax
         
+        pl.axvline(tmin_max,linestyle='--',color='k')
+        pl.axvline(tmax_min,linestyle='--',color='k')
+
         pl.legend(loc='best',ncol=2,prop={'size':9})
         pl.gca().invert_yaxis()
+        pl.savefig("%s_lcs.png"%SN)
         pl.show()
     
         
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         #inter_t = scope['jd_%s'%min_cadence_filt]
         inter_t = scope['jd_%s'%max_cadence_filt]
-        where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.1 ,inter_t >= tmax_min - 0.1))[0]
+        where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
         filters_used = []
 
         for filter in FILTER_ZPS : 
@@ -274,9 +279,11 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 fluxes[i].append(fab)
                 fluxes_err[i].append(np.asarray(ferr))
                 
-        
+        pl.axvline(tmin_max,linestyle='--',color='k')
+        pl.axvline(tmax_min,linestyle='--',color='k')
         pl.legend()
         pl.gca().invert_yaxis()
+        pl.savefig("%s_inter_lcs.png"%SN)
         pl.show()
         
         
@@ -329,18 +336,21 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                         yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.2f'%epoch)
             
         trans = ax.get_xaxis_transform()
+
+        band_string = ""
         for lam,flux in zip(sorted_lambdas,fluxes[0]):
             flux = np.asarray(flux)
             max_flux = np.max(flux)*c_cms/((lam*1e-4)**2.)
             band = FILTER_ZPS['filter'][np.where(FILTER_ZPS['lambda_p']==lam)[0]]
+            band_string+=str(band)
             print band,lam,max_flux
             ax.axvline(lam,linestyle='--',color='k',alpha=0.4)
             ax.annotate(str(band[0][0:2]),(lam+5,1.05),xycoords=trans,size=8,rotation=90)
-                
+            
         ax.set_title(SN)
         ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$')
         ax.set_ylabel('Flux in ergs/s/cm2/A')
-        ax.legend(loc='best',ncol=2,prop={'size':9})
+        ax.legend(loc='best',ncol=2,prop={'size':8})
         fig.savefig('./SED_lam_%s.png'%(str(R_V)))
         pl.show()
         pl.close()
@@ -354,16 +364,32 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         L_bol = []
         M_bol = []
         Lfile = open('%s_Lbol.dat'%SN,'w')
-        
+        Lfile.write("## SN \t z \t E_B_V_total \t d [Mpc] \t t_0 \n")
+        Lfile.write("## %s \t %s \t %s \t %s \t %s \n"%(SN,z_SN,E_B_V,d_L,t_0))
+        Lfile.write("###############%s#######################\n"%band_string)
+        Lfile.write("# t-t_0 \t Lbol [erg/s] \t log(Lbol) \n")
+        int_nu = False
+
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
-            
-            y,x = flux,c_cms/(sorted_lambdas*1e-8) 
-            I = -simps(y,x)
-            L = 4*pi * I * (d_L*1e6*pc_to_cm)**2.
-            print epoch,I,4*pi*I*(d_L*1e6*pc_to_cm)**2. 
-            L_bol.append(L)
-            ax.plot(epoch,L,marker='o',color='k')
-            Lfile.write("%s \t %s \n"%(epoch,L))
+
+            if int_nu:
+                y,x = flux,c_cms/(sorted_lambdas*1e-8)
+                I = -np.trapz(y,x)
+                L = 4*pi * I * (d_L*1e6*pc_to_cm)**2.
+                print epoch,I,4*pi*I*(d_L*1e6*pc_to_cm)**2. 
+                L_bol.append(L)
+                ax.plot(epoch,L,marker='o',color='k')
+                Lfile.write("%s \t %s \n"%(epoch,L))
+                
+            else:
+
+                y,x = np.asarray(flux)*c_cms/(sorted_lambdas*1e-4)**2.,sorted_lambdas
+                I = simps(y,x)
+                L = 4*pi * I * (d_L*1e6*pc_to_cm)**2.
+                print epoch,I,4*pi*I*(d_L*1e6*pc_to_cm)**2. 
+                L_bol.append(L)
+                ax.plot(epoch,L,marker='o',color='k')
+                Lfile.write("%s \t %s \t %s \n"%(epoch,L,np.log10(L)))
             
         Lfile.close()
         ax.set_xlabel('t')
@@ -385,8 +411,6 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         print "No directory %s/"%SN
         continue
 
-
-        
 try: 
 
     os.chdir(current_dir)

@@ -4,7 +4,7 @@ import matplotlib.pyplot as pl
 import os 
 
 snlist = [f.split()[0][:-1] for f in open('sn_dirs.dat','r').readlines()]
-homedir = "/home/dustspeck/SN/CCSNe_db/Stripped/"
+homedir = "/home/dust_speck/SN/CCSNe_db/Stripped/"
 #sn_data = open('sn_data.dat','w')
 params = ['sn','host','hostredshift','hostlumdist','host_ebv']
 #sn_data.write("%s \n"%"\t".join(params))
@@ -95,6 +95,13 @@ try :
                 
         
         os.system("rm mags_*.out")
+        
+        fig = pl.figure(figsize=(10,6))
+        ax = fig.add_subplot(111)
+        colormap = pl.cm.spectral
+        fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9,len(bands.keys()))])
+
+
         for key in iter(bands):
         
             print key
@@ -103,24 +110,24 @@ try :
                 with_err = np.where(magerr!=999)[0]
                 no_err = np.where(magerr==999)[0]
                 if len(with_err)>0:
-                    pl.errorbar(t[with_err],mag[with_err],yerr=magerr[with_err],marker='o',label=key)
+                    ax.errorbar(t[with_err],mag[with_err],yerr=magerr[with_err],marker='o',label=key)
                 if len(no_err)>0:
-                    pl.errorbar(t[no_err],mag[no_err],marker='o',label="no err %s"%key,alpha=0.3)
+                    ax.errorbar(t[no_err],mag[no_err],marker='o',label="no err %s"%key,alpha=0.3)
                 np.savetxt('mags_%s.out'%key, zip(t,mag,magerr),fmt="%5.3f")
                 print 'Saved mags_%s.out'%key
                 #print mag
             except:
                 print "key : %s"%key
                 t,mag = np.asfarray(bands.get(key))[:,0],np.asfarray(bands.get(key))[:,1]    
-                pl.errorbar(t,mag,marker='o',label=key)
+                ax.errorbar(t,mag,marker='o',label=key)
                 np.savetxt('mags_%s.out'%key, zip(t,mag),fmt='%5.3f')
                 print 'Saved mags_%s.out'%key
-        
-        pl.ylabel('mag')
-        pl.xlabel('MJD')
-        pl.title("%s"%sn)
-        pl.gca().invert_yaxis()
-        pl.legend()
+                
+        ax.set_ylabel('mag')
+        ax.set_xlabel('MJD')
+        ax.set_title("%s"%sn)
+        fig.gca().invert_yaxis()
+        ax.legend(loc='best',ncol=2,prop={'size':8})
         os.system("rm %s_phot.png"%sn)
         pl.savefig("%s_phot.png"%sn)
         pl.close()
