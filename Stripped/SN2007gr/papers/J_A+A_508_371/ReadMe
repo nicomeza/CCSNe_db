@@ -1,0 +1,194 @@
+J/A+A/508/371       UBVRIJHK observations of SN 2007gr           (Hunter+, 2009)
+================================================================================
+Extensive optical and near-infrared observations of the nearby, narrow-lined
+type Ic SN 2007gr : days 5 to 415.
+     Hunter D.J., Valenti S., Kotak R., Meikle W.P.S., Taubenberger S.,
+     Pastorello A., Benetti S., Stanishev V., Smartt S.J., Trundle C.,
+     Arkharov A.A., Bufano F., Cappellaro E., Di  Carlo E., Dolci M.,
+     Elias-Rosa N., Frandsen S., Fynbo J.U., Hopp U., Larionov V.M., Laursen P.,
+     Mazzali P., Navasardyan H., Ries C., Riffeser A., Rizzi L., Tsvetkov D.Y.,
+     Turatto M., Wilke S.
+    <Astron. Astrophys. 508, 371 (2009)>
+    =2009A&A...508..371H
+================================================================================
+ADC_Keywords: Supernovae ; Photometry, UBVRI ; Photometry, infrared
+Keywords: supernovae: individual: SN 2007gr - techniques: miscellaneous -
+          supernovae: individual: SN 2002ap - supernovae: general
+
+Abstract:
+    We present photometric and spectroscopic observations at optical and
+    near-infrared wavelengths of the nearby type-Ic supernova 2007gr.
+    These represent the most extensive data-set to date of any supernova
+    of this sub-type, with frequent coverage from shortly after discovery
+    to more than one year post-explosion.
+
+Description:
+    UBVRI photometry of SN 2007gr was obtained from 2007 Aug. 18 to 2008
+    Sep. 30, spanning approximately -6 to +404 days with respect to B-band
+    maximum.
+    Optical spectra were obtained at 29 epochs, spanning -7.3 to +375.5
+    days with respect to B maximum.
+
+Objects:
+    ----------------------------------------------------------
+       RA   (2000)   DE    Designation(s)
+    ----------------------------------------------------------
+    02 43 28.0 +37 20 45   SN 2007gr = SN 2007gr
+    ----------------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName   Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe         80        .   This file
+tablea1.dat    67       10   UBVRI magnitudes of the sequence stars in the
+                              field of NGC 1058
+tablea2.dat    95       80   Optical Photometry of SN 2007gr
+tablea3.dat    69       23   Near-Infrared Photometry of SN 2007gr
+tablea4.dat    82       29   Log of Optical Spectroscopy for SN 2007gr
+tablea5.dat    72       11   Log of Near-Infrared Spectroscopy of SN 2007gr
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tablea1.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  2  I2    ---     Seq       Sequential number of sequence star of Fig. 1
+   4-  9  F6.3  mag     Umag      U magnitude
+  11- 15  F5.3  mag   e_Umag      rms uncertainty on Umag
+  17- 22  F6.3  mag     Bmag      B magnitude
+  24- 28  F5.3  mag   e_Bmag      rms uncertainty on Bmag
+  30- 35  F6.3  mag     Vmag      V magnitude
+  37- 41  F5.3  mag   e_Vmag      rms uncertainty on Vmag
+  43- 48  F6.3  mag     Rmag      R magnitude
+  50- 54  F5.3  mag   e_Rmag      rms uncertainty on Rmag
+  56- 61  F6.3  mag     Imag      I magnitude
+  63- 67  F5.3  mag   e_Imag      rms uncertainty on Imag
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tablea2.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units        Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10  A10   "DD/MM/YYYY" ObsDate   U.T. observation date
+  12- 21  F10.2 d            JD        Julian date of observation
+  23- 28  F6.1  ---          Phase     Phase, relative to the epoch of B maximum
+                                        JD=2454337.0+/-1.0
+  30- 35  F6.3  mag          Umag      ? U magnitude
+  37- 41  F5.3  mag        e_Umag      ? rms uncertainty on Umag (1)
+  43- 48  F6.3  mag          Bmag      ? B magnitude
+  50- 54  F5.3  mag        e_Bmag      ? rms uncertainty on Bmag (1)
+  56- 61  F6.3  mag          Vmag      ? V magnitude
+  63- 67  F5.3  mag        e_Vmag      ? rms uncertainty on Vmag (1)
+  69- 74  F6.3  mag          Rmag      R magnitude
+  76- 80  F5.3  mag        e_Rmag      rms uncertainty on Rmag (1)
+  82- 87  F6.3  mag          Imag      ? I magnitude
+  89- 93  F5.3  mag        e_Imag      ? rms uncertainty on Imag (1)
+      95  I1    ---          Inst      Instrument (2)
+--------------------------------------------------------------------------------
+Note (1): The reported errors are a result of the uncertainty due to the
+     PSF fitting of the SN magnitude and to the background contamination
+     (computed using the artificial-star experiment).
+
+Note (2): Instrument number as follows:
+      1 = Ekar: 1.82m Copernico Telescope, INAF - Osservatorio di Asiago,
+          Mt. Ekar, Asiago (Italy) + AFOSC.
+      2 = TNG: 3.5m Telescopio Nazionale Galileo, La Palma, Canary Isl.
+          (Spain) + DOLORES.
+      3 = NOT: 2.5m Nordic Optical Telescope, La Palma, Canary Isl.
+          (Spain) + ALFOSC.
+      4 = LT: 2.0m Liverpool Telescope, La Palma, Canary Isl.
+          (Spain) + RATCAM.
+      5 = Wendelstein: 0.8m Telescope at the Wendelstein Observatory,
+          (Munich, Germany) + MONICA.
+      6 = S70: 0.70m Sternberg Astronomical Institute Telescope, Moscow (Russia)
+      7 = G. D. Cassini: 1.52m Telescope at the Loiano Observatory
+          (BOL., Italy) + BFOSC.
+      8 = CA: 2.2m Telescope at the Calar Alto Observatory (Spain) + CAFOS.
+      9 = Gemini North: 8.1m Telescope, Mauna Kea (Hawaii) + GMOS-N.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tablea3.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units      Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10  A10 "DD/MM/YYYY" ObsDate   U.T. observation date
+  12- 21  F10.2 d          JD        Julian date of observation
+  23- 28  F6.1  ---        Phase     Phase, relative to the epoch of B maximum
+                                        JD=2454337.0+/-1.0
+  30- 35  F6.3  mag        Jmag      ? J magnitude
+  37- 41  F5.3  mag      e_Jmag      ? rms uncertainty on Jmag (1)
+  43- 48  F6.3  mag        Hmag      ? H magnitude
+  50- 54  F5.3  mag      e_Hmag      ? rms uncertainty on Hmag (1)
+  56- 61  F6.3  mag        Kmag      ? K magnitude
+  63- 67  F5.3  mag      e_Kmag      ? rms uncertainty on Kmag (1)
+      69  I1    ---        Inst      Instrument (2)
+--------------------------------------------------------------------------------
+Note (1): The reported errors are a result of the uncertainty due to the
+     PSF fitting of the SN magnitude and to the background contamination
+     (computed using the artificial-star experiment).
+Note (2): Instrument number as follows:
+      1 = CI: 1.1m Telescope AZT-24, Campo Imperatore (Italy) + SWIRCAM.
+      2 = NOT: 2.5m Nordic Optical Telescope, La Palma, Canary Isl.
+          (Spain) + NOTCAM.
+      3 = TNG: 3.5m Telescopio Nazionale Galileo, La Palma, Canary Isl.
+          (Spain) + NICS.
+      4 = Gemini North: 8.1m Telescope, Mauna Kea (Hawaii) + NIRI.
+      5 = UKIRT: 3.8m Infrared Telescope, Mauna Kea (Hawaii) + WFCAM.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tablea4.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units      Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10  A10 "YYYY/MM/DD" ObsDate   U.T. observation date
+  12- 20  F9.1  d          JD        Julian date of observation
+  22- 27  F6.1  ---        Epoch     Epoch, relative to the epoch of B
+                                      maximum (JD=2454337.0+/- 1.0
+  29- 51  A23   ---        Inst      Instrumental configuration
+  53- 54  I2    0.1nm      Res       Resolution (1)
+      55  A1    ---        ---       [-]
+  56- 57  I2    0.1nm      Res2      ? Second value of resolution (1)
+  60- 63  I4    s          texp      Exposure time (in seconds)
+  64- 65  A2    ---      n_texp      [x23] Multiple exposures
+  68- 71  I4    0.1nm      lam0      First value of wavelength range
+      72  A1    ---        ---       [-]
+  73- 77  I5    0.1nm      lam1      Second value of wavelength range
+  79- 82  A4    ---        Ref       References (2)
+--------------------------------------------------------------------------------
+Note (1): Derived from FWHM of night-sky emission lines.
+Note (2): References as follows:
+      1 = Valenti et al. (2008ApJ...673L.155V)
+      2 = This paper
+      3 = Valenti et al. (2009Natur.459..674V)
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: tablea5.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units      Label       Explanations
+--------------------------------------------------------------------------------
+   1- 10  A10 "YYYY/MM/DD" ObsDate     U.T. observation date
+  12- 20  F9.1  d          JD          Julian date of observation
+  22- 27  F6.1  ---        Epoch       Epoch, relative to the epoch of B
+                                        maximum (JD=2454337.0+/-1.0)
+  29- 37  A9    ---        Star        Standard star name
+  39- 42  A4    ---        SpType      MK spectral type
+  44- 47  I4    ---        texp        Exposure time by band (1)
+      48  A1    ---      n_texp        [*] *: 1050s exposure for the J band
+  50- 66  A17   ---        Inst        Instrument and filter set (2)
+  68- 69  I2    0.1nm      Res         Resolution (3)
+      70  A1    ---        ---         [-]
+  71- 72  I2    0.1nm      Res2        ? Second value of resolution (3)
+--------------------------------------------------------------------------------
+Note (1): The quantity is the on-source integration time for each band
+Note (2): Instruments as follows:
+    TNG = 3.5m Telescopio Nazionale Galileo, La Palma, Canary Isl.  (Spain)
+     GN = 8.1m Telescope at Gemini North, Hawaii.
+Note (3): The instrumental resolution for the Gemini spectra was derived as
+     the range of Gaussian FWHMs measured for a number of unblended arc
+     lines. The resolution of the TNG spectra have been estimated using the
+     FWHM of the night sky lines.
+--------------------------------------------------------------------------------
+
+================================================================================
+(End)                                      Patricia Vannier [CDS]    07-Dec-2009
