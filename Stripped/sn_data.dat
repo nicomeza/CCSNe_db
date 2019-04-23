@@ -7,4 +7,9 @@
 #SN2011bm	"IC3918"	0.021778 95.1 0.032	0.021778	55644.0	
 #SN2011dh	"M51"		0.002000 7.8 0.07	0.002		55712.5 # From Ergon 2014-15
 SN2012ap	"NGC1729"	0.0121	 43  0.45	0.0121		55962 # From Milisavljevic
-SN2016coi	"UGC11868"	0.0036	 17.2	0.0645	0.0036		57532.5 # From Yamanaka
+#SN2016coi	"UGC11868"	0.0036	 17.2	0.0645	0.0036		57532.5 # From Yamanaka
+###########Prentice 2016###########
+#SN1998bw	"bla"		0.0087	 35.645	0.052	0.0087		50928.89 # From Prentice 2016 compilation. t_0 = t_0_GRB 
+#SN2002ap	"bla"		0.0022	 7.943	0.079	0.0022		52302 # From Prentice 2016 compilation. t_0 = t_0_GRB 
+SN1999ex	"bla"		0.0114	 48.75	0.3	0.0114		51480 # t_0 from Stritzinger
+SN2003jd	"bla"		0.019	 76.91	0.15	0.019		52927 # t_0 from Valenti 08
