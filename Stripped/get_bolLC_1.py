@@ -33,7 +33,7 @@ scope = globals()
 #f_name=('lambda','u','g','r','i','z','Y','atm')
 #DECAM_filters = ('u','g','r','i','z','Y')                                                             
 #f_format = ('f8','f8','f8','f8','f8','f8','f8','S8')
-#DECAM = np.genfromtxt('/home/dust_speck/SN/DECAM_Filters.dat',dtype={'names':f_name,'formats':f_format})
+#DECAM = np.genfromtxt('/home/dustspeck/SN/DECAM_Filters.dat',dtype={'names':f_name,'formats':f_format})
 #DECAM['lambda']*=10
 
 # ------------- LCOGT FILTERS ----------------------------------------------
@@ -41,7 +41,7 @@ scope = globals()
 LCOGT_filters = ('B','V','gp','rp','ip')
 LCOGT_filters = ('gp','rp','ip')
 
-LCOGT_DIR = "/home/dust_speck/SN/lcogt_filters"
+LCOGT_DIR = "/home/dustspeck/SN/lcogt_filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
 lcogt_responses = []
@@ -62,7 +62,7 @@ LCOGT_data=  np.genfromtxt("%s/LCOGT_filters.dat"%(LCOGT_DIR),dtype={'names':f_n
 
 UVOT = ('UVW2','UVM2','UVW1','U','B','V')
 UVOT_names = ('W2','M2','W1','U','B','V')
-UVOT_DIR = "/home/dust_speck/SN/SWIFT/filters"
+UVOT_DIR = "/home/dustspeck/SN/SWIFT/filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
 uvot_responses = []
@@ -76,7 +76,7 @@ for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
 
 #------------------ UVOT ZERO POINT -------------------------------------
 
-AB_ZPs = np.genfromtxt('/home/dust_speck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
+AB_ZPs = np.genfromtxt('/home/dustspeck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
 
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
@@ -99,10 +99,10 @@ colormap = pl.cm.spectral
 filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K','Ks']
 filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
         
-use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I']
+use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
-    print "####### %s ########## \n"
+    print "####### %s ########## \n"%SN
     try: 
     
         os.chdir("%s/"%SN)
@@ -367,9 +367,11 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         Lfile.write("## SN \t z \t E_B_V_total \t d [Mpc] \t t_0 \n")
         Lfile.write("## %s \t %s \t %s \t %s \t %s \n"%(SN,z_SN,E_B_V,d_L,t_0))
         Lfile.write("###############%s#######################\n"%band_string)
-        Lfile.write("# t-t_0 \t Lbol [erg/s] \t log(Lbol) \n")
+        Lfile.write("# t-t_0 \t Lbol [erg/s] \t log(Lbol) \t M_ni\n")
         int_nu = False
-
+        
+        M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
+        
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
 
             if int_nu:
@@ -386,10 +388,10 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 y,x = np.asarray(flux)*c_cms/(sorted_lambdas*1e-4)**2.,sorted_lambdas
                 I = simps(y,x)
                 L = 4*pi * I * (d_L*1e6*pc_to_cm)**2.
-                print epoch,I,4*pi*I*(d_L*1e6*pc_to_cm)**2. 
+                print epoch,I,L,M_ni(epoch,L) 
                 L_bol.append(L)
                 ax.plot(epoch,L,marker='o',color='k')
-                Lfile.write("%s \t %s \t %s \n"%(epoch,L,np.log10(L)))
+                Lfile.write("%s \t %s \t %s \t %s\n"%(epoch,L,np.log10(L),M_ni(epoch,L)))
             
         Lfile.close()
         ax.set_xlabel('t')
