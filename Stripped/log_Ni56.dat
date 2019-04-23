@@ -1,0 +1,27 @@
+SN 1994I : 
+
+   - Sauer 2006 :
+      m-M = 29.6 , E_B_V = 0.3, Extinction law of Savage and Mathis.
+      Bolometric light curve from UBVRI data. the IR contribution is taken from SN2002ap.
+      Ni56 from Hydro-modeling. Ni56 = 0.07
+
+   - Richmond 1996 : 
+     m-M = 29.6 from SBF , E_B_V = 0.45
+
+SN 1998bw :
+   
+   - Patat 2001 : 
+     m-M = 32.89 (37.8 Mpc, H_0 = 65), A_V = 0.2 
+     Ni56 upper limit from late bolometric LC, assuming full trapping up to 400 days. Ni56 < 1.0
+
+   - Mckenzie 1999 :
+     distance = 39 Mpc (H_0 = 65). A_V = 0.2
+     Ni56 from Comparison with SN1987A, Ni56 = 0.22 +- 0.09. Claimed as a lower limit. 
+
+   - Nakamura 2001 : 
+     m-M = 32.89 , A_V = 0.05.
+     Ni56 from hydro-modeling. Ni56 = 0.4 
+   
+   - Woosley 1999 : 
+     d = 36 Mpc (H_0 = 70), A_V = 0.2
+     Ni56 from Hydro-modeling. In the spherically simmetric case Ni56 ~ 0.45 
