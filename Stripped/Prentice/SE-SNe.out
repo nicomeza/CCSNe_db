@@ -1,0 +1,44 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Database}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Selection criteria}{section.2}% 3
+\BOOKMARK [1][-]{section.3}{Constructing the bolometric light curve}{}% 4
+\BOOKMARK [2][-]{subsection.3.1}{Missing data}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.2}{GRB-SNe and afterglow subtraction}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.3}{Distance}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.4}{Extinction}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.5}{Constructing the SED}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.6}{From SED to pseudobolometric luminosity}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Pseudobolometric light curves}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{The contribution of U to UBVRI}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.2}{NIR contribution}{section.4}% 13
+\BOOKMARK [1][-]{section.5}{Light-curve statistics}{}% 14
+\BOOKMARK [2][-]{subsection.5.1}{Light curves}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.2}{Luminosity functions}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.3}{Parameter values and statistics}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.4}{Determining Errors}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.5}{Rise time}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.6}{Comparison between optical and optical/NIR light curves at peak}{section.5}% 20
+\BOOKMARK [1][-]{section.6}{Pseudobolometric to fully bolometric}{}% 21
+\BOOKMARK [2][-]{subsection.6.1}{The conversion method}{section.6}% 22
+\BOOKMARK [2][-]{subsection.6.2}{Luminosity function for the bolometric sample}{section.6}% 23
+\BOOKMARK [1][-]{section.7}{temporal properties}{}% 24
+\BOOKMARK [2][-]{subsection.7.1}{Lp as a function of t+1/2}{section.7}% 25
+\BOOKMARK [2][-]{subsection.7.2}{Is there a relationship between t-1/2 and t+1/2?}{section.7}% 26
+\BOOKMARK [2][-]{subsection.7.3}{Correlation between tp and t-1/2}{section.7}% 27
+\BOOKMARK [2][-]{subsection.7.4}{Inferred rise time tp}{section.7}% 28
+\BOOKMARK [1][-]{section.8}{Explosion properties}{}% 29
+\BOOKMARK [2][-]{subsection.8.1}{The synthesis of 56Ni}{section.8}% 30
+\BOOKMARK [2][-]{subsection.8.2}{Characteristic timescales, kinetic energy, and ejecta mass }{section.8}% 31
+\BOOKMARK [1][-]{section.9}{Comparison with multiband photometry}{}% 32
+\BOOKMARK [2][-]{subsection.9.1}{Deriving multiband parameters}{section.9}% 33
+\BOOKMARK [2][-]{subsection.9.2}{Colour curves}{section.9}% 34
+\BOOKMARK [2][-]{subsection.9.3}{Comparing the multiband and bolometric peak time}{section.9}% 35
+\BOOKMARK [2][-]{subsection.9.4}{Bolometric corrections}{section.9}% 36
+\BOOKMARK [1][-]{section.10}{Discussion}{}% 37
+\BOOKMARK [2][-]{subsection.10.1}{Biases}{section.10}% 38
+\BOOKMARK [2][-]{subsection.10.2}{Explosion characteristics}{section.10}% 39
+\BOOKMARK [2][-]{subsection.10.3}{Photometry}{section.10}% 40
+\BOOKMARK [1][-]{section.11}{Conclusions}{}% 41
+\BOOKMARK [1][-]{section.12}{Appendix}{}% 42
+\BOOKMARK [1][-]{section.A1}{Host-galaxy extinction}{}% 43
+\BOOKMARK [1][-]{section.A2}{Tables}{}% 44

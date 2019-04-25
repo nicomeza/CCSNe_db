@@ -1,0 +1,38 @@
+# Filter λeff (microns)	λpivot	F_lambdax10-11 erg cm-2 s-1 A-1	ZP(f_nu) | mag_nu = -2.5log(f_nu)-48.598-ZP(f_nu)
+u 	0.356	3556	859.5		0.91
+g	0.483	4702 	466.9		-0.08
+r	0.626	6176 	278.0		0.15
+i	0.767	7490 	185.2		0.37
+z	0.910	8947	131.5		0.54
+up	0.356	3556	859.5		0.91
+gp	0.483	4702 	466.9		-0.08
+rp	0.626	6176 	278.0		0.15
+ip	0.767	7490 	185.2		0.37
+zp	0.910	8947	131.5		0.54
+U	0.366	3611	417.5		0.79		
+B	0.438	4396	632		-0.09
+V	0.545	5511 	363.1		0.02
+R	0.641	6582 	217.7		0.21
+I	0.798	8034 	112.6		0.45
+J	1.22	12393	 31.47		0.91
+H	1.63	16495 	 11.38		1.39
+K	2.19	21638 	 3.961		1.85
+Ks	2.19	21638 	 3.961		1.85
+W2_uvot	0.1928	1928	 99		1.73		
+M2_uvot	0.2246	2246	 99		1.69
+W1_uvot	0.2600	2600	 99		1.51
+U_uvot	0.3465	3465	 99		1.02
+B_uvot	0.4392	4392	 99		-0.13
+V_uvot	0.5468	5468	 99		-0.01
+u_CSPI	0.36393	3639.3	 99		-0.06
+g_CSPI	0.47651	4765.1	 99		-0.02		
+r_CSPI	0.62233	6223.3	 99		-0.01		
+i_CSPI	0.76092	7609.2	 99		0.0
+B_CSPI	0.43506	4350.6	 99		-0.125
+V_3014_CSPI	0.53696	 5369.6		99	-0.02
+V_3009_CSPI	0.54014	 5401.4		99	-0.02
+V_9844-CSPI	0.53752	 5375.2		99	-0.02
+# microns, ugriz from Fukugita et al. (1996)
+# Taken from http://www.astronomy.ohio-state.edu/~martini/usefuldata.html
+# UVOT and CSP pivot wavelengths are only the effective wavelengths. Must calculate that independently.
+# CSP from https://csp.obs.carnegiescience.edu/data/filters (Krisciunas 2017)
