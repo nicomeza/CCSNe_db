@@ -8,8 +8,9 @@ homedir = "/home/dust_speck/SN/CCSNe_db/Stripped/"
 #sn_data = open('sn_data.dat','w')
 params = ['sn','host','hostredshift','hostlumdist','host_ebv']
 #sn_data.write("%s \n"%"\t".join(params))
-uvot_bands=['U','B','V','M2','W1','W2','UVW1','UVW2','UVM2']
+uvot_bands=['U','B','V','M2','W1','W2','UVW1','UVW2','UVM2','u','b','v']
 no_bands = ['F475W','F625W','F775W','C','G']
+
 try :
     for sn in snlist:
     

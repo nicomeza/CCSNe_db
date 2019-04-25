@@ -94,13 +94,15 @@ current_dir = os.getcwd()
 print "Current directory : %s"%current_dir
 colormap = pl.cm.spectral
 
-
-
 filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K','Ks']
 filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
         
 use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
 use_filters = ['B','V','R','I']
+
+Ni_56 = []
+Lps = []
+tps = []
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
@@ -393,7 +395,14 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 L_bol.append(L)
                 ax.plot(epoch,L,marker='o',color='k')
                 Lfile.write("%s \t %s \t %s \t %s\n"%(epoch,L,np.log10(L),M_ni(epoch,L)))
-            
+                
+        L_bol = np.asarray(L_bol)
+        where_2nd_peak = np.where(inter_t[where_inter]>10.)[0]
+        where_peak = np.argmax(L_bol[where_2nd_peak])
+        tp,Lp = inter_t[where_inter][where_2nd_peak][where_peak],L_bol[where_2nd_peak][where_peak]
+        M_p = M_ni(tp,Lp)
+        print "t_peak = %s\nL_peak = %s\nM_ni = %s\n"%(tp,Lp,M_p)
+        Lfile.write("#t_peak = %s\n#L_peak = %s\n#M_ni = %s\n"%(tp,Lp,M_p))
         Lfile.close()
         ax.set_xlabel('t')
         ax.set_ylabel('L  [erg/s]')
@@ -401,6 +410,9 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.show()
         pl.close()
         
+        Ni_56.append(M_p)
+        Lps.append(Lp)
+        tps.append(tp)
         
         try:
             os.chdir(current_dir)
@@ -421,3 +433,14 @@ try:
 except:
 
     print "No diretory %s"%current_dir
+
+
+nis = np.genfromtxt('Prentice/BVRI_stats.dat',usecols=[0,1,2,3,4,5,6,7,8,9],names=('SN','type','Lp','Lperr1','Lperr2','Mni','Mni_err1','Mni_err2','tp','tp_err'),dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8'))
+my_nis = np.genfromtxt('Ni56_peak.dat',usecols=[0,1,2,3],names=('SN','tp','Lp','Mni'),dtype=('S15','f8','f8','f8'))
+i1,i2 = overlap(my_nis['SN'],nis['SN'])
+pl.plot(my_nis[i1]['Mni'],nis[i2]['Mni'],marker='o',linestyle='None')
+x = np.arange(0,0.5,0.01)
+pl.xlabel('My Ni56')
+pl.ylabel('Prentice Ni56')
+pl.plot(x,x)
+pl.show()
