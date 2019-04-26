@@ -1,0 +1,120 @@
+J/AJ/107/1022                     UBVRI photometry of SN 1993J (Richmond+, 1994)
+================================================================================
+UBVRI photometry of SN 1993J in M81: the first 120 days
+        RICHMOND M.W., TREFFERS R.R., FILIPPENKO A.V., PAIK Y., LEIBUNDGUT B.,
+        SCHULMAN E., COX C.V.
+      <Astron. J. 107, 1022 (1994)>
+      =1994AJ....107.1022R      (SIMBAD/NED Reference)
+================================================================================
+
+Abstract:
+  We present photometry of SN 1993J in M81 (NGC 3031) in the
+  Johnson-Cousins UBVRI system, starting within three days of the
+  probable time of explosion and ending 120 days later. The reddening
+  along the line of sight to this supernova is uncertain - there is
+  evidence for small [E(B-V)~0.08mag] and moderate [E(B-V)~0.32mag]
+  values. For each value, we correct the observed fluxes for extinction
+  and calculate the evolution of the sum of all optical flux, which
+  contains roughly half of the supernova's total flux during the period
+  of observation. We also fit the colors to a Planck function, and
+  determine the temperature and total luminosity of the supernova for each
+  value of reddening. A peculiar Type II supernova, SN 1993J gradually
+  evolved spectroscopically to resemble a Type Ib in some respects. We
+  compare its bolometric evolution with that of the prototypical Type Ib
+  SN 1983N, and find the two to be similar.
+
+Addresses:
+  Richmond M.W.                   richmond@astro.princeton.edu
+     Department of Astrophysical Sciences, Princeton University,
+     Princeton, New Jersey 08544
+  Treffers R.R.                   treffer@bkyast.berkeley.edu
+  Filippenko A.V.                 alex@bkyast.berkeley.edu
+  Paik Y.                         ypaik@goofy.berkeley.edu
+     Department of Astronomy, University of California, Berkeley,
+     California 94720
+  Leibundgut B.                   bleibund@eso.org
+     European Southern Observatory, Karl-Schwarzschild-Strasse 2,
+     D-8046 Garching bei Muenchen, Germany
+  Schulman E.                     eric@astro.lsa.umich.edu
+  Cox C.V.                        cvcox@astro.lsa.umich.edu
+     Department of Astronomy, University of Michigan, Ann Arbor,
+     Michigan 48109-1090
+
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName    Lrecl    Records    Explanations
+--------------------------------------------------------------------------------
+ReadMe          80          .    This file
+table.tex      153        529    LaTeX version of tables
+table2          60         86    Leuschner 76-cm observations of SN 1993J
+table3          58         47    Leuschner 50-cm observations of SN 1993J
+table7          62         50    La Palma observations of SN 1993J
+table14         54         95    Summed optical fluxes of SN 1993J
+table15         45         95    Blackbody temp. and luminosity of SN 1993J
+--------------------------------------------------------------------------------
+
+Byte-per-byte Description of file: table2 table3
+--------------------------------------------------------------------------------
+   Bytes Format  Units      Label    Explanations
+--------------------------------------------------------------------------------
+   1-  9  A9      ---        UT       UT date (Month day)
+  11- 20  F10.2   d          JD       Julian Date
+  22- 26  F5.2    mag        Umag     []? U band magnitude (1)
+      27  A1      ---      u_Umag     [:+] Uncertainty flag for U (2)
+  29- 33  F5.2    mag        Bmag     []? B band magnitude
+      34  A1      ---      u_Bmag     [:+] Uncertainty flag for B (2)
+  36- 40  F5.2    mag        Vmag     []? V band magnitude
+      41  A1      ---      u_Vmag     [:+] Uncertainty flag for V (2)
+  43- 47  F5.2    mag        Rmag     []? R band magnitude
+      48  A1      ---      u_Rmag     [:+] Uncertainty flag for R (2)
+  50- 54  F5.2    mag        Imag     []? I band magnitude
+      55  A1      ---      u_Imag     [:+] Uncertainty flag for I (2)
+  57- 60  A4      ---        Notes    [ CP?] C = cloudy, P = poor seeing
+      62  A1      ---        Note7    [IP]   I = Isaac Newton Telescope;
+                                             P = poor conditions (3)
+--------------------------------------------------------------------------------
+Note (1): The 76 cm telescope's U-band values do not transform well onto the
+           standard color system, but may at least give a qualitative idea of
+           the behavior of SN 1993J at near-UV wavelengths.
+Note (2): ":" denotes an uncertain value, and
+          "+" one which has been derived using color terms from the previous
+              or following night.
+Note (3): In table7, all data are from the 1-m Jacobus Kapteyn Telescope unless
+           marked I.
+--------------------------------------------------------------------------------
+
+Byte-per-byte Description of file: table14
+--------------------------------------------------------------------------------
+   Bytes  Format  Units     Label    Explanations
+--------------------------------------------------------------------------------
+   1- 10  F10.2   d         JD       Julian Date
+  13- 21  E9.3    mW/m2     Flux     Fluxes from measured light curves
+  24- 32  E9.3    mW/m2     LowExt   Fluxes for extinction [E(B-V)=0.08 mag]
+  35- 43  E9.3    mW/m2     ModExt   Fluxes for extinction [E(B-V)=0.32 mag]
+  46- 47  A2      ---       Site     Observing site (1)
+  50- 54  A5      ---       Bands    Bands summed to determine fluxes
+--------------------------------------------------------------------------------
+Note (1): Site: LP = La Palma; KP = Kitt Peak; L = Leuschner
+--------------------------------------------------------------------------------
+
+Byte-per-byte Description of file: table15
+--------------------------------------------------------------------------------
+   Bytes  Format  Units  Label    Explanations
+--------------------------------------------------------------------------------
+   1- 10  F10.2   d      JD       Julian Date
+  12- 16  I5      K      LowTemp  Temperature from low extinction
+                                   [E(B-V)=0.08 mag]
+  19- 22  F4.2  10+35W   LowLum   Bolometric luminosity from LowTemp
+  24- 28  I5      K      ModTemp  Temperature from moderate extinction
+                                   [E(B-V)=0.32 mag]
+  30- 34  F5.2  10+35W   ModLum   Bolometric luminosity from ModTemp
+  37- 38  A2      ---    Site     Observing site  (1)
+  41- 45  A5      ---    Bands    Bands used to determine luminosities
+--------------------------------------------------------------------------------
+Note (1): Site: LP = La Palma; KP = Kitt Peak; L = Leuschner
+--------------------------------------------------------------------------------
+
+Origin: AAS CD-ROM series, Volume 2, 1994
+================================================================================
+(End)           Lee Brotzman [ADS] 20-Apr-1994, Patricia Bauer [CDS] 21-Oct-1994

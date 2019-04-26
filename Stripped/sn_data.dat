@@ -14,10 +14,10 @@ SN2002ap	"bla"		0.0022	 9.1	0.079	0.0022		52302 # From Prentice 2016 compilation
 SN1999ex	"bla"		0.0114	 47.2	0.3	0.0114		51480 # t_0 from Stritzinger
 SN2003jd	"bla"		0.019	 79.2	0.15	0.019		52927 # t_0 from Valenti 08
 SNiPTF13bvn	"bla"		0.0045	 18.5	0.0715	0.0045		56458 # t_0 from Cao
-SN2013ge	"bla"		0.0044	 18.1	0.067	0.0044		56602.6 # t_0 from Drout 
+#SN2013ge	"bla"		0.0044	 18.1	0.067	0.0044		56602.6 # t_0 from Drout 
 SN2013df	"NGC4414"	0.0024	9.9	0.097	0.0024 		56447.299 # 
 #SN2013cu 	"bla"		0.026	111.17	0.011	0.026		56414.93 # t_0 From Gal-Yam
-SN2012bz	"bla"		0.28	1383.8	0.037	0.28		56029	 # t_0 = t_0_GRB
+#SN2012bz	"bla"		0.28	1383.8	0.037	0.28		56029	 # t_0 = t_0_GRB
 SN2012ap	"NGC1729"	0.012	49.8  0.445	0.012		55962 # From Milisavljevic
 SN2011hs	"bla"		0.0057	23.5	0.171	0.0057		55871.5 # From Bufano 
 SN2011fu	"bla"		0.019	79.2	0.083	0.019		55824 # t_0 from Garofolo
