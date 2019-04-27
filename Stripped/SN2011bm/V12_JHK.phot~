@@ -1,0 +1,30 @@
+Table 1
+Photometric Data^a
+
+Date	JD-2400000	u	g	r	i	z	Telescope + Instrument	
+2011 Mar 26	55646.53	 sdotsdotsdot	 sdotsdotsdot	18.71 0.10	18.82 0.06	 sdotsdotsdot	PS1 + GPC1	
+2011 Mar 29	55649.56	 sdotsdotsdot	18.78 0.16	 sdotsdotsdot	 sdotsdotsdot	 sdotsdotsdot	PS1 + GPC1	
+2011 Apr 11	55663.50	17.42 0.08	17.17 0.16	16.95 0.15	16.93 0.27	17.07 0.12	Liverpool Telescope + RATCAM	
+2011 Apr 12	55664.50	17.56 0.03	17.07 0.19	16.84 0.18	16.84 0.07	16.92 0.05	Liverpool Telescope + RATCAM	
+2011 Apr 13	55665.37	 sdotsdotsdot	16.93 0.42	16.81 0.05	16.74 0.04	16.82 0.09	Liverpool Telescope + RATCAM	
+2011 Apr 14	55666.42	17.39 0.10	16.88 0.28	16.69 0.19	16.71 0.16	16.83 0.06	Liverpool Telescope + RATCAM	
+2011 Apr 20	55672.42	17.42 0.06	16.82 0.06	16.54 0.11	16.53 0.11	16.63 0.03	Liverpool Telescope + RATCAM	
+2011 Apr 23	55675.38	 sdotsdotsdot	16.74 0.09	16.48 0.08	16.49 0.14	16.59 0.02	Liverpool Telescope + RATCAM	
+2011 Apr 24	55676.41	17.52 0.23	16.82 0.04	16.43 0.04	16.43 0.05	16.53 0.03	Liverpool Telescope + RATCAM	
+2011 Apr 25	55677.44	17.60 0.15	16.82 0.09	16.42 0.08	16.41 0.07	16.58 0.03	Liverpool Telescope + RATCAM	
+2011 May 3	55685.37	18.40 0.10	17.02 0.06	16.34 0.07	16.41 0.05	16.51 0.02	Liverpool Telescope + RATCAM	
+2011 May 7	55689.60	18.71 0.20	17.27 0.04	16.33 0.04	16.39 0.03	16.49 0.03	Liverpool Telescope + RATCAM	
+2011 May 11	55693.38	18.92 0.26	17.37 0.03	16.41 0.03	16.44 0.01	16.54 0.02	Liverpool Telescope + RATCAM	
+2011 May 14	55696.40	19.30 0.27	17.42 0.07	16.52 0.07	16.49 0.10	16.60 0.07	Liverpool Telescope + RATCAM	
+2011 May 21	55703.45	19.50 0.16	17.63 0.05	16.62 0.05	16.58 0.03	16.69 0.04	Liverpool Telescope + RATCAM	
+2011 May 27	55709.47	19.57 0.12	17.75 0.08	16.81 0.07	16.65 0.03	16.71 0.03	Liverpool Telescope + RATCAM	
+2011 Jun 4	55717.49	19.74 0.17	17.96 0.04	16.92 0.04	16.82 0.02	16.79 0.03	Liverpool Telescope + RATCAM	
+2011 Jun 16	55729.40	19.97 0.24	18.21 0.08	17.22 0.08	17.16 0.04	16.97 0.05	Liverpool Telescope + RATCAM	
+2011 Jun 26	55739.42	19.99 0.31	18.37 0.06	17.35 0.06	17.30 0.05	17.02 0.03	Liverpool Telescope + RATCAM	
+2011 Jul 7	55750.39	20.18 0.22	18.55 0.06	17.62 0.05	17.49 0.03	17.19 0.05	Liverpool Telescope + RATCAM	
+2011 Jul 17	55760.44	20.22 0.65	18.71 0.18	17.74 0.14	17.64 0.08	17.39 0.05	Liverpool Telescope + RATCAM	
+2011 Dec 14	55909.69	 sdotsdotsdot	20.20 0.61	19.43 0.36	19.46 0.31	19.67 0.98	Liverpool Telescope + RATCAM	
+2011 Dec 31	55927.77	 sdotsdotsdot	20.47 0.27	19.51 0.26	19.65 0.08	19.77 0.16	Liverpool Telescope + RATCAM	
+
+#Note.
+#a ugriz magnitudes are calibrated to the Sloan photometric system (AB system) using the SDSS catalog (Abazajian et al. 2009); UBVRI magnitudes are in the Bessell sys#tem, calibrated with Landolt fields observed during photometric nights (Landolt 1992). Near-infrared images are calibrated to 2MASS catalog (Skrutskie et al. 2006).

@@ -121,7 +121,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             if os.path.isfile(filter_file):
                 print filter_file,filter
                 try:
-                    scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file).T
+                    scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
                     no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+80.),scope['err_%s'%filter]<0.5))[0]
                     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
                                                                                           scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
@@ -129,7 +129,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 except:
                     
                     print "No errors in band %s ?"%filter
-                    scope['jd_%s'%filter],scope['mag_%s'%filter] = np.genfromtxt(filter_file).T
+                    scope['jd_%s'%filter],scope['mag_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
                     no_nebular = np.where(scope['jd_%s'%filter]<(t_0+80.))[0]
                     scope['jd_%s'%filter],scope['mag_%s'%filter] = scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular]
                     
