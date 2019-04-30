@@ -1,0 +1,26 @@
+#Observations log: the first column shows the date of the observation, $\Delta t$ (column 2) refers to the beginning of the exposure, with respect to the GRB trigger #time, with a duration $t_{\rm exp}$ (column 3). Magnitudes (column 4) have not been corrected for Galactic absorption along the line of sight ($E_{B-V}$ = 0.02 mag,.#We calculated flux densities (column 5) from absorption-corrected magnitudes, following Fukugita et al. 1995.} 
+#Date  $\Delta t$  $t_{\rm exp}$  Magnitude  Flux density  Ref.  Seeing
+ 2013May3     6.724    1.0   20.31    0.02   28.7   0.6   VLT-$V$   1.16
+ 2013May6     9.724    1.0   20.60    0.03   22.2   0.6   VLT-$V$   1.20
+ 2013May8     11.647   1.0   20.74    0.02   19.4   0.5   VLT-$V$   0.85
+ 2013May10    13.650   1.0   20.81    0.04   18.2   0.7   VLT-$V$   1.37
+ 2013May11    14.649   1.0   20.84    0.03   17.8   0.4   VLT-$V$   1.15
+ 2013May13    16.646   1.5   20.90    0.03   16.8   0.5   VLT-$V$   1.30
+ 2013May14    17.751   1.5   20.96    0.06   15.9   0.8   VLT-$V$   0.89
+ 2013May15    18.723   1.5   20.99    0.04   15.4   0.6   VLT-$V$   1.34
+ 2013May20    23.677   3.0   20.85    0.13   17.7   2.2   VLT-$V$   1.17
+ 2013May25    28.657   1.5   21.05    0.08   14.7   1.1   VLT-$V$   1.07
+ 2013May27    30.645   1.5   21.18    0.05   13.0   0.5   VLT-$V$   1.25
+ 2013May28    31.649   1.5   21.25    0.03   12.2   0.3   VLT-$V$   0.68
+ 2013May29    32.639   1.5   21.25    0.04   12.2   0.4   VLT-$V$   1.03
+ 2013June1    34.651   1.5   21.33    0.06   11.3   0.7   VLT-$V$   0.76
+ 2013June2    35.652   1.5   21.34    0.04   11.2   0.4   VLT-$V$   1.33
+ 2013June3    37.651   1.5   21.33    0.03   11.3   0.3   VLT-$V$   0.75
+ 2013June4    38.657   1.5   21.31    0.03   11.6   0.4   VLT-$V$   0.91
+ 2013June5    39.652   1.5   21.44    0.04   10.3   0.4   VLT-$V$   0.80
+ 2013June6    40.643   2.5   21.37    0.03   10.9   0.3   VLT-$V$   0.86
+ 2013June10   44.641   1.5   21.41    0.04   10.5   0.4   VLT-$V$   0.92
+ 2013June13   47.628   3.0   21.48    0.08   9.9   0.7   VLT-$V$   1.62
+ 2013June15   49.652   1.5   21.38    0.06   10.8   0.6   VLT-$V$   1.62
+ 2013June16   50.673   1.5   21.57    0.08   9.1   0.7   VLT-$V$   0.85
+ 2013June17   51.660   1.5   21.41    0.08   10.5   0.8   VLT-$V$   0.87

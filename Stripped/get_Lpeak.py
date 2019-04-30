@@ -15,7 +15,7 @@ get_peak = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
-band_string = "W1UBVRIJHKs"
+#band_string = "W1UBVRIJHKs"
 band_string = "BVRI"
 current_dir = os.getcwd()
 
@@ -38,7 +38,7 @@ def weird_Ni_der(t,Mni,t_m=1.0):
     Weird = 2*x**2. * Q_dot/(2.*x**2. - 1)
     return Weird
     
-inflection = False
+inflection = True
 
 if get_peak:
 
@@ -158,7 +158,6 @@ if compare_nis:
         pl.ylim(xmin-0.1*(xmax-xmin),xmax+0.1*(xmax-xmin))
         
         for sn,mni,mni2 in zip(my_nis[i1]['SN'],my_nis[i1][item],nis[i2][item]):
-
-            pl.annotate(sn,(mni+0.01,mni2+0.01),size=8)
+            pl.annotate(sn,(mni+0.005,mni2+0.005),size=7)
         pl.savefig("%s_comp.png"%item)
     pl.show()

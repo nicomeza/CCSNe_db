@@ -5,6 +5,7 @@ from astro_utils import *
 import os
 import pyqt_fit.nonparam_regression as smooth
 from pyqt_fit import npr_methods
+from scipy.stats import entropy
 
 L_sun = 3.8270e33
 M_sun = 4.7554
@@ -78,7 +79,7 @@ for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
 
 #------------------ UVOT ZERO POINT -------------------------------------
 
-AB_ZPs = np.genfromtxt('/home/dust_speck/SN/AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
+AB_ZPs = np.genfromtxt('./AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
 
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
@@ -110,7 +111,7 @@ tps = []
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
-    use_filters = ['B','V','R','I']
+    use_filters = ['B','V','R','I','i_AB','R_c']
     
     try: 
     
@@ -219,7 +220,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         max_cadence,min_cadence = 0.,100.0
         min_cadence_filt,max_cadence_filt = None,None
         filters_cadence = []
-
+        filters_entropy = []
         for filter in FILTER_ZPS:
             
             
@@ -238,6 +239,8 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             scope['cadence_%s'%lco_filter] = len(where_cadence)/dtmax   #NEED CADENCE IN THE ACTUAL INTERVAL (tmax_min,tmin_max)
             filter_cadence = len(where_cadence)/dtmax
             filters_cadence.append(filter_cadence)
+            n,bins = np.histogram(t[where_cadence])
+            filters_entropy.append(entropy(n))
             print filter_cadence
             if max_cadence < filter_cadence:
                 max_cadence_filt = lco_name
@@ -249,9 +252,11 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         
         print "Max cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,max_cadence_filt)
         print "Min cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,min_cadence_filt)
+        max_entropy_filter =  FILTER_ZPS[np.argmax(filters_entropy)]['filter']
+        print "Max entropy filter between (%s,%s) : %s  "%(tmax_min,tmin_max,max_entropy_filter)
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         #inter_t = scope['jd_%s'%min_cadence_filt]
-        inter_t = scope['jd_%s'%max_cadence_filt]
+        inter_t = scope['jd_%s'%max_entropy_filter]
         where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
         filters_used = []
 
