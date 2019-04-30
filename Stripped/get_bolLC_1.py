@@ -100,7 +100,7 @@ filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V',
 filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
         
 use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
-use_filters = ['B','V','R','I']
+use_filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
 
 Ni_56 = []
 Lps = []
@@ -108,6 +108,8 @@ tps = []
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
+    use_filters = ['W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
+    
     try: 
     
         os.chdir("%s/"%SN)
@@ -115,7 +117,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         # ---------------------LOAD PHOTOMETRY ----------------------------------------------------
 
         for filter in zip(use_filters):
-
+            filter = filter[0]
             filter_file = "mags_%s.out"%filter
             scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = None,None,None
             if os.path.isfile(filter_file):
@@ -123,21 +125,31 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 try:
                     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
                     no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+80.),scope['err_%s'%filter]<0.5))[0]
-                    scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
-                                                                                          scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
+                    if len(no_nebular)>1:
+                        scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
+                            scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
+                    else:
+                        filter_removed = use_filters.pop(use_filters.index(filter))
+                        print "LACK OF DATA : filter %s removed"%(filter_removed)
+                    
                                                 
                 except:
                     
                     print "No errors in band %s ?"%filter
+                    filter_removed = use_filters.pop(use_filters.index(filter))
+                    print "filter %s removed"%(filter_removed)
                     scope['jd_%s'%filter],scope['mag_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
                     no_nebular = np.where(scope['jd_%s'%filter]<(t_0+80.))[0]
                     scope['jd_%s'%filter],scope['mag_%s'%filter] = scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular]
                     
             else:
                 print "no %s"%filter_file
+                filter_removed = use_filters.pop(use_filters.index(filter))
+                print "filter %s removed"%(filter_removed)
 
         FILTER_ZPS = AB_ZPs[np.in1d(AB_ZPs['filter'],use_filters)]  
         print FILTER_ZPS['filter']
+        filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(FILTER_ZPS))]
         
         print "# ---------- FILTER_ZPS filters ----------------------------"
 
@@ -146,7 +158,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         min_cadence_filt,max_cadence_filt = None,None
         
         pl.gca().set_color_cycle(filters_colors)
-        filters_cadence = []
+        filters_cadence_full = []
         offset = 0.0
         for filter in FILTER_ZPS:
             
@@ -180,11 +192,11 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 tmin_max = tmax
         
             scope['min_%s'%lco_filter] ,scope['max_%s'%lco_filter]  = tmin,tmax
-            scope['cadence_%s'%lco_filter] = len(t)/dtmax
+            scope['cadence_%s'%lco_filter] = len(t)/dtmax   #NEED CADENCE IN THE ACTUAL INTERVAL (tmax_min,tmin_max)
             #scope['inter_%s'%lco_filter] = interp1d(t,mag,kind='linear')
             #pl.plot(t,scope['inter_%s'%lco_filter](t),color='k',linestyle='--')
             
-            filters_cadence.append(len(t)/dtmax)
+            filters_cadence_full.append(len(t)/dtmax)
             print len(t)/dtmax
             if max_cadence < len(t)/dtmax:
                 max_cadence_filt = lco_name
@@ -201,8 +213,41 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.gca().invert_yaxis()
         pl.savefig("%s_lcs.png"%SN)
         pl.show()
-    
         
+        max_cadence,min_cadence = 0.,100.0
+        min_cadence_filt,max_cadence_filt = None,None
+        filters_cadence = []
+        for filter in FILTER_ZPS:
+            
+            
+            lco_filter = filter['filter']
+            lco_name = lco_filter
+            try:
+                scope['mag_%s'%lco_name]
+                if len(scope['mag_%s'%lco_name])<=1:
+                    continue
+            except:
+                continue
+        
+            t = scope['jd_%s'%lco_name]
+            where_cadence = np.where(np.logical_and(t <= tmin_max + 0.8 ,t >= tmax_min - 0.8))[0]
+            dtmax = np.max(t[where_cadence]) - np.min(t[where_cadence])
+            scope['cadence_%s'%lco_filter] = len(where_cadence)/dtmax   #NEED CADENCE IN THE ACTUAL INTERVAL (tmax_min,tmin_max)
+            filter_cadence = len(where_cadence)/dtmax
+            filters_cadence.append(filter_cadence)
+            print filter_cadence
+            if max_cadence < filter_cadence:
+                max_cadence_filt = lco_name
+                max_cadence = filter_cadence
+        
+            if min_cadence > filter_cadence:
+                min_cadence_filt = lco_name
+                min_cadence = filter_cadence
+        
+       
+
+        print "Max cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,max_cadence_filt)
+        print "Min cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,min_cadence_filt)
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         #inter_t = scope['jd_%s'%min_cadence_filt]
         inter_t = scope['jd_%s'%max_cadence_filt]
@@ -347,7 +392,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             flux = np.asarray(flux)
             max_flux = np.max(flux)*c_cms/((lam*1e-4)**2.)
             band = FILTER_ZPS['filter'][np.where(FILTER_ZPS['lambda_p']==lam)[0]]
-            band_string+=str(band[0])
+            band_string+=str(band[0].split('_')[0])
             print band,lam,max_flux
             ax.axvline(lam,linestyle='--',color='k',alpha=0.4)
             ax.annotate(str(band[0][0:2]),(lam+5,1.05),xycoords=trans,size=8,rotation=90)
