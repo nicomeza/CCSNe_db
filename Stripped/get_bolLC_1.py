@@ -102,13 +102,15 @@ filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
 use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
 use_filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
 
+
+
 Ni_56 = []
 Lps = []
 tps = []
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
-    use_filters = ['W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
+    use_filters = ['B','V','R','I']
     
     try: 
     
@@ -217,6 +219,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         max_cadence,min_cadence = 0.,100.0
         min_cadence_filt,max_cadence_filt = None,None
         filters_cadence = []
+
         for filter in FILTER_ZPS:
             
             
@@ -244,8 +247,6 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 min_cadence_filt = lco_name
                 min_cadence = filter_cadence
         
-       
-
         print "Max cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,max_cadence_filt)
         print "Min cadence filter between (%s,%s) : %s  "%(tmax_min,tmin_max,min_cadence_filt)
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
@@ -289,7 +290,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 else:
                     
                     scope['inter_t_%s'%lco_name].append(t_inter)
-                    inter,inter_err = inter_sample(t_inter,t,mag,yerr=err,n_sample=500,plot=False,confidence=False)
+                    inter,inter_err = inter_sample(t_inter,t,mag,yerr=err,n_sample=500,plot=False,confidence=False,honest_mean=True)
                     scope['inter_mags_%s'%lco_name].append(inter)
                     scope['inter_err_%s'%lco_name].append(inter_err)
                     
@@ -454,7 +455,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         Lfile.close()
         ax.set_xlabel('t')
         ax.set_ylabel('L  [erg/s]')
-        fig.savefig('./Lbol_%s.png'%(SN))
+        fig.savefig('./Lbol_%s_%s.png'%(SN,band_string))
         pl.show()
         pl.close()
         

@@ -9,13 +9,14 @@ sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = False
+compare_nis = True
 get_peak = True
 
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
 band_string = "W1UBVRIJHKs"
+band_string = "BVRI"
 current_dir = os.getcwd()
 
 def weird_Ni(t,Mni,t_m=1.0):
@@ -40,6 +41,7 @@ def weird_Ni_der(t,Mni,t_m=1.0):
 inflection = False
 
 if get_peak:
+
     Lfile = open('Ni56_%s_peak.dat'%band_string,'w')
     Lfile.write("###############%s#######################\n"%band_string)
     Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni\n")
@@ -49,30 +51,27 @@ if get_peak:
         try: 
             os.chdir("%s/"%SN)
             try:
+                
                 t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string)).T
                 xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
-                where_peak = np.where(np.logical_and(xs>5.,xs<40.))[0]
+                where_peak = np.where(np.logical_and(xs>10.,xs<40.))[0]
                 xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
             #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
                 k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=2))
                 k0.fit()
                 grid = np.arange(np.min(xs),np.max(xs),0.1)
                 y_grid = np.log10(k0(grid))+42
-                pl.figure()
-                pl.plot(t,Mni,marker='o',color='y',linestyle='None')
-                pl.xlabel('t-t_0')
-                pl.ylabel('M(Ni56)')
-                pl.savefig('%s_%s_Ni.png'%(SN,band_string))
-                pl.show()
                 
-                pl.figure()
-                pl.plot(grid,y_grid,linestyle='--',color='k')
-                pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN)
-
                 where_peak = np.argmax(y_grid)
                 tp,Lp = grid[where_peak],y_grid[where_peak]
                 M_p = M_ni(tp,10**Lp)    
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
+                
+                print tp,Lp,M_p
+
+                pl.figure()
+                pl.plot(grid,y_grid,linestyle='--',color='k')
+                pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN)
                 pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
                 
                 after_p,before_p = np.where(grid>tp+2)[0],np.where(grid<=tp-2)[0]
@@ -87,7 +86,7 @@ if get_peak:
                     
                     for t_m in [5,10,15,20,25,30]:
                         print t_m,(weird_Ni_der(inf_t,M_p,t_m=t_m) - der_at_inf)/der_at_inf
-                    pl.axvline(inf_t,color='k')
+                    pl.axvline(inf_t,color='k',linestyle='--')
                     
                 if len(after_p):
                     
@@ -97,7 +96,7 @@ if get_peak:
 
                     for t_m in [5,10,15,20,25,30]:
                         print t_m,(weird_Ni_der(inf_t2,M_p,t_m=t_m) - der_at_inf)/der_at_inf                    
-                    pl.axvline(inf_t2,color='k')
+                    pl.axvline(inf_t2,color='k',linestyle='--')
 
                 if inflection:
                     for t_m,color in zip([5,10,20,30],['g','r','b','orange']):
@@ -109,6 +108,20 @@ if get_peak:
                 pl.ylim(np.min(logL)-0.1,Lp+0.2)
                 pl.savefig("../%s_%s_Lbol.png"%(SN,band_string))
                 pl.show()
+
+                pl.figure()
+                pl.plot(t,Mni,marker='o',color='y',linestyle='None')
+                pl.plot(grid,M_ni(grid,10**y_grid),color='y',linestyle='--')
+                pl.xlabel('t-t_0')
+                pl.ylabel('M(Ni56)')
+                pl.axvline(tp,color='k')
+                pl.axvline(inf_t2,color='k')
+                pl.axhline(M_p,color='k')
+                pl.xlim(np.max([0,np.min(t)-5]),np.max(t)+5)
+                pl.savefig('%s_%s_Ni.png'%(SN,band_string))
+                pl.show()
+                print np.min(t),np.max(t)
+                print (np.max([0,np.min(t)-5]),np.max(t)+5)
 
                 s = "%s \t %s \t %s \t %s \t %s\n"%(SN,tp,10**Lp,Lp,M_p)
                 print s 

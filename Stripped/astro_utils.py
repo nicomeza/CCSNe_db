@@ -354,9 +354,10 @@ def PMM_distance(m_corr,phot_vel,t,t_0,filter):  # m_corr : magnitude AKA correc
     mu = m_corr-R-M
     return mu
 
-def inter_sample(x_0,x,y,yerr,n_sample = 1000,plot=False,confidence=True,n_c =95):
+def inter_sample(x_0,x,y,yerr,n_sample = 1000,plot=False,confidence=True,n_c =95,honest_mean=True):
     
     inter = np.zeros(n_sample)
+    sample_0 = np.interp(x_0,x,y)
     for i in np.arange(n_sample):
         
         y_sample = np.random.multivariate_normal(y,np.diag(yerr))
@@ -371,7 +372,10 @@ def inter_sample(x_0,x,y,yerr,n_sample = 1000,plot=False,confidence=True,n_c =95
         std_inter = np.percentile(inter,q=[n_c,100-n_c])-np.mean(inter)
     else:
         std_inter = np.std(inter)
-    return mean_inter,std_inter
+    if honest_mean:
+        return sample_0,std_inter
+    else:
+        return mean_inter,std_inter
     
 def fit_sample(x,y,yerr,model,n_par,n_sample = 1000,plot=False,confidence=True,n_c =95):
     
