@@ -9,7 +9,7 @@ sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = True
+compare_nis = False
 get_peak = True
 plot = True
 show = False
@@ -17,8 +17,28 @@ show = False
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
 #band_string = "W1UBVRIJHKs"
-band_string = "BVRI"
+band_string = ("BVRIJHK","BVRIJHKs")
 current_dir = os.getcwd()
+
+def L_peak_explicit(x,Mni=0.1,t_peak=20):
+
+    A,B,C,D,E,F = 1.0402,-2.4935,-84.23,-0.28336,-0.75684,86.72
+    t_ni = 8.8        # niquel decay [days]                                                                                                                                        
+    t_co = 111.3      # Cobalt decay [days]  
+    x_ni = x/t_ni
+    x_co = x/t_co
+    corcho = (A*x + B*np.exp(-x_ni) + C*np.exp(-x_co) + D*x*np.exp(-x_ni) + E*x*np.exp(-x_co) + F) * 1e12 /x**2
+    return 2*Mni*corcho
+
+def L_peak(M_ni,L_heat,t_peak,beta=1.0):
+    
+    I = integrate.quad(lambda x: x*L_heat(x,M_ni), 0,beta*t_peak)
+    return 2 * np.asarray(I) / (beta*t_peak)**2.
+
+def Ni_K(Lpeak,tpeak,beta,Ni_min=0.01,Ni_max = 1.0):
+
+    F =  lambda x : L_peak(x,Q_t,t_peak=tpeak,beta=beta)[0]-Lpeak
+    return brentq(F,Ni_min,Ni_max)
 
 def weird_Ni(t,Mni,t_m=1.0):
     
@@ -46,20 +66,28 @@ def Q_t_dot(t,Mni):
 
 
 inflection = True
-pl.close()
+pl.close("all")
 if get_peak:
 
-    Lfile = open('Ni56_%s_peak.dat'%band_string,'w')
-    Lfile.write("###############%s#######################\n"%band_string)
-    Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
+    Lfile = open('Ni56_%s_peak.dat'%band_string[0],'w')
+    Lfile.write("###############%s#######################\n"%band_string[0])
+    Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
+        band_string = ("BVRIJHK","BVRIJHKs")
         print "####### %s ########## \n"%SN
         try: 
             os.chdir("%s/"%SN)
             t_half_1,t_half_2= None,None
             try:
                 
-                t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string)).T
+                try:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
+                    band_string = band_string[0]
+                except:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
+                    band_string = band_string[1]
+
+                t = t/(1+z_SN)
                 xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
                 t,logL = xs,ys
                 where_peak = np.where(np.logical_and(xs>10.,xs<45.))[0]
@@ -77,9 +105,10 @@ if get_peak:
                 y_grid_full = y_grid_full[~np.isnan(y_grid_full)]
                 where_peak = np.argmax(y_grid)
                 tp,Lp = grid[where_peak],y_grid[where_peak]
-                M_p = M_ni(tp,10**Lp)    
+                M_p = M_ni(tp,10**Lp)[0][0]
+                Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
-                print tp,Lp,M_p
+                print tp,Lp,M_p,Ni_Khatami
                 
                 if plot:
 
@@ -87,7 +116,8 @@ if get_peak:
                     pl.plot(grid_full,y_grid_full,linestyle='--',color='k')
                     pl.plot(grid,y_grid,color='g')
                     pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN,alpha=0.6)
-                    pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
+                    pl.plot(ni_t,np.log10(Q_t(ni_t,M_p))[0],linestyle='-.',color='k')
+                    pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)[0]),linestyle='-.',color='k')
                     pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
                     pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
                     
@@ -157,7 +187,7 @@ if get_peak:
 
                     pl.figure()
                     pl.plot(t,Mni,marker='o',color='y',linestyle='None')
-                    pl.plot(grid,M_ni(grid,10**y_grid),color='y',linestyle='--')
+                    pl.plot(grid,M_ni(grid,10**y_grid)[0],color='y',linestyle='--')
                     pl.xlabel('t-t_0')
                     pl.ylabel('M(Ni56)')
                     pl.axvline(tp,color='k')
@@ -168,9 +198,9 @@ if get_peak:
                     if show:
                         pl.show()
                     else:
-                        pl.close()
+                        pl.close("all")
                     
-                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,tp,10**Lp,Lp,M_p,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2)
+                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,tp,10**Lp,Lp,M_p,Ni_Khatami,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
                 print s 
                 Lfile.write(s)
                 os.chdir(current_dir)
@@ -187,13 +217,13 @@ if get_peak:
 
 if compare_nis:
 
-    pl.close()
+    pl.close("all")
     nis = np.genfromtxt('Prentice/BVRI_stats.dat',\
                             names=('SN','type','logLp','logLp_err1','logLp_err2','Mni','Mni_err1','Mni_err2','tp','tp_err','trise','trise_err','tdecay','tdecay_err','FWHM','FWHM_err'),\
                             dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
     my_nis = np.genfromtxt('Ni56_BVRI_peak.dat',\
-                               names=('SN','tp','Lp','logLp','Mni','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
-                               dtype=('S15','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+                               names=('SN','tp','Lp','logLp','Mni','Mni_K','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
+                               dtype=('S15','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
     i1,i2 = overlap(my_nis['SN'],nis['SN'])
     
@@ -221,11 +251,56 @@ if compare_nis:
         pl.savefig("%s_comp.png"%item)
     if show:
         pl.show()
-
-    for item1,item2 in [('FWHM','L_dot_inf')]:
-        no_99 = np.logical_and(my_nis[item1] != 99.,my_nis[item2] != 99.)
-        no_nan = np.logical_and(~np.isnan(my_nis[item1]),~np.isnan(my_nis[item2]))
-        valid = np.where(np.logical_and(no_99,no_nan))[0]
-        pl.plot(my_nis[item1][valid],my_nis[item2][valid],'o')
-    pl.show()
         
+    scatter = False
+    hist = True
+    for item1,item2 in [('Mni','Mni_K')]:
+        if scatter:
+            pl.figure()
+            no_99 = np.logical_and(my_nis[item1] != 99.,my_nis[item2] != 99.)
+            no_nan = np.logical_and(~np.isnan(my_nis[item1]),~np.isnan(my_nis[item2]))
+            valid = np.where(np.logical_and(no_99,no_nan))[0]
+            xmin,xmax = np.min(my_nis[item1][valid]),np.max(my_nis[item1][valid])
+            ymin,ymax = np.min(my_nis[item2][valid]),np.max(my_nis[item2][valid])
+            xymin,xymax = np.min([xmin,ymin]),np.max([xmax,ymax])
+            x = np.arange(xymin-0.3*(xymax-xymin),0.3*(xymax-xymin)+xymax,0.01)
+            pl.plot(x,x)
+            pl.plot(my_nis[item1][valid],my_nis[item2][valid],'o')
+            pl.xlim(xymin-0.3*(xymax-xymin),xymax+0.3*(xymax-xymin))
+            pl.xlabel(item1)
+            pl.ylabel(item2)
+
+        if hist:
+            
+            pl.figure()
+            no_99 = np.logical_and(my_nis[item1] != 99.,my_nis[item2] != 99.)
+            no_nan = np.logical_and(~np.isnan(my_nis[item1]),~np.isnan(my_nis[item2]))
+            valid = np.where(np.logical_and(no_99,no_nan))[0]
+            pl.hist(my_nis[item1][valid],label=item1)
+            pl.hist(my_nis[item2][valid],label=item2)
+            pl.legend()
+
+    pl.show()
+
+colormap = pl.cm.spectral
+ 
+t_peak = 30
+Lps = np.arange(41,42,0.1)
+filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+pl.gca().set_color_cycle(filters_colors)
+
+for Lp in Lps:
+    
+    Ks = []
+    betas = np.arange(0.1,2.0,0.01)
+    for beta in betas:
+        
+        try:
+            Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
+        except:
+            print "failed at %s"%beta
+            Ks.append(0.0)
+    pl.plot(betas,Ks,label=Lp)
+pl.legend()
+pl.show()
+

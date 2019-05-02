@@ -100,8 +100,8 @@ colormap = pl.cm.spectral
 filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B_uvot','V_uvot','U','B','V','R','I','u','g','r','i','z','J','H','K','Ks']
 filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
         
-use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
-use_filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
+#use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
+#use_filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
 
 
 
@@ -111,7 +111,7 @@ tps = []
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
-    use_filters = ['B','V','R','I','i_AB','R_c']
+    use_filters = ['B','V','R','I','i_AB','R_c','J','H','Ks','K']
     
     try: 
     

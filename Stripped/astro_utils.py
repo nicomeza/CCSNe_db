@@ -96,8 +96,10 @@ def bol_correction_2(color,color_mag): # From Lyman 2014
 
 
 def bol_correction_3(color,color_mag): # From Bersten-Hamuy
-    
-    if color == "B-V":  # valid range:(-0.2, 1.65). rms = 0.113
+    '''From Bersten-Hamuy
+    valid range B-V :(-0.2, 1.65). rms = 0.113'''
+
+    if color == "B-V":  
         
         c_0 = -0.823
         c_1 = 5.027
@@ -119,11 +121,18 @@ def bol_correction_3(color,color_mag): # From Bersten-Hamuy
     
     
 def Q_t(t,M_ni):
-    
+    '''
+    t : Time in days (float or array)
+    M_ni : Niquel mass in solar masses (float or array)
+    Calculates the Luminosity from Ni+Co decay.
+    Q(t) = M_ni*(6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
+    returns 
+    '''
     #day = 60*60*24 # day in seconds
     t_ni = 8.8        # niquel decay [days]
     t_co = 111.3      # Cobalt decay [days]
-    Q = M_ni*(6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
+    t = np.asarray(t)
+    Q = np.outer(np.asarray(M_ni),6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
     return Q 
 
 def log_Q_t(t,M_ni):

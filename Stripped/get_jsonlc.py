@@ -56,7 +56,7 @@ try :
             band = phot.get('band')
             time = phot.get('time')
             teles = phot.get('telescope')
-            
+            system = phot.get("System")
             if band in uvot_bands:
                 if teles == "Swift":
                     
