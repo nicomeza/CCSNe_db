@@ -9,10 +9,11 @@ sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = False
+compare_nis = True
 get_peak = False
 plot = True
 show = False
+Khatami = False
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
@@ -36,17 +37,14 @@ def L_peak(M_ni,L_heat,t_peak,beta=1.0):
     return 2 * np.asarray(I) / (beta*t_peak)**2.
 
 def Ni_K(Lpeak,tpeak,beta,Ni_min=0.01,Ni_max = 1.0):
-
+    '''F =  lambda x : L_peak(x,Q_t,t_peak=tpeak,beta=beta)[0]-Lpeak
+    return brentq(F,Ni_min,Ni_max)'''
     F =  lambda x : L_peak(x,Q_t,t_peak=tpeak,beta=beta)[0]-Lpeak
     return brentq(F,Ni_min,Ni_max)
 
 def weird_Ni(t,Mni,t_m=1.0):
     
-    t_ni = 8.8        # niquel decay [days]                                                                                                                          
-    t_co = 111.3      # Cobalt decay [days]                                                           
-    Q = Mni*(6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994   
-    Q_dot = -Mni*(6.45*np.exp(-t/t_ni)/t_ni+1.45*np.exp(-t/t_co)/t_co)*1e43
-    Weird = Q - t*Q_dot/((t/t_m)**2. - 1)
+    Weird = Q_t(t,Mni) - t*Q_t_dot(t,Mni)/((t/t_m)**2. - 1)
     return Weird
 
 def weird_Ni_der(t,Mni,t_m=1.0):
@@ -59,27 +57,21 @@ def weird_Ni_der(t,Mni,t_m=1.0):
     Weird = 2*x**2. * Q_dot/(2.*x**2. - 1)
     return Weird
 
-def Q_t_dot(t,Mni):
-    t_ni = 8.8        # niquel decay [days]                                                                                               
-    t_co = 111.3      # Cobalt decay [days]
-    return -Mni*(6.45*np.exp(-t/t_ni)/t_ni+1.45*np.exp(-t/t_co)/t_co)*1e43
-
-
 ########################################################
 
-
-band_string = ("BVRI","BVRcI")
+band_string = ("BVRIJHK","BVRIJHKs")
 
 inflection = True
 pl.close("all")
+
 if get_peak:
 
     Lfile = open('Ni56_%s_peak.dat'%band_string[0],'w')
     Lfile.write("###############%s#######################\n"%band_string[0])
     Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
-        #band_string = ("BVRIJHK","BVRIJHKs")
-        band_string = ("BVRI","BVRcI")
+        band_string = ("BVRIJHK","BVRIJHKs")
+        #band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
         try: 
             os.chdir("%s/"%SN)
@@ -111,7 +103,7 @@ if get_peak:
                 y_grid_full = y_grid_full[~np.isnan(y_grid_full)]
                 where_peak = np.argmax(y_grid)
                 tp,Lp = grid[where_peak],y_grid[where_peak]
-                M_p = M_ni(tp,10**Lp)[0][0]
+                M_p = M_ni(tp,10**Lp)
                 Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
                 print tp,Lp,M_p,Ni_Khatami
@@ -122,8 +114,8 @@ if get_peak:
                     pl.plot(grid_full,y_grid_full,linestyle='--',color='k')
                     pl.plot(grid,y_grid,color='g')
                     pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN,alpha=0.6)
-                    pl.plot(ni_t,np.log10(Q_t(ni_t,M_p))[0],linestyle='-.',color='k')
-                    pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)[0]),linestyle='-.',color='k')
+                    pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
+                    pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
                     pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
                     pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
                     
@@ -193,7 +185,7 @@ if get_peak:
 
                     pl.figure()
                     pl.plot(t,Mni,marker='o',color='y',linestyle='None')
-                    pl.plot(grid,M_ni(grid,10**y_grid)[0],color='y',linestyle='--')
+                    pl.plot(grid,M_ni(grid,10**y_grid),color='y',linestyle='--')
                     pl.xlabel('t-t_0')
                     pl.ylabel('M(Ni56)')
                     pl.axvline(tp,color='k')
@@ -220,14 +212,16 @@ if get_peak:
     Lfile.close()
 
 
+prentice_file = "UBVRIJHK_stats.dat"
+my_file = "Ni56_BVRIJHK_peak.dat"
 
 if compare_nis:
 
     pl.close("all")
-    nis = np.genfromtxt('Prentice/BVRI_stats.dat',\
+    nis = np.genfromtxt('Prentice/%s'%prentice_file,\
                             names=('SN','type','logLp','logLp_err1','logLp_err2','Mni','Mni_err1','Mni_err2','tp','tp_err','trise','trise_err','tdecay','tdecay_err','FWHM','FWHM_err'),\
                             dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
-    my_nis = np.genfromtxt('Ni56_BVRI_peak.dat',\
+    my_nis = np.genfromtxt(my_file,\
                                names=('SN','tp','Lp','logLp','Mni','Mni_K','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
                                dtype=('S15','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
@@ -238,26 +232,32 @@ if compare_nis:
         pl.figure()
         no_99 = np.logical_and(nis[i2][item] != 99.,my_nis[i1][item] != 99.)
         no_nan = np.logical_and(~np.isnan(my_nis[i1][item]),no_99)
-        if item == 'Mni' or item == "logLp":
-            pl.errorbar(my_nis[i1][item][no_nan],nis[i2][item][no_nan],yerr = (nis[i2]['%s_err1'%item][no_nan],nis[i2]['%s_err2'%item][no_nan]),fmt='o')
-        else:
-            pl.errorbar(my_nis[i1][item][no_nan],nis[i2][item][no_nan],nis[i2]['%s_err'%item][no_nan],fmt='o')
+        if len(np.where(no_nan)[0])>0:
+
+            if item == 'Mni' or item == "logLp":
+                pl.errorbar(my_nis[i1][item][no_nan],nis[i2][item][no_nan],yerr = (nis[i2]['%s_err1'%item][no_nan],nis[i2]['%s_err2'%item][no_nan]),fmt='o')
+            else:
+                pl.errorbar(my_nis[i1][item][no_nan],nis[i2][item][no_nan],nis[i2]['%s_err'%item][no_nan],fmt='o')
             
-        xmin,xmax = np.min([my_nis[i1][item][no_nan],nis[i2][item][no_nan]]),np.max([my_nis[i1][item][no_nan],nis[i2][item][no_nan]])
-        x = np.arange(xmin-0.3*(xmax-xmin),0.3*(xmax-xmin)+xmax,0.01)
-        print xmin,xmax
-        pl.xlabel('My %s'%item)
-        pl.ylabel('Prentice %s'%item)
-        pl.plot(x,x)
-        pl.xlim(xmin-0.3*(xmax-xmin),xmax+0.3*(xmax-xmin))
-        pl.ylim(xmin-0.3*(xmax-xmin),xmax+0.3*(xmax-xmin))
-        
-        for sn,mni,mni2 in zip(my_nis[i1]['SN'][no_nan],my_nis[i1][item][no_nan],nis[i2][item][no_nan]):
-            pl.annotate(sn,(mni+0.005,mni2+0.005),size=7)
-        pl.savefig("%s_comp.png"%item)
+            xmin,xmax = np.min([my_nis[i1][item][no_nan],nis[i2][item][no_nan]]),np.max([my_nis[i1][item][no_nan],nis[i2][item][no_nan]])
+            x = np.arange(xmin-0.3*(xmax-xmin),0.3*(xmax-xmin)+xmax,0.01)
+            print xmin,xmax
+            pl.xlabel('My %s'%item)
+            pl.ylabel('Prentice %s'%item)
+            pl.plot(x,x)
+            pl.xlim(xmin-0.3*(xmax-xmin),xmax+0.3*(xmax-xmin))
+            pl.ylim(xmin-0.3*(xmax-xmin),xmax+0.3*(xmax-xmin))
+            
+            for sn,mni,mni2 in zip(my_nis[i1]['SN'][no_nan],my_nis[i1][item][no_nan],nis[i2][item][no_nan]):
+                pl.annotate(sn,(mni+0.005,mni2+0.005),size=7)
+            pl.savefig("%s_comp.png"%item)
+        else:
+            pl.close()
     if show:
         pl.show()
-        
+    else:
+        pl.close()
+
     scatter = True
     hist = False
     for item1,item2 in [('Mni','Mni_K')]:
@@ -288,101 +288,105 @@ if compare_nis:
 
     pl.show()
 
-colormap = pl.cm.spectral
- 
 
-betas = np.arange(0.1,2.0,0.05)
 
-t_peak = 20
-Lps = np.arange(41.5,43,0.1)
-filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
-pl.gca().set_color_cycle(filters_colors)
 
-for Lp in Lps:
+
+if Khatami:
     
-    Ks = []
-    
-    for beta in betas:
+    colormap = pl.cm.spectral
+
+    betas = np.arange(0.1,2.0,0.05)
+
+    t_peak = 20
+    Lps = np.arange(41.5,43,0.1)
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+    pl.gca().set_color_cycle(filters_colors)
+
+    for Lp in Lps:
         
-        try:
-            Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
-        except:
-            print "failed at %s"%beta
-            Ks.append(0.0)
-    pl.plot(betas,Ks,label=r'$log(L_{peak} = %2.2f)$'%Lp)
-
-
-pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
-
-t_peak = 40
-filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
-pl.gca().set_color_cycle(filters_colors)
-
-for Lp in Lps:
-    
-    Ks = []
-    
-    for beta in betas:
+        Ks = []
         
-        try:
-            Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
-        except:
-            print "failed at %s"%beta
-            Ks.append(0.0)
-    pl.plot(betas,Ks,linestyle='--')
+        for beta in betas:
+            
+            try:
+                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
+            except:
+                print "failed at %s"%beta
+                Ks.append(0.0)
+        pl.plot(betas,Ks,label=r'$log(L_{peak} = %2.2f)$'%Lp)
 
 
-pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
-pl.xlabel(r'$\beta$')
-pl.ylabel(r'$M(^{56}\mathrm{Ni})$')
-pl.legend(loc='best',prop={'size':10},ncol=2)
-pl.show()
+        pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
 
+        t_peak = 40
+        filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+        pl.gca().set_color_cycle(filters_colors)
 
-
-Lp = 42.5
-t_ps = np.arange(15,40,1)
-filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
-pl.gca().set_color_cycle(filters_colors)
-
-for tp in t_ps:
+        for Lp in Lps:
     
-    Ks = []
+            Ks = []
     
-    for beta in betas:
+            for beta in betas:
         
-        try:
-            Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K(10**Lp,tp,beta=1.0,Ni_min=0.005,Ni_max = 1.0))
-        except:
-            print "failed at %s"%beta
-            Ks.append(0.0)
+                try:
+                    Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
+                except:
+                    print "failed at %s"%beta
+                    Ks.append(0.0)
+            pl.plot(betas,Ks,linestyle='--')
 
-    pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp)
-    
-pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
 
-Lp = 41.5
-filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
-pl.gca().set_color_cycle(filters_colors)
+    pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
+    pl.xlabel(r'$\beta$')
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})$')
+    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.show()
 
-for tp in t_ps:
+
+    Lp = 42.5
+    t_ps = np.arange(15,40,1)
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
+    pl.gca().set_color_cycle(filters_colors)
     
-    Ks = []
-    
-    for beta in betas:
+    for tp in t_ps:
         
-        try:
-            Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K(10**Lp,tp,beta=1.0,Ni_min=0.005,Ni_max = 1.0))
-        except:
-            print "failed at %s"%beta
-            Ks.append(0.0)
+        Ks = []
+        
+        for beta in betas:
+            
+            try:
+                Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K(10**Lp,tp,beta=1.0,Ni_min=0.005,Ni_max = 1.0))
+            except:
+                print "failed at %s"%beta
+                Ks.append(0.0)
 
-    pl.plot(betas,Ks,linestyle='--')
+        pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp)
+    
+    pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
+
+    Lp = 41.5
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
+    pl.gca().set_color_cycle(filters_colors)
+
+    for tp in t_ps:
+    
+        Ks = []
+        
+        for beta in betas:
+        
+            try:
+                Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K(10**Lp,tp,beta=1.0,Ni_min=0.005,Ni_max = 1.0))
+            except:
+                print "failed at %s"%beta
+                Ks.append(0.0)
+
+        pl.plot(betas,Ks,linestyle='--')
     
 
-pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='--',color='k')
-pl.xlabel(r'$\beta$')
-pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$')
-pl.legend(loc='best',prop={'size':10},ncol=2)
-pl.show()
+    pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='--',color='k')
+    pl.xlabel(r'$\beta$')
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$')
+    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.show()
 

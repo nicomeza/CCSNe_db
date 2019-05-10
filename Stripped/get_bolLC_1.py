@@ -109,9 +109,11 @@ Ni_56 = []
 Lps = []
 tps = []
 
+show = False
+
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
     print "####### %s ########## \n"%SN
-    use_filters = ['B','V','R','I','i_AB','R_c','J','H','Ks','K']
+    use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
     
     try: 
     
@@ -127,10 +129,14 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
                 print filter_file,filter
                 try:
                     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
-                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+80.),scope['err_%s'%filter]<0.5))[0]
+                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.25))[0]
                     if len(no_nebular)>1:
+                        
                         scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
                             scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
+                        sort_arg = np.argsort(scope['jd_%s'%filter])
+                        scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
+                            scope['jd_%s'%filter][sort_arg],scope['mag_%s'%filter][sort_arg],scope['err_%s'%filter][sort_arg]
                     else:
                         filter_removed = use_filters.pop(use_filters.index(filter))
                         print "LACK OF DATA : filter %s removed"%(filter_removed)
@@ -185,7 +191,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             err = scope['err_%s'%lco_name]
             t = scope['jd_%s'%lco_name]
             
-            pl.errorbar(t,mag+offset,yerr=err,fmt='o',label=lco_filter)
+            pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label=lco_filter)
             offset += 1.0
             tmax,tmin = np.max(t),np.min(t)
             dtmax = tmax-tmin
@@ -215,8 +221,10 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.legend(loc='best',ncol=2,prop={'size':9})
         pl.gca().invert_yaxis()
         pl.savefig("%s_lcs.png"%SN)
-        pl.show()
-        
+        if show:
+            pl.show()
+        else:
+            pl.close()
         max_cadence,min_cadence = 0.,100.0
         min_cadence_filt,max_cadence_filt = None,None
         filters_cadence = []
@@ -326,7 +334,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
             F_AB = 10**(-0.4*(48.6+mags+ZP)) # Jansky 
             F_err =  F_AB*0.4*errs*np.log(10)
             
-            pl.errorbar(inter_t[where_inter],mags,yerr = errs,label=filter)
+            pl.errorbar(inter_t[where_inter],mags,yerr = errs,label=filter,linestyle='None',fmt='o')
     
             for i,f in enumerate(zip(F_AB,F_err)):
                 
@@ -340,18 +348,10 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.legend()
         pl.gca().invert_yaxis()
         pl.savefig("%s_inter_lcs.png"%SN)
-        pl.show()
-        
-        
-        print "# --------- Saving SEDs -------------------------------------"
-
-        d_SED = {}
-        d_SED['t'] = inter_t[where_inter]
-        d_SED['data'] = fluxes
-        d_SED['daterr'] = fluxes_err
-        d_SED['lambda'] = sorted_lambdas
-        d_SED['bands'] = sorted_bands 
-        np.savez( 'SED_%s.npz'%SN, **d_SED )
+        if show:
+            pl.show()
+        else:
+            pl.close()
         
         
         print "# --------- Plot SED's --------------------------------------"
@@ -377,8 +377,11 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         ax.set_ylabel('Flux in ergs/s/cm2/Hz')
         ax.legend(loc='best',ncol=2,prop={'size':9})
         fig.savefig('./SED_nu_%s.png'%R_V)
-        pl.show()
-    
+        if show:
+            pl.show()
+        else:
+            pl.close()
+
         fig = pl.figure(figsize=(10,6))
         ax = fig.add_subplot(111)
 
@@ -408,8 +411,22 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         ax.set_ylabel('Flux in ergs/s/cm2/A')
         ax.legend(loc='best',ncol=2,prop={'size':8})
         fig.savefig('./SED_lam_%s.png'%(str(R_V)))
-        pl.show()
+        if show:
+            pl.show()
         pl.close()
+    
+        print "# --------- Saving SEDs -------------------------------------"
+
+        d_SED = {}
+        d_SED['t'] = inter_t[where_inter]
+        d_SED['data'] = fluxes
+        d_SED['daterr'] = fluxes_err
+        d_SED['lambda'] = sorted_lambdas
+        d_SED['bands'] = sorted_bands 
+        np.savez( 'SED_%s_%s.npz'%(SN,band_string),**d_SED)
+        
+
+        
         
         print "------------ Integrating SED -------------------------"
         
@@ -461,7 +478,8 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         ax.set_xlabel('t')
         ax.set_ylabel('L  [erg/s]')
         fig.savefig('./Lbol_%s_%s.png'%(SN,band_string))
-        pl.show()
+        if show:
+            pl.show()
         pl.close()
         
         Ni_56.append(M_p)

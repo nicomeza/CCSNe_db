@@ -11,6 +11,20 @@ from scipy.special import erf
 import scipy.integrate as integrate
 from matplotlib.patches import Ellipse
 
+
+L_sun = 3.8270e33
+M_sun = 4.7554 
+Ni_decay = 8.8 # days 
+CO_decay = 111.3 # days
+R_sun = 6.96e10 # cm 
+pc_to_cm = 3.086e+18
+day_to_sec = 60*60*24.0
+M_sun_gr = 1.989e33 # Sun mass in grams 
+c_kms = 299792.458 #km/s
+c_cms = 2.99792458*1e10
+pi = np.pi
+
+
 def overlap(a, b):
     # return the indices in a that overlap with b, also returns 
     # the corresponding index in b only works if both a and b are unique! 
@@ -125,29 +139,50 @@ def Q_t(t,M_ni):
     t : Time in days (float or array)
     M_ni : Niquel mass in solar masses (float or array)
     Calculates the Luminosity from Ni+Co decay.
-    Q(t) = M_ni*(6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
-    returns 
+    Q(t) = M_ni*(6.395*np.exp(-t/t_ni)+1.362*np.exp(-t/t_co))*1e43  # [erg/s] . See Wygoda 2017/Valenti 2008/Nadyozhin 1994
     '''
     #day = 60*60*24 # day in seconds
-    t_ni = 8.8        # niquel decay [days]
-    t_co = 111.3      # Cobalt decay [days]
+    t_ni = np.log2(np.e) * 6.075 # niquel decay [days]
+    t_co = np.log2(np.e) * 77.2      # Cobalt decay [days]
+    e_ni = 3.9e10 * M_sun_gr
+    e_co = 6.78e9 * M_sun_gr
+    A_ni = (e_ni-1.01*e_co)
+    A_co = 1.01*e_co
     t = np.asarray(t)
-    Q = np.outer(np.asarray(M_ni),6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
-    return Q 
+    try:
+        Q = M_ni*(A_ni*np.exp(-t/t_ni)+A_co*np.exp(-t/t_co)) # [erg/s] . See Wygoda 2017/Valenti 2008/Nadyozhin 1994
+        return Q 
+    except:
+        Q = np.outer(np.asarray(M_ni),A_ni*np.exp(-t/t_ni)+A_co*np.exp(-t/t_co))  # [erg/s] . See Wygoda 2017/Valenti 2008/Nadyozhin 1994
+        return Q 
+
+def Q_t_dot(t,Mni):
+
+    t_ni = np.log2(np.e) * 6.075 # niquel decay [days]                                                                                                                
+    t_co = np.log2(np.e) * 77.2      # Cobalt decay [days]                                                                                                       
+    e_ni = 3.9e10 * M_sun_gr
+    e_co = 6.78e9 * M_sun_gr
+    A_ni = (e_ni-1.01*e_co)
+    A_co = 1.01*e_co
+    return -Mni*(A_ni*np.exp(-t/t_ni)/t_ni+A_co*np.exp(-t/t_co)/t_co)
+
 
 def log_Q_t(t,M_ni):
-
-    t_ni = 8.8        # niquel decay [days]
-    t_co = 111.3      # Cobalt decay [days]
-    Q = M_ni*(6.45*np.exp(-t/t_ni)+1.45*np.exp(-t/t_co))*1e43  # [erg/s] . See Nadyozhin 1994
-    return np.log10(Q)
+    '''
+    t : Time in days (float or array)
+    M_ni : Niquel mass in solar masses (float or array)
+    Calculates the Luminosity from Ni+Co decay.
+    Q(t) = M_ni*(6.395*np.exp(-t/t_ni)+1.362*np.exp(-t/t_co))*1e43  # [erg/s] . See Wygoda 2017/Valenti 2008/Nadyozhin 1994
+    returns log10(Q(t)) 
+    '''
+    return np.log10(Q_t(t,M_ni))
 
 def M_bol_Q_t(t,M_ni):
     L_sun = 3.8270e33
     M_sun = 4.7554 
     return -2.5*(np.log10(Q_t(t,M_ni)/L_sun))+M_sun
 
-def m_t(t,M_ni,T_0):
+def m_Qt(t,M_ni,T_0):
     
      return -2.5*(np.log10(Q_t(t,M_ni)/L_sun))+M_sun - 2.5*np.log10(1-np.exp(-(T_0/t)**2))
     
@@ -504,17 +539,6 @@ def skew_gauss(x,A,x0,fwhm,alpha):
     return 2.*gauss_model(x,A,x0,fwhm)*cum_gauss(alpha*(x-x0)/sigma)
     
     
-L_sun = 3.8270e33
-M_sun = 4.7554 
-Ni_decay = 8.8 # days 
-CO_decay = 111.3 # days
-R_sun = 6.96e10 # cm 
-pc_to_cm = 3.086e+18
-day_to_sec = 60*60*24.0
-M_sun_gr = 1.989e33 # Sun mass in grams 
-c_kms = 299792.458 #km/s
-c_cms = 2.99792458*1e10
-pi = np.pi
 
 R_V = 3.1
 R_U = 1.569*R_V # From Cardelli law
