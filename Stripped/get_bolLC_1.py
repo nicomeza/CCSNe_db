@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 from astro_utils import *
 import os
+import argparse
 import pyqt_fit.nonparam_regression as smooth
 from pyqt_fit import npr_methods
 from scipy.stats import entropy
@@ -30,6 +31,10 @@ R_i = R_V*0.639
 R_z = R_V*0.453  # from shlegel et al (see Kim-Lee 2007)                            
 
 scope = globals()
+parser = argparse.ArgumentParser(description='Calculate bolometric light curves.')
+parser.add_argument('Args', metavar='Img', type=str, nargs='+',help='--')
+args = parser.parse_args()
+IN_FILE = args.Args[0] # SN metadata
 
 #--------------DECAM FILTERS-----------------------------------------------  
 
@@ -91,7 +96,7 @@ print " Convert photometry to fluxes to obtain SED "
 sn_labels = ['sn','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
 sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt(IN_FILE,dtype={'names':sn_labels,'formats':sn_formats})
 
 current_dir = os.getcwd()
 print "Current directory : %s"%current_dir
@@ -112,9 +117,10 @@ tps = []
 show = False
 
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
+
     print "####### %s ########## \n"%SN
-    use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
-    
+    #use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
+    use_filters = ['B','V','R','I','R_c']
     try: 
     
         os.chdir("%s/"%SN)
@@ -221,10 +227,12 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         pl.legend(loc='best',ncol=2,prop={'size':9})
         pl.gca().invert_yaxis()
         pl.savefig("%s_lcs.png"%SN)
+
         if show:
             pl.show()
         else:
             pl.close()
+
         max_cadence,min_cadence = 0.,100.0
         min_cadence_filt,max_cadence_filt = None,None
         filters_cadence = []
@@ -322,6 +330,7 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         fluxes = [[] for i in range(len(where_inter))]
         fluxes_err = [[] for i in range(len(where_inter))]
         
+        
         for filter,mags,errs in sorted_mags:
             
             print filter
@@ -363,15 +372,14 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         colormap = pl.cm.spectral
         fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9,len(where_inter))])
         
-        filter_names = AB_ZPs['filter'][np.in1d(sorted_lambdas,AB_ZPs['lambda'])]
+        filter_names = AB_ZPs['filter'][np.in1d(AB_ZPs['lambda_p'],sorted_lambdas)]
         responses =  lcogt_responses
         
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
             
             flux = np.asarray(flux)
             ax.errorbar(c_cms/(sorted_lambdas*1e-8),flux,yerr=flux_err,linestyle='--',label='%2.2f'%epoch)
-                
-                
+                     
         ax.set_title(SN)
         ax.set_xlabel('Frequency [Hz]')
         ax.set_ylabel('Flux in ergs/s/cm2/Hz')
@@ -410,13 +418,13 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$')
         ax.set_ylabel('Flux in ergs/s/cm2/A')
         ax.legend(loc='best',ncol=2,prop={'size':8})
-        fig.savefig('./SED_lam_%s.png'%(str(R_V)))
+        fig.savefig('./SED_lam_%s_%s.png'%(band_string,str(R_V)))
         if show:
             pl.show()
         pl.close()
     
         print "# --------- Saving SEDs -------------------------------------"
-
+        
         d_SED = {}
         d_SED['t'] = inter_t[where_inter]
         d_SED['data'] = fluxes

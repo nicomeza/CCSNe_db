@@ -7,18 +7,18 @@ from scipy.optimize import newton,brentq
 sn_labels = ['sn','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
 sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_BVRI.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = True
+compare_nis = False
 get_peak = False
 plot = True
 show = False
 Khatami = False
+check_t_0 = True
+
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
-#band_string = "W1UBVRIJHKs"
-band_string = ("BVRIJHK","BVRIJHKs")
 current_dir = os.getcwd()
 
 def L_peak_explicit(x,Mni=0.1,t_peak=20):
@@ -60,6 +60,7 @@ def weird_Ni_der(t,Mni,t_m=1.0):
 ########################################################
 
 band_string = ("BVRIJHK","BVRIJHKs")
+band_string = ("BVRI","BVRcI")
 
 inflection = True
 pl.close("all")
@@ -70,8 +71,8 @@ if get_peak:
     Lfile.write("###############%s#######################\n"%band_string[0])
     Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
-        band_string = ("BVRIJHK","BVRIJHKs")
-        #band_string = ("BVRI","BVRcI")
+        #band_string = ("BVRIJHK","BVRIJHKs")
+        band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
         try: 
             os.chdir("%s/"%SN)
@@ -108,6 +109,7 @@ if get_peak:
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
                 print tp,Lp,M_p,Ni_Khatami
                 
+
                 if plot:
 
                     pl.figure()
@@ -212,8 +214,8 @@ if get_peak:
     Lfile.close()
 
 
-prentice_file = "UBVRIJHK_stats.dat"
-my_file = "Ni56_BVRIJHK_peak.dat"
+prentice_file = "BVRI_stats.dat"
+my_file = "Ni56_BVRI_peak.dat"
 
 if compare_nis:
 
@@ -390,3 +392,89 @@ if Khatami:
     pl.legend(loc='best',prop={'size':10},ncol=2)
     pl.show()
 
+
+if check_t_0:
+    
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(SN_DATA))]       
+    pl.gca().set_color_cycle(filters_colors)
+
+    for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
+        #band_string = ("BVRIJHK","BVRIJHKs")
+        band_string = ("BVRI","BVRcI")
+        print "####### %s ########## \n"%SN
+        try: 
+            os.chdir("%s/"%SN)
+            t_half_1,t_half_2= None,None
+            try:
+                
+                try:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
+                    band_string = band_string[0]
+                except:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
+                    band_string = band_string[1]
+
+                t = t/(1+z_SN)
+                xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
+                t,logL = xs,ys
+                where_peak = np.where(np.logical_and(xs>10.,xs<45.))[0]
+                xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
+                #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
+                k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=4))
+                k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=4))
+                k0.fit()
+                k0_full.fit()
+                grid = np.arange(np.min(xs),np.max(xs),0.1)
+                grid_full = np.arange(np.min(t),np.max(xs),0.1)
+                y_grid = np.log10(k0(grid))+42
+                y_grid = y_grid[~np.isnan(y_grid)]
+                y_grid_full = np.log10(k0_full(grid_full))+42
+                y_grid_full = y_grid_full[~np.isnan(y_grid_full)]
+                where_peak = np.argmax(y_grid)
+                tp,Lp = grid[where_peak],y_grid[where_peak]
+                M_p_0 = M_ni(tp,10**Lp)
+                Ni_Khatami_0 = Ni_K(10**Lp,tp,beta=4/3.)
+                print tp,Lp,M_p_0,Ni_Khatami_0
+                delta_ts = np.arange(-5,6,1)
+                delta_nis = [[],[]]
+
+                for delta_t in delta_ts:
+                    
+                    try:
+                        
+                        M_p = M_ni(tp+delta_t,10**Lp)
+                        Ni_Khatami = Ni_K(10**Lp,tp+delta_t,beta=4/3.)
+                        print M_p,Ni_Khatami
+                        delta_nis[0].append(M_p)
+                        delta_nis[1].append(Ni_Khatami)
+
+                    except:
+                        
+                        delta_nis[0].append(M_p_0)
+                        delta_nis[1].append(Ni_Khatami_0)
+                        
+                delta_nis = np.asarray(delta_nis)
+                plot = pl.plot(delta_ts,(delta_nis[0]-M_p_0)/M_p_0,label="%s (%2.2f)"%(SN,tp),marker='s',linestyle='--')
+                pl.plot(delta_ts,(delta_nis[1]-Ni_Khatami_0)/(Ni_Khatami_0),color=plot[0].get_color(),marker='o',linestyle='--')
+                os.chdir(current_dir)
+            except:
+                os.chdir(current_dir)
+                print "Failed"
+                
+        except:
+            os.chdir(current_dir)
+            print "Failed"
+            
+    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.show()
+
+    trs = np.arange(15,30,2.5)
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(trs))]       
+    pl.gca().set_color_cycle(filters_colors)
+    delta_ts = np.arange(-7,6,1)
+    for tr in trs:
+
+        pl.plot(delta_ts,-1+Q_t(tr,1)/Q_t(tr+delta_ts,1),label=tr)
+        
+    pl.legend(loc='best') 
+    pl.show()
