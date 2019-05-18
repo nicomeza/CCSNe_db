@@ -46,20 +46,18 @@ IN_FILE = args.Args[0] # SN metadata
 
 # ------------- LCOGT FILTERS ----------------------------------------------
 
-LCOGT_filters = ('B','V','gp','rp','ip')
-LCOGT_filters = ('gp','rp','ip')
+LCOGT_filters = ('bssl-bx-004','bssl-vx-022','bssl-rx-007','bssl-ix-023','SDSS.gp','SDSS.rp','SDSS.ip')
+LCOGT_filters_id = ('lcogt_B','lcogt_V','lcogt_R','lcogt_I','SDSS.gp','SDSS.rp','SDSS.ip')
 
 LCOGT_DIR = "/home/dust_speck/SN/lcogt_filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
-lcogt_responses = []
 
-for filter_name in LCOGT_filters:
+for filter_name,filter_id in zip(LCOGT_filters,LCOGT_filters_id):
     
-    scope['%s_response'%filter_name] = np.genfromtxt("%s/SDSS.%s.txt"%(LCOGT_DIR,filter_name),dtype={'names':f_name,'formats':f_format})
-    s_x,s_y = (10. * scope['%s_response'%filter_name]['lambda'],scope['%s_response'%filter_name]['response'])
+    scope['%s_response'%filter_id] = np.genfromtxt("%s/%s.txt"%(LCOGT_DIR,filter_name),dtype={'names':f_name,'formats':f_format})
+    s_x,s_y = (10. * scope['%s_response'%filter_id]['lambda'],scope['%s_response'%filter_id]['response'])
     where = np.where(s_y>0)[0]
-    lcogt_responses.append((s_x[where]*1e-8,s_y[where]))
     
 f_name = ('filter','lambda','fwhm')
 f_format = ('S3','f8','f8')   
@@ -73,14 +71,12 @@ UVOT_names = ('W2','M2','W1','U','B','V')
 UVOT_DIR = "/home/dust_speck/SN/SWIFT/filters"
 f_name = ('lambda','response')
 f_format = ('f8','f8')
-uvot_responses = []
 
 for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
     
     scope['%s_response'%uvot_name] = np.genfromtxt("%s/Swift_UVOT.%s.dat"%(UVOT_DIR,uvot_filter),dtype={'names':f_name,'formats':f_format})
     s_x,s_y = (scope['%s_response'%uvot_name]['lambda'],scope['%s_response'%uvot_name]['response'])
     where = np.where(s_y>0)[0]
-    uvot_responses.append((s_x[where]*1e-8,s_y[where]))
 
 #------------------ UVOT ZERO POINT -------------------------------------
 
@@ -432,8 +428,6 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         d_SED['lambda'] = sorted_lambdas
         d_SED['bands'] = sorted_bands 
         np.savez( 'SED_%s_%s.npz'%(SN,band_string),**d_SED)
-        
-
         
         
         print "------------ Integrating SED -------------------------"
