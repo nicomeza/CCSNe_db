@@ -4,22 +4,24 @@ from pyqt_fit import npr_methods
 from scipy.misc import derivative
 from scipy.optimize import newton,brentq
 
-sn_labels = ['sn','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
-sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_BVRI.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
 get_peak = False
 plot = True
 show = False
 Khatami = False
-check_t_0 = True
-
+check_t_0 = False
+check_type = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
 current_dir = os.getcwd()
+
+colormap = pl.cm.spectral
 
 def L_peak_explicit(x,Mni=0.1,t_peak=20):
 
@@ -294,9 +296,7 @@ if compare_nis:
 
 
 
-if Khatami:
-    
-    colormap = pl.cm.spectral
+if Khatami:    
 
     betas = np.arange(0.1,2.0,0.05)
 
@@ -397,8 +397,8 @@ if check_t_0:
     
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(SN_DATA))]       
     pl.gca().set_color_cycle(filters_colors)
-
-    for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
+    
+    for SN,SN_type,z_SN,E_B_V,t_0,d_L,t_disc,m_disc,t_non,m_non in SN_DATA[['sn','type','sn_z','sn_ebv','t_0','hostlumdist','t_discov','m_discov','t_non_det','m_non_det']]:
         #band_string = ("BVRIJHK","BVRIJHKs")
         band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
@@ -414,9 +414,16 @@ if check_t_0:
                     t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
                     band_string = band_string[1]
 
-                t = t/(1+z_SN)
+
+                L_disc = 4*pi*(pc_to_cm*d_L*1e6)**2. * 10**(-0.4*(m_disc+21.1))
+                L_non = 4*pi*(pc_to_cm*d_L*1e6)**2. * 10**(-0.4*(m_non+21.1))    
+                print L_disc,L_non
                 xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
                 t,logL = xs,ys
+                #pl.plot(t,logL,marker='o',color='k')
+                #pl.axvline(t_non-t_0)
+                #pl.axvline(t_disc-t_0)
+                
                 where_peak = np.where(np.logical_and(xs>10.,xs<45.))[0]
                 xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
                 #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
@@ -431,12 +438,26 @@ if check_t_0:
                 y_grid_full = np.log10(k0_full(grid_full))+42
                 y_grid_full = y_grid_full[~np.isnan(y_grid_full)]
                 where_peak = np.argmax(y_grid)
-                tp,Lp = grid[where_peak],y_grid[where_peak]
-                M_p_0 = M_ni(tp,10**Lp)
-                Ni_Khatami_0 = Ni_K(10**Lp,tp,beta=4/3.)
-                print tp,Lp,M_p_0,Ni_Khatami_0
-                delta_ts = np.arange(-5,6,1)
+                tp_0,Lp_0 = grid[where_peak],y_grid[where_peak]
+                M_p_0 = M_ni(tp_0,10**Lp_0)
+                Ni_Khatami_0 = Ni_K(10**Lp_0,tp_0,beta=4/3.)
+                print tp_0,Lp_0,M_p_0,Ni_Khatami_0
+                delta_ts = np.linspace(-0.5*(t_disc-t_non),0.5*(t_disc-t_non),10)
+
                 delta_nis = [[],[]]
+                
+                t = (t+t_0)
+                dt = (t_non+t_disc)/2.
+                t = t-dt
+                Lp = Lp_0
+                tp = tp_0+t_0-dt
+                M_p_new = M_ni(tp,10**Lp)
+                Ni_Khatami_new = Ni_K(10**Lp_0,tp,beta=4/3.)
+                print tp,Lp,M_p_new,Ni_Khatami_new
+                
+                print "old,new explosion epoch : %s,%s"%(t_0,dt)
+                print "moving (-%s,%s)"%(0.5*(t_disc-t_non),0.5*(t_disc-t_non))
+
 
                 for delta_t in delta_ts:
                     
@@ -444,7 +465,7 @@ if check_t_0:
                         
                         M_p = M_ni(tp+delta_t,10**Lp)
                         Ni_Khatami = Ni_K(10**Lp,tp+delta_t,beta=4/3.)
-                        print M_p,Ni_Khatami
+                        #print M_p,Ni_Khatami
                         delta_nis[0].append(M_p)
                         delta_nis[1].append(Ni_Khatami)
 
@@ -454,8 +475,11 @@ if check_t_0:
                         delta_nis[1].append(Ni_Khatami_0)
                         
                 delta_nis = np.asarray(delta_nis)
-                plot = pl.plot(delta_ts,(delta_nis[0]-M_p_0)/M_p_0,label="%s (%2.2f)"%(SN,tp),marker='s',linestyle='--')
-                pl.plot(delta_ts,(delta_nis[1]-Ni_Khatami_0)/(Ni_Khatami_0),color=plot[0].get_color(),marker='o',linestyle='--')
+                plot = pl.plot(delta_ts,(delta_nis[0]-M_p_0)/M_p_0,label="%s (%2.2f)"%(SN,tp_0),marker='s',linestyle='--')
+                color = plot[0].get_color()
+                pl.plot(delta_ts,(delta_nis[1]-Ni_Khatami_0)/(Ni_Khatami_0),color=color,marker='o',linestyle='--')
+                pl.axvline(tp_0-tp,color=color)
+                
                 os.chdir(current_dir)
             except:
                 os.chdir(current_dir)
@@ -464,10 +488,14 @@ if check_t_0:
         except:
             os.chdir(current_dir)
             print "Failed"
+
+
             
+    pl.axhline(0.0,color='k')
+    pl.axvline(0.0,color='k')
     pl.legend(loc='best',prop={'size':10},ncol=2)
     pl.show()
-
+                
     trs = np.arange(15,30,2.5)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(trs))]       
     pl.gca().set_color_cycle(filters_colors)
@@ -478,3 +506,94 @@ if check_t_0:
         
     pl.legend(loc='best') 
     pl.show()
+
+SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},'Ib':{"marker":"p","color":"g",'string':'$\mathrm{Ib}$'},'Ic':{"marker":"s","color":"k",'string':'$\mathrm{Ic}$'},'Ibc':{"marker":"x","color":"k",'string':'$\mathrm{Ibc}$'},'Ic_GRB':{"marker":"*","color":"r",'string':'$\mathrm{Ic-GRB}$'}}
+
+Ni_0,Ni_K0 = [],[]
+
+fig1 = pl.figure()
+ax1 = fig1.add_subplot(111)
+fig2 = pl.figure()
+ax2 = fig2.add_subplot(111)
+
+if check_type:
+
+    
+    for SN,SN_type,z_SN,E_B_V,t_0,d_L,t_disc,m_disc,t_non,m_non in SN_DATA[['sn','type','sn_z','sn_ebv','t_0','hostlumdist','t_discov','m_discov','t_non_det','m_non_det']]:
+        #band_string = ("BVRIJHK","BVRIJHKs")
+        band_string = ("BVRI","BVRcI")
+        print "####### %s ########## \n"%SN
+        try: 
+            os.chdir("%s/"%SN)
+            t_half_1,t_half_2= None,None
+            try:
+                
+                try:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
+                    band_string = band_string[0]
+                except:
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
+                    band_string = band_string[1]
+                
+                if SN_type in ["Ib","Ic","Ibc","Ic_GRB"]:
+                    beta_SN = 9/8.
+                else:
+                    beta_SN = 0.82
+
+                xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
+                t,logL = xs,ys
+
+                if SN!="SN2013cu":
+                    where_peak = np.where(np.logical_and(xs>8.,xs<45.))[0]
+                else:
+                    where_peak = np.where(np.logical_and(xs>0.))[0]
+
+                xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
+                #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
+                k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=4))
+                k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=4))
+                k0.fit()
+                k0_full.fit()
+                grid = np.arange(np.min(xs),np.max(xs),0.1)
+                grid_full = np.arange(np.min(t),np.max(xs),0.1)
+                y_grid = np.log10(k0(grid))+42
+                y_grid = y_grid[~np.isnan(y_grid)]
+                y_grid_full = np.log10(k0_full(grid_full))+42
+                y_grid_full = y_grid_full[~np.isnan(y_grid_full)]
+                where_peak = np.argmax(y_grid)
+                tp_0,Lp_0 = grid[where_peak],y_grid[where_peak]
+                M_p_0 = M_ni(tp_0,10**Lp_0)
+                Ni_Khatami_0 = Ni_K(10**Lp_0,tp_0,beta=beta_SN)
+                Ni_0.append(M_p_0)
+                Ni_K0.append(Ni_Khatami_0)
+                print SN_type,tp_0,Lp_0,M_p_0,Ni_Khatami_0
+                
+                ax1.plot(M_p_0,Ni_Khatami_0,marker=SN_plot[SN_type]["marker"],color=SN_plot[SN_type]["color"],markersize=9,alpha=0.9)
+                ax2.plot(np.log10(M_p_0),np.log10(M_p_0)-np.log10(Ni_Khatami_0),marker=SN_plot[SN_type]["marker"],color=SN_plot[SN_type]["color"],markersize=9,alpha=0.9)
+                os.chdir(current_dir)
+            except:
+                os.chdir(current_dir)
+                print "Failed"
+                
+        except:
+            os.chdir(current_dir)
+            print "Failed"
+        
+    for type in SN_plot:
+        
+        ax1.plot(-1,-1,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
+        ax2.plot(-10,-10,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
+    ax1.legend(loc='best',prop={'size':18})
+    ax2.legend(loc='best',prop={'size':18})
+    ax1.set_xlabel(r"$\mathrm{Arnett} \ ^{56}Ni \ [M_\odot]$",size=15)
+    ax2.set_xlabel(r"$\mathrm{log Arnett} \ ^{56}Ni \ [M_\odot]$",size=15)
+    ax1.set_ylabel(r"$\mathrm{Khatami} \ ^{56}Ni \ [M_\odot]$",size=15)
+    ax2.set_ylabel(r"$\mathrm{log Khatami} \ ^{56}Ni \ [M_\odot]$",size=15)
+    ax1.plot(np.linspace(0,np.max(Ni_0)+0.01,100),np.linspace(0,np.max(Ni_0)+0.01,100),color='grey')
+    #ax2.plot(np.linspace(-1.7,np.log10(np.max(Ni_0)+0.02),100),np.linspace(-1.7,np.log10(np.max(Ni_0)+0.02),100),color='grey')
+    ax1.set_xlim(0,np.max(Ni_0)+0.01)
+    ax1.set_ylim(0,np.max(Ni_0)+0.01)
+    #ax2.set_xlim(-1.7,np.log10(np.max(Ni_0)+0.02))
+    #ax2.set_ylim(-1.7,np.log10(np.max(Ni_0)+0.02))
+    pl.show()
+    

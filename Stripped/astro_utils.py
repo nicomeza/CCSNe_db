@@ -7,6 +7,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d,splrep,splev,UnivariateSpline
 import sgolay
 from scipy.integrate import simps
+from scipy.misc import derivative
 from scipy.special import erf
 import scipy.integrate as integrate
 from matplotlib.patches import Ellipse
@@ -23,6 +24,44 @@ M_sun_gr = 1.989e33 # Sun mass in grams
 c_kms = 299792.458 #km/s
 c_cms = 2.99792458*1e10
 pi = np.pi
+k = 1.38064852*1e-16 
+h = 6.6260755e-27  # erg*s                             
+
+R_V = 3.1
+R_U = 1.569*R_V # From Cardelli law
+R_B = 4.2
+R_R = 0.75*R_V
+R_I = 0.478*R_V
+R_u = R_V*1.579
+R_g = R_V*1.161
+R_r = R_V*0.843
+R_i = R_V*0.639
+R_z = R_V*0.453  # from shlegel et al (see Kim-Lee 2007)
+
+
+
+def synthetic_mag(Data,Filter,lambda_=True,mag=False,ZP=0.0,F_0=363.1e-11,z=0.0):  # F_0(lambda),ZP default from Vega System in the V band 
+    
+    Flux = Data['Flux']
+    Data['lambda']=Data['lambda']/(1+z)
+    inter_Flux = np.interp(Filter['lambda'],Data['lambda'],Flux)  # Interpolate flux data ? 
+    norm = simps(y = Filter['response'], x = Filter['lambda']) 
+    if lambda_:
+        
+        Response = Filter['response']*inter_Flux
+        I = simps(y = Response,x = Filter['lambda'])
+
+    else:
+        
+        nu = c_cms/Filter['lambda']
+        Response = Filter['response']*inter_Flux
+        I = simps(y = Response,x = Filter['lambda'])
+        
+    if mag:
+        return -2.5*np.log10(I/F_0)+ZP
+    else:
+        return I/norm
+
 
 
 def overlap(a, b):
@@ -214,17 +253,17 @@ def F_b(x):
         return 0.2130*(x-5.9)**2+0.1207*(x-5.9)**3
     else:
         return 0.0
-        
+    
 def a_x(x,verbose=False):
-
+      
     if x > 0.3 and x <= 1.1:   # IR                                                                                                            
-
+        
         return 0.574*x**1.61
-
+    
     elif x > 1.1 and x <= 3.3:  # NIR/optical                                                                                                  
-
+        
         y = x-1.82
-
+        
         return 1+0.17699*y-0.50447*y**2-0.02427*y**3+0.72085*y**4+0.01979*y**5-0.77530*y**6+0.32999*y**7
 
     elif x > 3.3 and x <=8 :   # UV                                                                                                            
@@ -262,24 +301,19 @@ def b_x(x,verbose=False):
     
 # ------------ -Black body --------------------------------------------- 
 
-def B_lambda(lam,T): # cgs units 
+def T_BB(I,lam):
     
-    c = 2.99792458*1e10  # cm/s 
-    k = 1.38064852*1e-16 
-    h = 6.6260755e-27  # erg*s                             
-    E = h*c/(lam*k*T)
-    
-    return np.pi * ((2. * h * c**2)/(lam**5))*(1/(np.exp(E)-1)) # erg/s/cm3
+    return 1/(k*(lam)*(np.log(np.pi * (2. * h * c_cms**2)+I*(lam)**5.)-np.log(I*(lam)**5.))/h/c_cms)
 
+
+def B_lambda(lam,T): # cgs units 
+
+    E = h*c_cms/(lam*k*T)
+    return np.pi * ((2. * h * c_cms**2)/(lam**5))*(1/(np.exp(E)-1)) # erg/s/cm3
 
 def B_nu(nu,T):
-    
-    c = 2.99792458*1e10
-    k = 1.38064852*1e-16
-    h = 6.6260755e-27
     E = h*nu/(k*T)
-    
-    return np.pi*((2.*h*nu**3)/c**2)*(1/(np.exp(E)-1))
+    return np.pi*((2.*h*nu**3)/c_cms**2)*(1/(np.exp(E)-1))
 
 
 def Black_body(lam,T,R,nu=False):
@@ -292,8 +326,6 @@ def Black_body(lam,T,R,nu=False):
 
 
 def int_BB(responses,T,R,nu=False,kernel=None,template=False,weight = 0.0):
-    
-    c = 2.99792458*1e10
     
     int_fluxes = []
 
@@ -350,10 +382,6 @@ def int_BB(responses,T,R,nu=False,kernel=None,template=False,weight = 0.0):
 # ---------  Late time parameters with free trapping ---------------
 
 
-
-
-# Distance 
-
 def power_law(x,a,b):
 
     return b*x**a
@@ -370,20 +398,13 @@ def E_B_V_poz(EW,R_V=3.1):
 def Photospheric_mag(t,t_0,filter='V'):
 
     if(filter=='V'):
-        a_1 = -37.7  # (0.21)                                                                                                                                         \
-                                                                                                                                                                       
-        a_2 = 0.55  # (0.26)                                                                                                                                          \
-                                                                                                                                                                       
-        a_3 = -2.85  #(0.23)                                                                                                                                          \
-                                                                                                                                                                       
+        a_1 = -37.7  # (0.21)                                                                                               
+        a_2 = 0.55  # (0.26)                                                                                                                  
+        a_3 = -2.85  #(0.23)  
     elif(filter=='I'):
-            
-        a_1 = -37.7 # (0.27)                                                                                                                                          \
-                                                                                                                                                                       
-        a_2 = 0.55  # (0.31)                                                                                                                                          \
-                                                                                                                                                                       
-        a_3 = -2.85  # (0.34)                                                                                                                                         \
-                                                                                                                                                                       
+        a_1 = -37.7 # (0.27)                                                                                                                                 
+        a_2 = 0.55  # (0.31)                                                                                                                                   
+        a_3 = -2.85  # (0.34)                                                                                                                                                                                                                                                                                 
     else:
         print "No calibration for %s filter"%(filter)
         return 0.
@@ -540,14 +561,3 @@ def skew_gauss(x,A,x0,fwhm,alpha):
     
     
 
-R_V = 3.1
-R_U = 1.569*R_V # From Cardelli law
-R_B = 4.2
-R_R = 0.75*R_V
-R_I = 0.478*R_V
-
-R_u = R_V*1.579
-R_g = R_V*1.161
-R_r = R_V*0.843
-R_i = R_V*0.639
-R_z = R_V*0.453  # from shlegel et al (see Kim-Lee 2007)

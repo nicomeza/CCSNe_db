@@ -89,8 +89,8 @@ AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 print " Convert photometry to fluxes to obtain SED "
 
 
-sn_labels = ['sn','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
-sn_formats = ['S15','S20','f8','f8','f8','f8','f8']
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt(IN_FILE,dtype={'names':sn_labels,'formats':sn_formats})
 
@@ -104,8 +104,6 @@ filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(filters))]
 #use_filters = ['W2_uvot','M2_uvot','W1_uvot','U','B','V','R','I','J','H','K','Ks']
 #use_filters = ['W2_uvot','M2_uvot','W1_uvot','U_uvot','B','V','R','I','J','H','K','Ks']
 
-
-
 Ni_56 = []
 Lps = []
 tps = []
@@ -116,7 +114,8 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
 
     print "####### %s ########## \n"%SN
     #use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
-    use_filters = ['B','V','R','I','R_c']
+    #use_filters = ['B','V','R','I','R_c']
+    use_filters = ['B_uvot','V_uvot','R','I','R_c']
     try: 
     
         os.chdir("%s/"%SN)
