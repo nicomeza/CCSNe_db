@@ -10,12 +10,12 @@ sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
-get_peak = False
+get_peak = True
 plot = True
 show = False
 Khatami = False
 check_t_0 = False
-check_type = True
+check_type = False
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
@@ -64,7 +64,7 @@ def weird_Ni_der(t,Mni,t_m=1.0):
 band_string = ("BVRIJHK","BVRIJHKs")
 band_string = ("BVRI","BVRcI")
 
-inflection = True
+inflection = False
 pl.close("all")
 
 if get_peak:
