@@ -89,8 +89,8 @@ AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 print " Convert photometry to fluxes to obtain SED "
 
 
-sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0']
-sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8']
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt(IN_FILE,dtype={'names':sn_labels,'formats':sn_formats})
 
@@ -113,9 +113,9 @@ show = False
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
 
     print "####### %s ########## \n"%SN
-    #use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
+    use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
     #use_filters = ['B','V','R','I','R_c']
-    use_filters = ['B_uvot','V_uvot','R','I','R_c']
+    #use_filters = ['B_uvot','V_uvot','R','I','R_c']
     try: 
     
         os.chdir("%s/"%SN)
@@ -368,7 +368,6 @@ for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]
         fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9,len(where_inter))])
         
         filter_names = AB_ZPs['filter'][np.in1d(AB_ZPs['lambda_p'],sorted_lambdas)]
-        responses =  lcogt_responses
         
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
             

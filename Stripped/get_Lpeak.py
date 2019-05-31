@@ -7,12 +7,12 @@ from scipy.optimize import newton,brentq
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_data.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_UBVRIJHK.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
 get_peak = True
 plot = True
-show = False
+show = True
 Khatami = False
 check_t_0 = False
 check_type = False
@@ -62,7 +62,7 @@ def weird_Ni_der(t,Mni,t_m=1.0):
 ########################################################
 
 band_string = ("BVRIJHK","BVRIJHKs")
-band_string = ("BVRI","BVRcI")
+#band_string = ("BVRI","BVRcI")
 
 inflection = False
 pl.close("all")
@@ -73,8 +73,8 @@ if get_peak:
     Lfile.write("###############%s#######################\n"%band_string[0])
     Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
-        #band_string = ("BVRIJHK","BVRIJHKs")
-        band_string = ("BVRI","BVRcI")
+        band_string = ("BVRIJHK","BVRIJHKs")
+        #band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
         try: 
             os.chdir("%s/"%SN)
@@ -95,7 +95,7 @@ if get_peak:
                 xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
                 #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
                 k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=4))
-                k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=4))
+                k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=7))
                 k0.fit()
                 k0_full.fit()
                 grid = np.arange(np.min(xs),np.max(xs),0.1)
@@ -109,19 +109,31 @@ if get_peak:
                 M_p = M_ni(tp,10**Lp)
                 Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
+                try: 
+                    Tail = False
+                    where_tail = np.where(t>tp)[0]
+                    x_tail,y_tail = t[where_tail][len(where_tail)-4:len(where_tail)],logL[where_tail][len(where_tail)-4:len(where_tail)]
+                    Ni_tail,Ni_tail_err = curve_fit(log_Q_t,x_tail,y_tail)
+                    Tail = True
+                except:
+                    print "Tail fit failed"
+                
                 print tp,Lp,M_p,Ni_Khatami
                 
 
                 if plot:
 
                     pl.figure()
-                    pl.plot(grid_full,y_grid_full,linestyle='--',color='k')
-                    pl.plot(grid,y_grid,color='g')
+                    pl.plot(grid_full,y_grid_full,linestyle='--',color='g')
+                    #pl.plot(grid,y_grid,color='g')
                     pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN,alpha=0.6)
                     pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
-                    pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
-                    pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
-                    pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
+                    if Tail:
+                        pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
+                        pl.annotate(r"$\Delta ^{56}Ni = %2.2f$"%(M_p-Ni_tail),(x_tail[-1]-20,log_Q_t(x_tail[-1]-20,M_p)+0.1),size=20)
+                    #pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
+                    #pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
+                    #pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
                     
                 after_p,before_p = np.where(grid>tp+2)[0],np.where(grid<=tp-2)[0]
                 after_p_full,before_p_full = np.where(grid_full>tp+2)[0],np.where(grid_full<=tp-2)[0]
@@ -143,7 +155,7 @@ if get_peak:
                     der_at_inf =  1e42*derivative(k0, inf_t, dx=0.5, n=2, order=order)
                     print (der_at_inf - Q_t_dot(inf_t,M_p))/Q_t_dot(inf_t,M_p)
                     
-                    if plot:
+                    if plot and inflection:
                         for t_m in [5,10,15,20,25,30]:
                             print t_m,(weird_Ni_der(inf_t,M_p,t_m=t_m) - der_at_inf)/der_at_inf
                         pl.axvline(inf_t,color='k',linestyle='--')
@@ -163,9 +175,10 @@ if get_peak:
                     inf_t2 = grid[after_p][np.argmin(np.abs(der2))]
                     der_at_inf_2 =  1e42 * derivative(k0, inf_t2, dx=0.5, n=2, order=order)
                     print (der_at_inf_2 - Q_t_dot(inf_t2,M_p))/Q_t_dot(inf_t2,M_p)
+                    
                     for t_m in [5,10,15,20,25,30]:
                         print t_m,(weird_Ni_der(inf_t2,M_p,t_m=t_m) - der_at_inf_2)/der_at_inf_2                    
-                    if plot:
+                    if plot and inflection:
                         pl.axvline(inf_t2,color='k',linestyle='--')
                         pl.annotate("Inflection",(inf_t2-2.,np.min(logL)+0.1),size=8,rotation='vertical')
                 if plot:
@@ -179,8 +192,8 @@ if get_peak:
                 except:
                     FWHM = 99
                 if plot:
-                    pl.xlabel('t-t_0')
-                    pl.ylabel('log10(L)')
+                    pl.xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
+                    pl.ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
                     pl.legend()
                     pl.ylim(np.min(logL)-0.1,Lp+0.2)
                     pl.savefig("../%s_%s_Lbol.png"%(SN,band_string))
