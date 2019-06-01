@@ -1,0 +1,7 @@
+#Bolometric light-curves table format:
+#1) Rest-frame days since explosion  2)  Luminosity in erg/s
+
+The explosion epochs are those listed in Table 7 (last column),
+the redshifts used to correct for time dilation the phases are listed in
+Table 1 (column 11).
+
