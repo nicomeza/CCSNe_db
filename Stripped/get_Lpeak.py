@@ -10,12 +10,13 @@ sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 SN_DATA = np.genfromtxt('sn_UBVRIJHK.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
-get_peak = True
+get_peak = False
 plot = True
 show = True
-Khatami = False
-check_t_0 = False
-check_type = False
+Khatami = True
+check_t_0 = True
+check_type = True
+Tail = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
@@ -30,6 +31,7 @@ def L_peak_explicit(x,Mni=0.1,t_peak=20):
     t_co = 111.3      # Cobalt decay [days]  
     x_ni = x/t_ni
     x_co = x/t_co
+
     corcho = (A*x + B*np.exp(-x_ni) + C*np.exp(-x_co) + D*x*np.exp(-x_ni) + E*x*np.exp(-x_co) + F) * 1e12 /x**2
     return 2*Mni*corcho
 
@@ -109,14 +111,15 @@ if get_peak:
                 M_p = M_ni(tp,10**Lp)
                 Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
-                try: 
-                    Tail = False
-                    where_tail = np.where(t>tp)[0]
-                    x_tail,y_tail = t[where_tail][len(where_tail)-4:len(where_tail)],logL[where_tail][len(where_tail)-4:len(where_tail)]
-                    Ni_tail,Ni_tail_err = curve_fit(log_Q_t,x_tail,y_tail)
-                    Tail = True
-                except:
-                    print "Tail fit failed"
+                if Tail:
+                    try: 
+                        Tail = False
+                        where_tail = np.where(t>tp)[0]
+                        x_tail,y_tail = t[where_tail][len(where_tail)-4:len(where_tail)],logL[where_tail][len(where_tail)-4:len(where_tail)]
+                        Ni_tail,Ni_tail_err = curve_fit(log_Q_t,x_tail,y_tail)
+                        Tail = True
+                    except:
+                        print "Tail fit failed"
                 
                 print tp,Lp,M_p,Ni_Khatami
                 
@@ -126,11 +129,14 @@ if get_peak:
                     pl.figure()
                     pl.plot(grid_full,y_grid_full,linestyle='--',color='g')
                     #pl.plot(grid,y_grid,color='g')
-                    pl.plot(t,logL,marker='o',color='k',linestyle='None',label=SN,alpha=0.6)
+                    pl.plot(t,logL,marker='o',color='k',linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
                     pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
                     if Tail:
+
                         pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
-                        pl.annotate(r"$\Delta ^{56}Ni = %2.2f$"%(M_p-Ni_tail),(x_tail[-1]-20,log_Q_t(x_tail[-1]-20,M_p)+0.1),size=20)
+                        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(x_tail[-1]-20,M_p)+0.2),size=20)
+                        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(x_tail[-1]-20,M_p)+0.12),size=20)
+                        
                     #pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
                     #pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
                     #pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
@@ -194,7 +200,7 @@ if get_peak:
                 if plot:
                     pl.xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
                     pl.ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
-                    pl.legend()
+                    pl.legend(prop={'size':15})
                     pl.ylim(np.min(logL)-0.1,Lp+0.2)
                     pl.savefig("../%s_%s_Lbol.png"%(SN,band_string))
                     if show:
@@ -314,18 +320,19 @@ if Khatami:
     betas = np.arange(0.1,2.0,0.05)
 
     t_peak = 20
-    Lps = np.arange(41.5,43,0.1)
+    Lps = np.arange(41.5,43,1)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
     pl.gca().set_color_cycle(filters_colors)
-
+    
+    
     for Lp in Lps:
-        
+        Ni_K_0 = Ni_K(10**Lp,t_peak,beta=1.0,Ni_min=0.005,Ni_max = 1.0)
         Ks = []
         
         for beta in betas:
             
             try:
-                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
+                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K_0)
             except:
                 print "failed at %s"%beta
                 Ks.append(0.0)
@@ -334,22 +341,23 @@ if Khatami:
 
         pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
 
-        t_peak = 40
-        filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
-        pl.gca().set_color_cycle(filters_colors)
+    t_peak = 40
+    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+    pl.gca().set_color_cycle(filters_colors)
+    
+    for Lp in Lps:
 
-        for Lp in Lps:
-    
-            Ks = []
-    
-            for beta in betas:
+        Ni_K_0 = Ni_K(10**Lp,t_peak,beta=1.0,Ni_min=0.005,Ni_max = 1.0)
+        Ks = []
         
-                try:
-                    Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
-                except:
-                    print "failed at %s"%beta
-                    Ks.append(0.0)
-            pl.plot(betas,Ks,linestyle='--')
+        for beta in betas:
+            
+            try:
+                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K_0)
+            except:
+                print "failed at %s"%beta
+                Ks.append(0.0)
+        pl.plot(betas,Ks,linestyle='--')
 
 
     pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
@@ -360,7 +368,7 @@ if Khatami:
 
 
     Lp = 42.5
-    t_ps = np.arange(15,40,1)
+    t_ps = np.arange(15,40,5)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
     pl.gca().set_color_cycle(filters_colors)
     
@@ -378,31 +386,11 @@ if Khatami:
 
         pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp)
     
-    pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
+    #pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
 
-    Lp = 41.5
-    filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
-    pl.gca().set_color_cycle(filters_colors)
-
-    for tp in t_ps:
-    
-        Ks = []
-        
-        for beta in betas:
-        
-            try:
-                Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K(10**Lp,tp,beta=1.0,Ni_min=0.005,Ni_max = 1.0))
-            except:
-                print "failed at %s"%beta
-                Ks.append(0.0)
-
-        pl.plot(betas,Ks,linestyle='--')
-    
-
-    pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='--',color='k')
-    pl.xlabel(r'$\beta$')
-    pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$')
-    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.xlabel(r'$\beta$',size=18)
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$',size=18)
+    pl.legend(loc='best',prop={'size':15},ncol=2)
     pl.show()
 
 
@@ -515,9 +503,11 @@ if check_t_0:
     delta_ts = np.arange(-7,6,1)
     for tr in trs:
 
-        pl.plot(delta_ts,-1+Q_t(tr,1)/Q_t(tr+delta_ts,1),label=tr)
+        pl.plot(delta_ts,Q_t(tr,1)/Q_t(tr-delta_ts,1),label=r"$t_{rise} \ =\ %2.1f $"%tr)
         
-    pl.legend(loc='best') 
+    pl.legend(loc='best',prop={"size":15}) 
+    pl.xlabel(r"$\Delta t_0$",size=18)
+    pl.ylabel(r"$M(^{56}\mathrm{Ni})(t_{rise}-\Delta t_0)/M(^{56}\mathrm{Ni})(t_{rise})$",size=18)
     pl.show()
 
 SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},'Ib':{"marker":"p","color":"g",'string':'$\mathrm{Ib}$'},'Ic':{"marker":"s","color":"k",'string':'$\mathrm{Ic}$'},'Ibc':{"marker":"x","color":"k",'string':'$\mathrm{Ibc}$'},'Ic_GRB':{"marker":"*","color":"r",'string':'$\mathrm{Ic-GRB}$'}}

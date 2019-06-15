@@ -45,7 +45,7 @@ for bolo in bolos:
     t,L = np.genfromtxt(bolo).T
     clean = np.where(L<1e43)[0]
     t,L = t[clean],L[clean]
-    pl.plot(t,np.log10(L),marker='o',linestyle='None',label=sn_name,color='k')
+    pl.plot(t,np.log10(L),marker='o',linestyle='None',label=r"$\mathrm{%s}$"%sn_name,color='k')
     
     try:
      
@@ -74,8 +74,8 @@ for bolo in bolos:
         print tp,Lp,x_tail,Ni_tail
         pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
         pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
-        pl.annotate(r"$\Delta ^{56}Ni = %2.2f$"%(M_p-Ni_tail),(x_tail[-1]-20,log_Q_t(x_tail[-1]-20,M_p)+0.1),size=20)
-
+        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(x_tail[-1]-20,M_p)+0.3),size=20)
+        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(x_tail[-1]-20,M_p)+0.1),size=20)
         pl.ylim(np.min(np.log10(L))-0.5,Lp+0.5)
         pl.xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
         pl.ylabel(r'$\mathrm{\log{L_{bol}}}$',size=20)

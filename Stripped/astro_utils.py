@@ -12,6 +12,7 @@ from scipy.special import erf
 import scipy.integrate as integrate
 from matplotlib.patches import Ellipse
 
+## --- Physical constants ---------------#
 
 L_sun = 3.8270e33
 M_sun = 4.7554 
@@ -26,6 +27,13 @@ c_cms = 2.99792458*1e10
 pi = np.pi
 k = 1.38064852*1e-16 
 h = 6.6260755e-27  # erg*s                             
+e_charge = 4.8032068e-10
+sigma_SB = 5.67051e-5
+eV_K = 11604.51812 # Kelvin/eV
+ev_erg = 1.6022e-12 # 1eV =  1.6022e-12 erg #                                                                                                                                                  
+
+
+# --- Reddening  ----------------
 
 R_V = 3.1
 R_U = 1.569*R_V # From Cardelli law
