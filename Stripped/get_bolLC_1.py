@@ -85,6 +85,16 @@ AB_ZPs = np.genfromtxt('./AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
 
+#---- CSP zeropoints ------------------------
+
+CSP_ZPs = np.genfromtxt('./CSP/CSP_AB_ZPs.dat',dtype={'names':('filter','ZP'),'formats':('S10','f8')})
+
+#---------- CSP SN data-----------------------------------
+
+csp_names = ('SN', 'ra', 'dec', 'host', 'host_type', 'host_z_hel', 'discovery', 'discoverer', 'SN_type', 'phase_i', 'phase_f' ,'maximum_epoch', 'maximum_epoch_err')
+csp_types = ('S10','S20','S20','S30','S20','f8','S20','S20','S6','S5','S5','f8','f8')
+CSP_SN = np.genfromtxt('./CSP/CSP_SN.dat',usecols=np.arange(len(csp_names)),dtype={'names':csp_names,'formats':csp_types})
+
 # -------------SN METADATA ------------------
 print " Convert photometry to fluxes to obtain SED "
 

@@ -30,7 +30,9 @@ h = 6.6260755e-27  # erg*s
 e_charge = 4.8032068e-10
 sigma_SB = 5.67051e-5
 eV_K = 11604.51812 # Kelvin/eV
-ev_erg = 1.6022e-12 # 1eV =  1.6022e-12 erg #                                                                                                                                                  
+ev_erg = 1.6022e-12 # 1eV =  1.6022e-12 erg #                  
+m_e = 9.109e-28                         
+m_p =  1.6726231e-24
 
 
 # --- Reddening  ----------------
