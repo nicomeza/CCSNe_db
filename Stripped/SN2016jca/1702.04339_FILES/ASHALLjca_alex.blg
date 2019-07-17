@@ -1,0 +1,61 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: ASHALLjca_alex.aux
+The style file: mnras.bst
+Database file #1: BB.bib
+Repeated entry---line 1442 of file BB.bib
+ : @article{Mazzali17
+ :                   ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 1666 of file BB.bib
+ : @article{Hjorth03
+ :                  ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 1977 of file BB.bib
+ : @article{Cano17
+ :                ,
+I'm skipping whatever remains of this entry
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 78 entries,
+            2881 wiz_defined-function locations,
+            1412 strings with 38150 characters,
+and the built_in function-call counts, 35778 in all, are:
+= -- 3016
+> -- 2438
+< -- 144
++ -- 1097
+- -- 320
+* -- 4648
+:= -- 5435
+add.period$ -- 0
+call.type$ -- 78
+change.case$ -- 156
+chr.to.int$ -- 78
+cite$ -- 78
+duplicate$ -- 1773
+empty$ -- 1806
+format.name$ -- 584
+if$ -- 6184
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 78
+newline$ -- 247
+num.names$ -- 483
+pop$ -- 397
+preamble$ -- 1
+purify$ -- 312
+quote$ -- 0
+skip$ -- 1043
+stack$ -- 0
+substring$ -- 2114
+swap$ -- 894
+text.length$ -- 320
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 702
+warning$ -- 0
+while$ -- 552
+width$ -- 0
+write$ -- 799
+(There were 3 error messages)

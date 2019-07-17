@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 import os 
 
-snlist = [f.split()[0][:-1] for f in open('sn_dirs.dat','r').readlines()]
+snlist = [f.split()[0] for f in open('sn_dirs.dat','r').readlines()]
 homedir = "/home/dust_speck/SN/CCSNe_db/Stripped/"
 #sn_data = open('sn_data.dat','w')
 params = ['sn','host','hostredshift','hostlumdist','host_ebv']
@@ -16,15 +16,24 @@ try :
     
         print sn
         os.chdir("%s/"%sn)
-        json_sn = js.loads(open('%s.json'%sn).read())
+
+        try:
+            json_sn = js.loads(open('%s.json'%sn).read())
+        except:
+            os.chdir(homedir)
+            continue
         
         try:
 
             phot_list = json_sn['%s'%sn]['photometry']
         except:
             print "Wrong SN name or no photometry ?"
-            phot_list = json_sn['%s'%sn[2:]]['photometry']
-            sn = sn[2:]
+            try:
+                sn = sn[2:]
+                phot_list = json_sn['%s'%sn]['photometry']
+            except:
+                os.chdir(homedir)
+                continue
 
         try:
             
