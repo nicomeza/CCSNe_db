@@ -15,6 +15,9 @@ for key in snlist.keys():
         lc_file.write('\t'.join(mag[1:])+"\n")
     lc_file.close()
     
+
+#  -------------- NIR du pont -------------------------------
+
 lcs = [l.split()[0] for l in open("NIR_duPont.dat")]
 
 bands = ["Y","J","H"]
@@ -29,16 +32,19 @@ for file in lcs:
     for band in bands:
         try:
             data = mags[['JD',"%s"%band,"%serr"%band]]
-            np.savetxt("%s_mags_%s.out"%(sn,band),data)
-            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_duPont_mags_%s.out"%(sn,band)) 
+            where_dat = np.where(~np.isnan(mags["%s"%band]))
+            np.savetxt("%s_mags_%s.out"%(sn,band),data[where_dat])
+            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_WIRC.out"%(sn,band)) 
         except:
             try :
                 jd,mag,err = data['JD'],data['%s'%band],data["%serr"%band]
                 if mag!=np.nan:
                     np.savetxt("%s_mags_%s.out"%(sn,band),np.array([[jd],[mag],[err]]).T)
-                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_duPont_mags_%s.out"%(sn,band)) 
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_WIRC.out"%(sn,band)) 
             except:    
                 print "no data in band %s"%band
+
+#  -------------- OPT du pont -------------------------------
 
 lcs = [l.split()[0] for l in open("OPT_duPont.dat")]
 
@@ -56,17 +62,38 @@ for file in lcs:
         try:
             data = mags[['JD',"%s"%band,"%serr"%band]]
             np.savetxt("%s_mags_%s.out"%(sn,band),data)
-            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_duPont_mags_%s.out"%(sn,band)) 
+            if band != "V":
+                os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_CSPI.out"%(sn,band)) 
+            else:
+                if np.min(data['JD']<=53748.0):
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3014.out"%(sn)) 
+                elif np.min(data['JD']<=53759.0):
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3009.out"%(sn)) 
+                else:
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_9844.out"%(sn)) 
         except:
             try :
                 jd,mag,err = data['JD'],data['%s'%band],data["%serr"%band]
                 if mag!=np.nan:
+                    
                     np.savetxt("%s_mags_%s.out"%(sn,band),np.array([[jd],[mag],[err]]).T)
-                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_duPont_mags_%s.out"%(sn,band)) 
+                    
+                    if band != "V":
+                        os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_CSPI.out"%(sn,band)) 
+                    else:
+                        if np.min(data['JD']<=53748.0):
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3014.out"%(sn)) 
+                        elif np.min(data['JD']<=53759.0):
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3009.out"%(sn)) 
+                        else:
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_9844.out"%(sn)) 
+                            
+                            
             except:    
                 print "no data in band %s"%band
 
 
+#  -------------- NIR Swope -------------------------------
 
 lcs = [l.split()[0] for l in open("NIR_Swope.dat")]
 
@@ -84,14 +111,29 @@ for file in lcs:
             data = mags[['JD',"%s"%band,"%serr"%band]]
             np.savetxt("%s_mags_%s.out"%(sn,band),data)
             os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_Swope_mags_%s.out"%(sn,band)) 
+            if band == "Y" or band =="H":
+                os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC.out"%(sn,band)) 
+            else:
+                if np.min(jd)<=56007.0:
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC1.out"%(sn,band)) 
+                else:
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC2.out"%(sn,band)) 
         except:
             try :
                 jd,mag,err = data['JD'],data['%s'%band],data["%serr"%band]
                 if mag!=np.nan:
                     np.savetxt("%s_mags_%s.out"%(sn,band),np.array([[jd],[mag],[err]]).T)
-                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_Swope_mags_%s.out"%(sn,band)) 
-            except:    
+                    if band == "Y" or band =="H":
+                        os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC.out"%(sn,band)) 
+                    else:
+                        if np.min(jd)<=56007.0:
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC1.out"%(sn,band)) 
+                        else:
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_RC2.out"%(sn,band)) 
+            except:  
                 print "no data in band %s"%band
+
+#  -------------- OPT Swope  -------------------------------
 
 lcs = [l.split()[0] for l in open("OPT_Swope.dat")]
 
@@ -109,12 +151,30 @@ for file in lcs:
         try:
             data = mags[['JD',"%s"%band,"%serr"%band]]
             np.savetxt("%s_mags_%s.out"%(sn,band),data)
-            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_Swope_mags_%s.out"%(sn,band)) 
+            if band != "V":
+                os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_CSPI.out"%(sn,band)) 
+            else:
+                if np.min(data['JD']<=53748.0):
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3014.out"%(sn)) 
+                elif np.min(data['JD']<=53759.0):
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3009.out"%(sn)) 
+                else:
+                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_9844.out"%(sn)) 
+
         except:
             try :
                 jd,mag,err = data['JD'],data['%s'%band],data["%serr"%band]
                 if mag!=np.nan:
                     np.savetxt("%s_mags_%s.out"%(sn,band),np.array([[jd],[mag],[err]]).T)
-                    os.rename("%s_mags_%s.out"%(sn,band),"../../%s/CSP_Swope_mags_%s.out"%(sn,band)) 
+                    if band != "V":
+                        os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_%s_CSPI.out"%(sn,band)) 
+                    else:
+                        if np.min(data['JD']<=53748.0):
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3014.out"%(sn)) 
+                        elif np.min(data['JD']<=53759.0):
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_3009.out"%(sn)) 
+                        else:
+                            os.rename("%s_mags_%s.out"%(sn,band),"../../%s/mags_V_9844.out"%(sn)) 
+
             except:    
                 print "no data in band %s"%band

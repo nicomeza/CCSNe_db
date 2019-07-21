@@ -123,7 +123,7 @@ show = False
 for SN,z_SN,E_B_V,t_0,d_L in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist']]:
 
     print "####### %s ########## \n"%SN
-    use_filters = ['B','V','R','I','i_AB','R_c','r_AB','J','H','Ks','K']
+    use_filters = ['B','B_AB','V','V_AB','R','R_AB','I','I_AB','g','g_AB','r','r_AB','i','i_AB','R_c','J','H','J_AB','H_AB']
     #use_filters = ['B','V','R','I','R_c']
     #use_filters = ['B_uvot','V_uvot','R','I','R_c']
     try: 
