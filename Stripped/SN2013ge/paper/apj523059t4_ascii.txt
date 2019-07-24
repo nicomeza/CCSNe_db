@@ -1,0 +1,18 @@
+Table 4
+MMTCam, LBT, and IMACS Photometry
+
+UT Date	MJD	r (err)	i (err)	z (err)	Instrument	
+		(mag)	(mag)	(mag)		
+2013 Nov 19	56,615.5	15.01 (0.03)	14.98 (0.04)	15.04 (0.05)	MMTCam	
+2014 Apr 1	56,748.1	17.59 (0.05)	17.85 (0.02)	cdots	MMTCam	
+2014 Apr 4	56,751.3	17.69 (0.03)	17.91 (0.02)	17.04 (0.01)	MMTCam	
+2014 May 21	56,798.2	18.41 (0.02)	18.71 (0.03)	cdots	MMTCam	
+2014 Jun 7	56,815.1	18.71 (0.04)	18.92 (0.01)	cdots	MMTCam	
+2014 Oct 22	56,952.1	20.48 (0.05)	20.96 (0.02)	cdots	LBT	
+2014 Nov 20	56,981.5	21.18 (0.03)	21.62 (0.03)	cdots	MMTCam	
+2014 Dec 18	57,009.3	21.36 (0.02)	cdots	cdots	IMACS	
+2015 Jan 15	57,037.3	21.65 (0.03)	cdots	cdots	IMACS	
+2015 Feb 10	57,063.4	22.13 (0.06)	22.58 (0.04)	cdots	MMTCam	
+2015 Apr 16	57,128.1	>22.3	>22.4	cdots	MMTCam	
+
+Note. Data are presented in the SDSS photometric system.

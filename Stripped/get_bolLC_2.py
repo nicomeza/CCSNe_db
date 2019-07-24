@@ -291,7 +291,7 @@ show = False
 for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
 
     print "####### %s ########## \n"%SN
-    use_filters = ['B_CSPI','B','B_AB','V_3014','V_3009','V_9844','V_AB','R','R_AB','I','I_AB','g','g_CSPI','g_AB','r','r_CSPI','r_AB','i','i_CSPI','i_AB','R_c',\
+    use_filters = ['B_CSPI','B','B_AB','V','V_3014','V_3009','V_9844','V_AB','R','R_AB','I','I_AB','g','g_CSPI','g_AB','r','r_CSPI','r_AB','i','i_CSPI','i_AB','R_c',\
                        'J','H','J_AB','H_AB','Y_WIRC','Y_RC','J_WIRC','H_WIRC','J_RC1','J_RC2','Y_RC','H_RC']
     #use_filters = ['B','V','R','I','R_c']
     #use_filters = ['B_uvot','V_uvot','R','I','R_c']

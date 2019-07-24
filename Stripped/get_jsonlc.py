@@ -104,7 +104,7 @@ try :
                 print phot
                 
         
-        os.system("rm mags_*.out")
+        #os.system("rm mags_*.out")
         
         fig = pl.figure(figsize=(10,6))
         ax = fig.add_subplot(111)

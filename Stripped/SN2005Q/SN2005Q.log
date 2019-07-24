@@ -1,5 +1,5 @@
-Filters used:g	r	i	B	B_CSPI	V_3014
-Max entropy filter : g 
+Filters used:g_CSPI	r_CSPI	i_CSPI	B_CSPI	V_3014
+Max entropy filter : g_CSPI 
 Number of data points : 13 
 Data points time range : (15.370,44.350) 
 Peak at 22.35 days past explosion.
