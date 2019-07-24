@@ -21,6 +21,17 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
                     t_0 = 0.5*(t_non + t_discov)
                     print "Taking t_0 as midpoint between last non detection and discovery"
                     no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.35))[0]
+                    if len(no_nebular)>1:
+                        
+                        scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
+                            scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular],scope['err_%s'%filter][no_nebular] 
+                        sort_arg = np.argsort(scope['jd_%s'%filter])
+                        scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
+                            scope['jd_%s'%filter][sort_arg],scope['mag_%s'%filter][sort_arg],scope['err_%s'%filter][sort_arg]
+                    else:
+                        print scope['jd_%s'%filter][no_nebular]-t_0
+                        filter_removed = use_filters.pop(use_filters.index(filter))
+                        print "LACK OF DATA : filter %s removed"%(filter_removed)
                 else:
                     print "Cant use. No t_0 and no discovery/non detection"
                     filter_removed = use_filters.pop(use_filters.index(filter))
@@ -234,56 +245,14 @@ IN_FILE = args.Args[0] # SN metadata
 # sys.argv = ['arg1','arg2']
 
 
-#--------------DECAM FILTERS-----------------------------------------------  
-
-#f_name=('lambda','u','g','r','i','z','Y','atm')
-#DECAM_filters = ('u','g','r','i','z','Y')                                                             
-#f_format = ('f8','f8','f8','f8','f8','f8','f8','S8')
-#DECAM = np.genfromtxt('/home/dust_speck/SN/DECAM_Filters.dat',dtype={'names':f_name,'formats':f_format})
-#DECAM['lambda']*=10
-
-# ------------- LCOGT FILTERS ----------------------------------------------
-
-LCOGT_filters = ('bssl-bx-004','bssl-vx-022','bssl-rx-007','bssl-ix-023','SDSS.gp','SDSS.rp','SDSS.ip')
-LCOGT_filters_id = ('lcogt_B','lcogt_V','lcogt_R','lcogt_I','SDSS.gp','SDSS.rp','SDSS.ip')
-
-LCOGT_DIR = "/home/dust_speck/SN/lcogt_filters"
-f_name = ('lambda','response')
-f_format = ('f8','f8')
-
-for filter_name,filter_id in zip(LCOGT_filters,LCOGT_filters_id):
-    
-    scope['%s_response'%filter_id] = np.genfromtxt("%s/%s.txt"%(LCOGT_DIR,filter_name),dtype={'names':f_name,'formats':f_format})
-    s_x,s_y = (10. * scope['%s_response'%filter_id]['lambda'],scope['%s_response'%filter_id]['response'])
-    where = np.where(s_y>0)[0]
-    
-f_name = ('filter','lambda','fwhm')
-f_format = ('S3','f8','f8')   
-
-LCOGT_data=  np.genfromtxt("%s/LCOGT_filters.dat"%(LCOGT_DIR),dtype={'names':f_name,'formats':f_format})
-
-# ----------- UVOT FILTERS -----------------------------------------------
-
-UVOT = ('UVW2','UVM2','UVW1','U','B','V')
-UVOT_names = ('W2','M2','W1','U','B','V')
-UVOT_DIR = "/home/dust_speck/SN/SWIFT/filters"
-f_name = ('lambda','response')
-f_format = ('f8','f8')
-
-for uvot_filter,uvot_name in zip(UVOT,UVOT_names):
-    
-    scope['%s_response'%uvot_name] = np.genfromtxt("%s/Swift_UVOT.%s.dat"%(UVOT_DIR,uvot_filter),dtype={'names':f_name,'formats':f_format})
-    s_x,s_y = (scope['%s_response'%uvot_name]['lambda'],scope['%s_response'%uvot_name]['response'])
-    where = np.where(s_y>0)[0]
-
-#------------------ UVOT ZERO POINT -------------------------------------
+#------------------ AB ZERO POINT -------------------------------------
 
 AB_ZPs = np.genfromtxt('./AB_zeropoints.dat',usecols=[0,1,2,3,4],dtype={'names':('filter','lambda','lambda_p','flux','ZP'),'formats':('S10','f8','f8','f8','f8')})
 
 AB_ZPs['lambda']*=1e4 # Transforming wavelength to Angstroms
 
 
-#---- CSP zeropoints ------------------------
+#---------- CSP zeropoints ------------------------------
 
 CSP_ZPs = np.genfromtxt('./CSP/CSP_AB_ZPs.dat',dtype={'names':('filter','ZP'),'formats':('S10','f8')})
 
@@ -293,7 +262,8 @@ csp_names = ('SN', 'ra', 'dec', 'host', 'host_type', 'host_z_hel', 'discovery', 
 csp_types = ('S10','S20','S20','S30','S20','f8','S20','S20','S6','S5','S5','f8','f8')
 CSP_SN = np.genfromtxt('./CSP/CSP_SN.dat',usecols=np.arange(len(csp_names)),dtype={'names':csp_names,'formats':csp_types})
 
-# -------------SN METADATA ------------------
+# -------------SN METADATA --------------------
+
 print " Convert photometry to fluxes to obtain SED "
 
 
@@ -321,13 +291,14 @@ show = False
 for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
 
     print "####### %s ########## \n"%SN
-    use_filters = ['B','B_AB','V','V_AB','R','R_AB','I','I_AB','g','g_AB','r','r_AB','i','i_AB','R_c','J','H','J_AB','H_AB']
+    use_filters = ['B_CSPI','B','B_AB','V_3014','V_3009','V_9844','V_AB','R','R_AB','I','I_AB','g','g_CSPI','g_AB','r','r_CSPI','r_AB','i','i_CSPI','i_AB','R_c',\
+                       'J','H','J_AB','H_AB','Y_WIRC','Y_RC','J_WIRC','H_WIRC','J_RC1','J_RC2','Y_RC','H_RC']
     #use_filters = ['B','V','R','I','R_c']
     #use_filters = ['B_uvot','V_uvot','R','I','R_c']
     try: 
     
         os.chdir("%s/"%SN)
-
+        sn_log = open("%s.log"%SN,'w')
         # ---------------------LOAD PHOTOMETRY ----------------------------------------------------
 
         for filter in zip(use_filters):
@@ -352,16 +323,25 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         #inter_t = scope['jd_%s'%min_cadence_filt]
         inter_t = scope['jd_%s'%max_entropy_filter]
         where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
-
+        sn_log.write("Filters used:")
+        sn_log.write("\t".join(FILTER_ZPS['filter'])+"\n")
+        sn_log.write("Max entropy filter : %s \n"%max_entropy_filter)
+        sn_log.write("Number of data points : %s \n"%len(where_inter))
+        sn_log.write("Data points time range : (%3.3f,%3.3f) \n"%(tmax_min,tmin_max))
         if len(where_inter)<2:
             print "No data in range (tmax_min,tmin_max)"
+            sn_log.write("No data in range (tmax_min,tmin_max) \n")
             os.chdir(current_dir)
+            sn_log.close()
             continue
         if tmax_min>=tmin_max:
             print "tmax_min>=tmin_max. Bad overlap of filters."
+            sn_log.write("tmax_min>=tmin_max. Bad overlap of filters.\n")
             os.chdir(current_dir)
+            sn_log.close()
             continue
 
+        
         print "# ---------- filter interpolation : ----------------------------"
 
         filters_used = []
@@ -405,6 +385,9 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
 
         fluxes = [[] for i in range(len(where_inter))]
         fluxes_err = [[] for i in range(len(where_inter))]
+        
+        filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(sorted_mags))]
+        pl.gca().set_color_cycle(filters_colors)
         
         print "# ---------- Getting fluxes ----------------------------"
         
@@ -461,6 +444,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         ax.set_ylabel('Flux in ergs/s/cm2/Hz')
         ax.legend(loc='best',ncol=2,prop={'size':9})
         fig.savefig('./SED_nu_%s.png'%R_V)
+
         if show:
             pl.show()
         else:
@@ -550,11 +534,18 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
                 
         L_bol = np.asarray(L_bol)
         where_2nd_peak = np.where(inter_t[where_inter]>10.)[0]
-        
         where_peak = np.argmax(L_bol[where_2nd_peak])
+        try:
+            in_peak = np.where(L_bol==L_bol[where_2nd_peak][where_peak])[0][0]
+            sn_log.write("Peak at %2.2f days past explosion.\n"%inter_t[where_inter][where_2nd_peak][where_peak])
+            print "Number of data points before/after apparent peak (after 10 days past t_0) : (%s/%s)"%(len(L_bol[:in_peak]),len(L_bol[in_peak:]))
+            sn_log.write("Number of data points before/after apparent peak (after 10 days past t_0) : (%s/%s)"%(len(L_bol[:in_peak]),len(L_bol[in_peak:])))
+        except:
+            print "Could not get number of data points before/after peak."
         tp,Lp = inter_t[where_inter][where_2nd_peak][where_peak],L_bol[where_2nd_peak][where_peak]
         M_p = M_ni(tp,Lp)
         print "t_peak = %s\nL_peak = %s\nM_ni = %s\n"%(tp,Lp,M_p)
+        
         Lfile.write("#t_peak = %s\n#L_peak = %s\n#M_ni = %s\n"%(tp,Lp,M_p))
         Lfile.close()
         ax.set_xlabel('t')
@@ -570,15 +561,16 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         
         try:
             os.chdir(current_dir)
-            
+            sn_log.close()
         except:
-            
+            sn_log.close()
             print "No diretory %s"%current_dir
 
     except:
         
         print "No directory %s/"%SN
         os.chdir(current_dir)
+        sn_log.close()
         continue
 
 try: 

@@ -186,7 +186,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
     try: 
     
         os.chdir("%s/"%SN)
-
+        sn_log = open("SN%s.log"%SN,'w')
         # ---------------------LOAD PHOTOMETRY ----------------------------------------------------
 
         for filter in zip(use_filters):
@@ -246,6 +246,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         if len(use_filters)<1:
             print "NOT ENOUGH FILTERS AVAILABLE"
             os.chdir(current_dir)
+            sn_log.close()
             continue
         filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(FILTER_ZPS))]
         
@@ -258,6 +259,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         pl.gca().set_color_cycle(filters_colors)
         filters_cadence_full = []
         offset = 0.0
+        sn_log.write("\t".join(FILTER_ZPS['filter']))
         for filter in FILTER_ZPS:
             
             lco_filter = filter['filter']
@@ -363,6 +365,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         if len(where_inter)<2:
             print "No data in range (tmax_min,tmin_max)"
             os.chdir(current_dir)
+            sn_log.close()
             continue
         filters_used = []
 
@@ -582,6 +585,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         tps.append(tp)
         
         try:
+            sn_log.close()
             os.chdir(current_dir)
             
         except:
@@ -591,6 +595,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
     except:
         
         print "No directory %s/"%SN
+        sn_log.close()
         os.chdir(current_dir)
         continue
 
