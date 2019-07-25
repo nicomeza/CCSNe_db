@@ -1,0 +1,141 @@
+J/A+A/593/A68   PTF12os and iPTF13bvn spectra and light curves (Fremling+, 2016)
+================================================================================
+PTF12os and iPTF13bvn:
+Two stripped-envelope supernovae from low-mass progenitors in NGC 5806.
+    Fremling C., Sollerman J., Taddia F., Ergon M., Fraser M.,
+    Karamehmetoglu E., Valenti S., Jerkstrand A., Arcavi I., Bufano F.,
+    Elias Rosa N., Filippenko A.V., Fox D., Gal-Yam A., Howell D.A.,
+    Kotak R., Mazzali P., Milisavljevic D., Nugent P.E., Nyholm A., Pian E.,
+    Smartt S.
+    <Astron. Astrophys. 593, A68 (2016)>
+    =2016A&A...593A..68F        (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Supernovae ; Photometry, UBVRI ; Photometry, SDSS ; Spectroscopy
+Keywords: supernovae: general - supernovae: individual: PTF12os -
+          galaxies: individual: NGC 5806 - techniques: image processing -
+          supernovae: individual: iPTF13bvn
+
+Abstract:
+    We investigate two stripped-envelope supernovae (SNe) discovered in
+    the nearby galaxy NGC 5806 by the (i)PTF. We classify PTF12os as a
+    Type IIb SN based on our spectral sequence; iPTF13bvn has previously
+    been classified as Type Ib. Our main objective is to constrain the
+    explosion parameters of iPTF12os and iPTF13bvn, and to put constraints
+    on the SN progenitors, using our comprehensive photometric and
+    spectroscopic datasets.
+
+Description:
+    Photometric and spectroscopic datasets of PTF12os and iPTF13bvn. Our
+    dataset on PTF12os spans from approximately 8.5 days to 215 days past
+    the SN explosion and it contains optical photometry and spectra. Our
+    data on iPTF13bvn spans from approximately 0.6 to 380 days. The
+    dataset on iPTF13bvn contains optical photometry and optical/infrared
+    spectroscopy.
+
+Objects:
+    ---------------------------------------------------
+       RA   (2000)   DE        Designation(s)
+    ---------------------------------------------------
+    14 59 59.12  +01 53 24.4   PTF12os   = SN 2012P
+    15 00 00.15  +01 52 53.2   iPTF13bvn = iPTF 13bvn
+    ---------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+ph12os.dat        30      264   Bgriz photometry of PTF12os
+ph13bvn.dat       32      461   UBVRIgriz photometry of iPTF13bvn
+sw12os.dat        43        6   Swift/UVOT photometry of PTF12os
+sw13bvn.dat       43        9   Swift/UVOT photometry of iPTF13bvn
+sp12os.dat        49       19   Spectroscopic observations of PTF12os
+sp13bvn.dat       52       32   Spectroscopic observations of iPTF13bvn
+sp/*               .       51   Individual spectra
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: ph12os.dat ph13bvn.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 11  F11.3 d       JD        Julian date of observation
+  13- 18  F6.3  mag     mag       Apparent magnitude (1)
+  20- 24  F5.3  mag   e_mag       Uncertainty (1 sigma) of apparent magnitude
+      26  A1    ---     Filter    [UBVRIgriz] Photometric filter
+  28- 33  A6    ---     Tel       Telescope (G2)
+--------------------------------------------------------------------------------
+Note (1): Johnson-Cousins filter magnitudes are given in the Vega system.
+          Sloan filter magnitudes are in the AB system.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: sw12os.dat sw13bvn.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10  F10.2 d       JD        Julian date of observation
+  12- 16  F5.2  mag     Umag      ?=99.99 Apparent U-band AB magnitude
+  18- 21  F4.2  mag   e_Umag      ?=9.99 Uncertainty (1 sigma) of U magnitude
+  23- 27  F5.2  mag     UVW1mag   ?=99.99 Apparent UVW1-band AB magnitude
+  29- 32  F4.2  mag   e_UVW1mag   ?=9.99 Uncertainty (1 sigma) of UVW1 magnitude
+  34- 38  F5.2  mag     UVM2mag   ?=99.99 Apparent UVM2-band AB magnitude
+  40- 43  F4.2  mag   e_UVM2mag   ?=9.99 Uncertainty (1 sigma) of UVM2 magnitude
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: sp12os.dat sp13bvn.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 10  F10.2 d       JD        Julian date of observation
+  12- 17  F6.2  d       Phase     Time since supernova explosion
+  19- 37  A19   ---     TelInst   Name of telescope/instrument (G1)
+  39- 52  A14   ---     FileName  Name of spectrum file in subdirectory sp
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: sp/*
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  8  F8.2  0.1nm   lambda    Wavelength
+  10- 19  E10.4 ---     Flux      Observed flux (1)
+--------------------------------------------------------------------------------
+Note (1): The spectra are uncalibrated and fluxes are given in arbitrary units.
+--------------------------------------------------------------------------------
+
+Global Notes:
+Note (G1): the telescopes used for the spectroscopy are as follows:
+  CA/CAFOS            = Calar Alto 2.2m Telscope
+  FTS/FLOYDS          = Faulkes Telescope North
+  FTS/FLOYDS          = Faulkes Telescope South
+  NOT/ALFOSC          = Nordic Optical Telescope
+  P200/DBSP           = Palomar 200-inch (5.1-meter) Hale Telescope
+  TNG/LRS             = Telescopie Nazionale Galileo
+  WHT/ISIS            = William Herschel Telescope
+  Magellan_Baade/FIRE = The Magellan Telescopes (6.5m)
+  IRTF/SpeX           = NASA Infrared Telescope Facility
+  KECK1/LRIS          = The Keck 1 Telescope at W. M. Keck Observatory
+  KECK2/DEIMOS        = The Keck 2 Telescope at W. M. Keck Observatory
+  VLT/FORS2           = The Very Large Telescope
+  APO/DIS             = Apache Point ARC 3.5m Telescope
+  SALT/Spectrograph   = The Southern African Large Telescope
+  ASIAGO/AFOSC        = The 182cm Copernico telescope
+  KPNO/RCSpec         = Kitt Peak National Observatory's Mayall 4-m Telescope
+  LICK/KAST           = The Lick Observatory Shane 3-m Telescope
+  GTC/OSIRIS          = Gran Telescopio Canarias
+  NTT/EFOSC           = The 3.58-meter New Technology Telescope
+  GEMINI_N/GMOS       = The Frederick C. Gillett Gemini North Telescope
+Note (G2): the telescopes used for the photometry are as follows:
+  P48   = Palomar 48-inch Samuel Oschin Telescope
+  P60   = Palomar 60-inch (1.5-meter) Telescope
+  P200  = Palomar 200-inch (5.1-meter) Hale Telescope
+  LCOGT = Las Cumbres Observatory Global Telescope Network
+  NOT   = Nordic Optical Telescope
+  NTT   = The 3.58-meter New Technology Telescope
+  LT    = The Liverpool Telescope
+  GTC   = Gran Telescopio Canarias
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+    Christoffer Fremling, christoffer.fremling(at)astro.su.se
+
+================================================================================
+(End) Christoffer Fremling [Stockholm Univ.], Patricia Vannier [CDS] 07-Jul-2016

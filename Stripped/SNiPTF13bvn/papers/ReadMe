@@ -1,0 +1,104 @@
+J/ApJ/825/L22     BVRI LCs of type Ib supernova iPTF13bvn     (Folatelli+, 2016)
+================================================================================
+Disappearance of the progenitor of supernova iPTF13bvn.
+    Folatelli G., Van Dyk S.D., Kuncarayakti H., Maeda K., Bersten M.C.,
+    Nomoto K., Pignata G., Hamuy M., Quimby R.M., Zheng W., Filippenko A.V.,
+    Clubb K.I., Smith N., Elias-Rosa N., Foley R.J., Miller A.A.
+   <Astrophys. J., 825, L22-L22 (2016)>
+   =2016ApJ...825L..22F    (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Supernovae ; Photometry, UBVRI
+Keywords: galaxies: individual: NGC 5806; stars: evolution; supernovae: general;
+          supernovae: individual: iPTF13bvn
+
+Abstract:
+    Supernova (SN) iPTF13bvn in NGC 5806 was the first Type Ib SN to have
+    been tentatively associated with a progenitor in pre-explosion images.
+    We performed deep ultraviolet (UV) and optical Hubble Space Telescope
+    observations of the SN site ~740 days after explosion. We detect an
+    object in the optical bands that is fainter than the pre-explosion
+    object. This dimming is likely not produced by dust absorption in the
+    ejecta; thus, our finding confirms the connection of the progenitor
+    candidate with the SN. The object in our data is likely dominated by
+    the fading SN, implying that the pre-SN flux is mostly due to the
+    progenitor. We compare our revised pre-SN photometry with previously
+    proposed models. Although binary progenitors are favored, models need
+    to be refined. In particular, to comply with our deep UV detection
+    limit, any companion star must be less luminous than a late-O star or
+    substantially obscured by newly formed dust. A definitive progenitor
+    characterization will require further observations to disentangle the
+    contribution of a much fainter SN and its environment.
+
+Description:
+    We obtained deep imaging of the field of iPTF13bvn ~740 days after
+    explosion using HST through Cycle 22 programs GO-13684 and GO-13822.
+    Program GO-13684 was executed between 2015 June 26.37 and 26.60 (UT
+    dates are used herein) with the Wide Field Camera 3 (WFC3) UVIS
+    channel. Program GO-13822 comprised observations obtained on 2015 June
+    30.63 with WFC3/UVIS (F225W filter) and on June 30.90 UT with the
+    Advanced Camera for Surveys (ACS; F814W filter).
+    The supernova (SN) location in the pre- and post-explosion images was
+    found by aligning them relative to a F555W image obtained through
+    program GO-12888 with WFC3/UVIS on 2013 September 2.37 when the SN was
+    still very bright.
+
+    We also obtained BVRI imaging of iPTF13bvn until ~280 days with the
+    Katzman Automatic Imaging Telescope (KAIT) and the 1m Nickel telescope
+    at Lick Observatory (see table 3). Apparent magnitudes were first
+    measured in the KAIT4 natural system and then transformed to the
+    standard system using local calibrators and color terms as given in
+    Table 4 of Ganeshalingam et al. (2010, J/ApJS/190/418).
+
+Objects:
+    ----------------------------------------------------
+         RA   (ICRS)   DE        Designation(s)
+    ----------------------------------------------------
+     15 00 00.15   +01 52 53.2   iPTF13bvn = iPTF 13bvn
+    ----------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+table3.dat        68       42   KAIT and Nickel Photometry of iPTF13bvn
+--------------------------------------------------------------------------------
+
+See also:
+ J/A+A/580/A142  : SN 2011dh. The first two years (Ergon+, 2015)
+ J/A+A/574/A60   : Light curve templates of SNe Ib/c from SDSS (Taddia+, 2015)
+ J/A+A/573/A12   : SN1993J spectra 100-500d post-explosion (Jerkstrand+, 2015)
+ J/A+A/562/A17   : SN 2011dh - The first 100 days (Ergon+, 2014)
+ J/MNRAS/436/774 : Core collapse supernovae (type Ibc) (Eldridge+, 2013)
+ J/A+A/558/A131  : Model spectra of hot stars at the pre-SN stage (Groh+, 2013)
+ J/ApJ/741/97    : Light curves of Ibc supernovae (Drout+, 2011)
+ J/ApJS/190/418  : Light curves for 165 SNe (Ganeshalingam+, 2010)
+
+Byte-by-byte Description of file: table3.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label  Explanations
+--------------------------------------------------------------------------------
+   1-  8 F8.2   d       MJD    Modified Julian date
+  10- 15 F6.2   d       Phase  Rest-frame phase (1)
+      17 A1     ---   l_Bmag   Limit flag on Bmag
+  19- 23 F5.2   mag     Bmag   [15.8/21.7] Apparent B band magnitude
+  25- 28 F4.2   mag   e_Bmag   [0.05/0.5]? One sigma uncertainty in Bmag
+  30- 34 F5.2   mag     Vmag   [15.2/21]? Apparent V band magnitude
+  36- 39 F4.2   mag   e_Vmag   [0.02/0.2]? One sigma uncertainty in Vmag
+  41- 45 F5.2   mag     Rmag   [14.9/20.7]? Apparent R band magnitude
+  47- 50 F4.2   mag   e_Rmag   [0.01/0.2]? One sigma uncertainty in Rmag
+  52- 56 F5.2   mag     Imag   [14.8/20.5]? Apparent I band magnitude
+  58- 61 F4.2   mag   e_Imag   [0.01/0.2]? One sigma uncertainty in Imag
+  63- 68 A6     ---     Tel    Telescope name (2)
+--------------------------------------------------------------------------------
+Note (1): In days after the explosion (JD=2456459.24).
+Note (2): Telescope as follows:
+    KAIT = Katzman Automatic Imaging Telescope.
+  Nickel = The 1m Nickel telescope at Lick Observatory.
+--------------------------------------------------------------------------------
+
+History:
+    From electronic version of the journal
+
+================================================================================
+(End)                  Prepared by [AAS], Emmanuelle Perret [CDS]    02-Sep-2016
