@@ -7,10 +7,10 @@ from scipy.optimize import newton,brentq
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_UBVRIJHK.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = False
-get_peak = False
+compare_nis = True
+get_peak = True
 plot = True
 show = True
 Khatami = True
@@ -84,7 +84,7 @@ if get_peak:
             try:
                 
                 try:
-                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
+                    t,L,logL,Mni = np.genfreomtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
                     band_string = band_string[0]
                 except:
                     t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T

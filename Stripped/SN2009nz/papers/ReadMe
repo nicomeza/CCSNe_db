@@ -1,0 +1,95 @@
+J/A+A/535/A57       g'r'i'z'JH light curves of GRB 091127      (Filgas+, 2011)
+================================================================================
+GRB 091127: The cooling break race on magnetic fuel.
+    Filgas R., Greiner J., Schady P., Kruehler T., Updike A.C., Klose S.,
+    Nardini M., Kann D.A., Rossi A., Sudilovsky V., Afonso P.M.J., Clemens C.,
+    Elliott J., Nicuesa Guelbenzu A., Olivares E. F., Rau A.
+   <Astron. Astrophys. 535, A57 (2011)>
+   =2011A&A...535A..57F
+================================================================================
+ADC_Keywords: Gamma rays - Photometry, infrared
+Keywords: ISM: jets and outflows - X-rays: bursts -
+          X-rays: individuals: GRB 091127
+
+Abstract:
+    Using high-quality, broad-band afterglow data for GRB 091127, we
+    investigate the validity of the synchrotron fireball model for
+    gamma-ray bursts, and infer physical parameters of the
+    ultra-relativistic outflow.
+
+    We used multi-wavelength (NIR to X-ray) follow-up observations
+    obtained with GROND simultaneously in the g'r'i'z' JH filters and the
+    XRT onboard the Swift satellite in the 0.3 to 10keV energy range. The
+    resulting afterglow light curve is of excellent accuracy with relative
+    photometric errors as low as 1%, and the spectral energy distribution
+    is well-sampled over 5 decades in energy. These data present one of
+    the most comprehensive observing campaigns for a single GRB afterglow
+    and allow us to test several proposed emission models and outflow
+    characteristics in unprecedented detail.
+
+Objects:
+    --------------------------------------------------
+       RA   (2000)   DE       Designation(s)
+    --------------------------------------------------
+    02 26 19.87  -18 57 08.6  GRB 091127 = GRB 091127
+    --------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName   Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe         80        .   This file
+phot.dat       30      718   g'r'i'z' JH photometric data
+                             (tables 3 and 4 of the paper)
+table5.dat     91        5   Secondary standards in the GRB field in the
+                             GROND filter bands used for the calibration
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: phot.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  2  A2    ---     Band      [griz' JH] Band
+   4- 13  F10.4 ks      Tmid-T0   Time since GRB trigger
+  15- 18  I4    s       Exp       Exposure time
+      20  A1    ---   l_mag       Limit flag on mag
+  21- 25  F5.2  mag     mag       Brightness in band "Band" (1)
+  27- 30  F4.2  mag   e_mag       ? rms uncertainty on mag (2)
+--------------------------------------------------------------------------------
+Note (1): Corrected for Galactic foreground reddening. Converted to AB
+     magnitudes for consistency with Table 3.
+Note (2): For JH, for the SED fitting, the additional error of the 
+     absolute calibration of 0.05 mag was added.
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: table5.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+       1  I1    ---     Star      Star sequential number
+   3-  4  I2    h       RAh       Right ascension (J2000)
+   6-  7  I2    min     RAm       Right ascension (J2000)
+   9- 13  F5.2  s       RAs       Right ascension (J2000)
+      15  A1    ---     DE-       Declination sign (J2000)
+  16- 17  I2    deg     DEd       Declination (J2000)
+  19- 20  I2    arcmin  DEm       Declination (J2000)
+  22- 25  F4.1  arcsec  DEs       Declination (J2000)
+  27- 31  F5.2  mag     g'mag     Brightness in g' band (AB system)
+  33- 36  F4.2  mag   e_g'mag     rms uncertainty on g'mag
+  38- 42  F5.2  mag     r'mag     Brightness in r' band (AB system)
+  44- 47  F4.2  mag   e_r'mag     rms uncertainty on r'mag
+  49- 53  F5.2  mag     i'mag     Brightness in i' band (AB system)
+  55- 58  F4.2  mag   e_i'mag     rms uncertainty on i'mag
+  60- 64  F5.2  mag     z'mag     Brightness in z' band (AB system)
+  66- 69  F4.2  mag   e_z'mag     rms uncertainty on z'mag
+  71- 75  F5.2  mag     Jmag      ?=- Brightness in J band (AB system)
+  77- 80  F4.2  mag   e_Jmag      ? rms uncertainty on Jmag
+  82- 86  F5.2  mag     Hmag      ?=- Brightness in H band (AB system)
+  88- 91  F4.2  mag   e_Hmag      ? rms uncertainty on Hmag
+--------------------------------------------------------------------------------
+
+History:
+    From electronic version of the journal
+
+================================================================================
+(End)                                        Patricia Vannier [CDS]  20-Oct-2011

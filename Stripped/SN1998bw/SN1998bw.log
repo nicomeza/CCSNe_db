@@ -1,6 +1,6 @@
-Filters used:B	V	R	I
+Filters used:B	V	R	I	J	H
 Max entropy filter : B 
-Number of data points : 48 
-Data points time range : (8.520,86.180) 
-Peak at 15.37 days past explosion.
-Number of data points before/after apparent peak (after 10 days past t_0) : (7/41)
+Number of data points : 26 
+Data points time range : (22.910,65.910) 
+Peak at 22.46 days past explosion.
+Number of data points before/after apparent peak (after 10 days past t_0) : (0/26)

@@ -1,0 +1,47 @@
+
+....Edit 10 rows of file 'table5.dat' with form=a
+#!form=a
+${Star} ${RAh} ${RAm} ${RAs} ${DE-}${DEd} ${DEm} ${DEs} ${g'mag} ${e_g'mag} ${r'mag} ${e_r'mag} ${i'mag} ${e_i'mag} ${z'mag} ${e_z'mag} ${Jmag} ${e_Jmag} ${Hmag} ${e_Hmag}
+ (hit Return)
+## (from tabmap V6.0 (2016-08-18)) 2019-07-26T20:33:43
+#---------------------------------------------------------------------------
+#-- J/A+A/535/A57 g'r'i'z'JH light curves of GRB 091127 (Filgas+, 2011)
+#--------------------------------------------------------------------------
+#---Table: J/A+A/535/A57/table5.dat Secondary standards in the GRB field in the GROND filter bands used for the calibration  (5 records)
+#Equinox=J2000
+#-------------------------------------------------------------------------------
+#     Label Format Unit   Explanations
+#-------------------------------------------------------------------------------
+#      Star I1     ---    Star sequential number
+#       RAh I2     h      Right ascension (J2000)
+#       RAm I2     min    Right ascension (J2000)
+#       RAs F5.2   s      Right ascension (J2000)
+#       DE- A1     ---    Declination sign (J2000)
+#       DEd I2     deg    Declination (J2000)
+#       DEm I2     arcmin Declination (J2000)
+#       DEs F4.1   arcsec Declination (J2000)
+#     g'mag F5.2   mag    Brightness in g' band (AB system)
+#   e_g'mag F4.2   mag    rms uncertainty on g'mag
+#     r'mag F5.2   mag    Brightness in r' band (AB system)
+#   e_r'mag F4.2   mag    rms uncertainty on r'mag
+#     i'mag F5.2   mag    Brightness in i' band (AB system)
+#   e_i'mag F4.2   mag    rms uncertainty on i'mag
+#     z'mag F5.2   mag    Brightness in z' band (AB system)
+#   e_z'mag F4.2   mag    rms uncertainty on z'mag
+#      Jmag F5.2   mag    ?=- Brightness in J band (AB system)
+#    e_Jmag F4.2   mag    ? rms uncertainty on Jmag
+#      Hmag F5.2   mag    ?=- Brightness in H band (AB system)
+#    e_Hmag F4.2   mag    ? rms uncertainty on Hmag
+#-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+S                                                                                      
+t                                                                                      
+a  R  R         D  D                                                                   
+r Ah Am   RAs  Ed Em  DEs g'mag   e_ r'mag   e_ i'mag   e_ z'mag   e_  Jmag   e_  Hmag   e_
+-------------------------------------------------------------------------------------------
+1 02 26 21.05 -18 57 19.1 15.18 0.03 14.49 0.03 14.22 0.03 14.07 0.03 13.03 0.05 12.57 0.05
+2 02 26 12.17 -18 57 17.6 17.48 0.03 16.64 0.03 16.26 0.03 16.06 0.03 14.47 0.05 14.38 0.05
+3 02 26 12.14 -18 57 02.9 17.74 0.03 16.96 0.03 16.80 0.03 16.71 0.03 14.93 0.05 15.35 0.05
+4 02 26 23.64 -18 58 17.8 22.17 0.03 20.43 0.03 19.34 0.03 18.80 0.03 ---        ---   
+5 02 26 25.03 -18 58 45.5 20.59 0.03 19.05 0.03 18.16 0.03 17.71 0.03 ---        ---   
+-------------------------------------------------------------------------------------------

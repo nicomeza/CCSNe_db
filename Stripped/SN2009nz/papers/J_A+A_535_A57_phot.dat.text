@@ -1,0 +1,40 @@
+
+....Edit 10 rows of file 'phot.dat' with form=a
+#!form=a
+${Band} ${Tmid-T0} ${Exp} ${l_mag} ${mag} ${e_mag}
+ (hit Return)
+## (from tabmap V6.0 (2016-08-18)) 2019-07-26T20:33:43
+#---------------------------------------------------------------------------
+#-- J/A+A/535/A57 g'r'i'z'JH light curves of GRB 091127 (Filgas+, 2011)
+#--------------------------------------------------------------------------
+#---Table: J/A+A/535/A57/phot.dat g'r'i'z' JH photometric data (tables 3 and 4 of the paper)  (718 records)
+#-------------------------------------------------------------------------------
+#     Label Format Unit  Explanations
+#-------------------------------------------------------------------------------
+#      Band A2     ---   [griz' JH] Band
+#   Tmid-T0 F10.4  ks    Time since GRB trigger
+#       Exp I4     s     Exposure time
+#     l_mag A1     ---   Limit flag on mag
+#       mag F5.2   mag   Brightness in band "Band" (1)
+#     e_mag F4.2   mag   ? rms uncertainty on mag (2)
+#-------------------------------------------------------------------------------
+#Note (1): Corrected for Galactic foreground reddening. Converted to AB
+#     magnitudes for consistency with Table 3.
+#Note (2): For JH, for the SED fitting, the additional error of the
+#     absolute calibration of 0.05 mag was added.
+#-------------------------------------------------------------------------------
+-------------------------------
+Ba                 l       
+nd    Tmid-T0  Exp _   mag   e_
+-------------------------------
+g'     3.3031   35   16.57 0.01
+g'     3.4039   35   16.62 0.01
+g'     3.5195   35   16.63 0.01
+g'     3.6192   35   16.65 0.01
+g'     3.7202   35   16.67 0.01
+g'     3.8222   35   16.67 0.01
+g'     3.9920  115   16.69 0.01
+g'     4.1762  115   16.72 0.01
+g'     4.3638  115   16.74 0.01
+g'     4.5513  115   16.76 0.01
+-------------------------------

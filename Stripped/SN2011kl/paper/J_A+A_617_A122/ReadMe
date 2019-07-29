@@ -1,0 +1,130 @@
+J/A+A/617/A122      GRB 111209A GROND and UVOT light curves       (Kann+, 2018)
+================================================================================
+The optical/NIR afterglow of GRB 111209A: Complex yet not unprecedented.
+    Kann D.A., Schady P., Olivares E.F., Klose S., Rossi A., Perley D.A.,
+    Zhang B., Kruehler T., Greiner J., Nicuesa Guelbenzu A., Elliott J.,
+    Knust, F., Cano Z., Filgas R., Pian E., Mazzali P., Fynbo J.P.U.,
+    Leloudas G., Afonso P.M.J., Delveaux C., Graham J.F., Rau A.,
+    Schmidl S., Schulze S., Tanga M., Updike A. C., Varela K.
+    <Astron. Astrophys. 617, A122 (2018)>
+    =2018A&A...617A.122K        (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Gamma rays ; Photometry, infrared ; Photometry, SDSS;
+              Photometry, ultraviolet
+Keywords: gamma-rays: bursts - gamma rays: bursts: individual: GRB 111209A -
+          gamma rays: bursts: individual: GRB 130925A
+
+Abstract:
+    Afterglows of Gamma-Ray Bursts (GRBs) are simple in the most basic
+    model, but can show many complex features. The ultra-long duration GRB
+    111209A, one of the longest GRBs ever detected, also has the
+    best-monitored afterglow in this rare class of GRBs. We want to
+    address the question whether GRB 111209A was a special event beyond
+    its extreme duration alone, and whether it is a classical GRB or
+    another kind of high-energy transient. The afterglow may yield
+    significant clues. We present afterglow photometry obtained in seven
+    bands with the GROND imager as well as in further seven bands with the
+    UVOT telescope on-board the Neil Gehrels Swift Observatory. The light
+    curve is analysed by multi-band modelling and joint fitting with
+    power-laws and broken power-laws, and we use the contemporaneous GROND
+    data to study the evolution of the spectral energy distribution. We
+    compare the optical afterglow to a large ensemble we have analysed in
+    earlier works, and especially to that of another ultra-long event, GRB
+    130925A. We furthermore undertake a photometric study of the host
+    galaxy. We find a strong, chromatic rebrightening event at ~0.8-days
+    after the GRB, during which the spectral slope becomes redder. After
+    this, the light curve decays achromatically, with evidence for a break
+    at about 9 days after the trigger. The afterglow luminosity is found
+    to not be exceptional. We find that a double-jet model is able to
+    explain the chromatic rebrightening. The afterglow features have been
+    detected in other events and are not unique. The duration aside, the
+    GRB prompt emission and afterglow parameters of GRB 111209A are in
+    agreement with the known distributions for these parameters. While the
+    central engine of this event may differ from that of classical GRBs,
+    there are multiple lines of evidence pointing to GRB 111209A resulting
+    from the core-collapse of a massive star with a stripped envelope.
+
+Description:
+    GROND g', r', i', z', J, H, Ks and UVOT uvw2, uvm2, uvw1, u, b, v,
+    white bands photometry of GRB 111209A. The file grond.dat contains 7
+    columns with: mid-time of the observation [ks after the GRB trigger],
+    mid-time of the observation [d after the GRB trigger], AB magnitude
+    not corrected for extinction [mag], magnitude error [mag], exposure
+    time of the observation [s], seeing [arcsec], filter The file uvot.dat
+    contains 7 columns with: mid-time of the observation [ks after the GRB
+    trigger], mid-time of the observation [d after the GRB trigger], AB
+    magnitude not corrected for extinction [mag], positive magnitude error
+    [mag], negative magnitude error [mag], exposure time of the
+    observation [s], seeing [arcsec], filter All data are in AB magnitudes
+    and not corrected for Galactic foreground extinction. 
+    
+    Midtimes are derived logarithmically,
+    t=10^([log(t(1)-t(0))+log(t(2)-t(0))]/2)^, hereby t(1.2) are the
+    absolute start and stop times, and t(0) is the Swift trigger time. To
+    obtain Vega magnitudes, it is uvw2_AB-uvw2_Vega=1.73mag,
+    uvm2_AB-uvm2_Vega=1.69mag, uvw1_AB-uvw1_Vega=1.51mag,
+    u_AB-u_Vega=1.02mag, b_AB-b_Vega=-0.13mag, v_AB-v_Vega=-0.01mag,
+    white_AB-white_Vega=0.80mag for UVOT data (as given at
+    https://swift.gsfc.nasa.gov/analysis/uvot_digest/zeropts.html), and
+    g'_AB-g'_Vega=-0.062mag, r'_AB-r'_Vega=0.178mag,
+    i'_AB-i'_Vega=0.410mag, z'_AB-z'_Vega=0.543mag, J_AB-J_Vega=0.929mag,
+    H_AB-H_Vega=1.394mag, Ks_AB-Ks_Vega=1.859mag for GROND data.
+    Corrections for Galactic extinction are, using E(B-V)=0.017 (Schlegel
+    et al., 1998ApJ...500..525S) and the Galactic extinction curve of
+    Cardelli et al. (1989ApJ...345..245C): A_uvw2_=0.134mag,
+    A_uvm2_=0.150mag, A_uvw1_=0.119mag, A_u=_0.085mag, A_b_=0.066mag,
+    A_v_=0.053mag, A_white_=0.084mag, A_g'_=0.066mag, A_r'_=0.046mag,
+    A_i'_=0.034mag, A_z'_=0.025mag, A_J_=0.015mag, A_H_=0.010mag,
+    A_Ks_=0.006mag.
+
+Objects:
+    ----------------------------------------------------
+       RA   (2000)   DE        Designation(s)
+    ----------------------------------------------------
+    00 57 22.64  -46 48 03.6   GRB 111209A = SN 2011kl
+    ----------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+grond.dat         47      329   GRB 111209A afterglow GROND photometry
+uvot.dat          50      231   GRB 111209A afterglow UVOT photometry
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: grond.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  8  F8.2  ks      Timeks    Time after trigger in ks
+  10- 19  F10.6 d       Timed     Time after trigger in days
+      21  A1    ---   l_mag       [>] Limit flag on mag
+  23- 28  F6.3  mag     mag       Magnitude in Band in (AB), not corrected for
+                                   extinction
+  30- 34  F5.3  mag   e_mag       ? Error in mag
+  36- 39  I4    s       TimeExp   Total exposure time
+  41- 44  F4.2  arcs    Seeing    Seeing in arcsec
+  46- 47  A2    ---     Band      [JHKs g'r'i'z'] Observed band
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: uvot.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  9  F9.4  ks      Timeks    Time after trigger in ks
+  11- 19  F9.6  d       Timed     Time after trigger in days
+      21  A1    ---   l_mag       [>] Limit flag on mag
+  23- 27  F5.2  mag     mag       Magnitude in Band in (AB), not corrected for
+                                   extinction
+  29- 32  F4.2  mag   E_mag       ? Positive error in mag
+  34- 37  F4.2  mag   e_mag       ? Negative error in mag
+  39- 44  F6.1  s       TimeExp   Total exposure time
+  46- 50  A5    ---     Band      [UBV uvw1 uvw2 uwm2 white] Observed band
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+     David Alexander Kann, kann(at)iaa.es
+
+================================================================================
+(End)                                        Patricia Vannier [CDS]  17-May-2018
