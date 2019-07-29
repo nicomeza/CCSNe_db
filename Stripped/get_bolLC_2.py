@@ -20,7 +20,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
                 if t_non>1000 and t_discov>1000:
                     t_0 = 0.5*(t_non + t_discov)
                     print "Taking t_0 as midpoint between last non detection and discovery"
-                    no_nebular = np.where(np.logeical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.35))[0]
+                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.35))[0]
                     if len(no_nebular)>1:
                         
                         scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \

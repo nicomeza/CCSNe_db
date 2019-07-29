@@ -1,6 +1,6 @@
-Filters used:g_AB	r_AB	i_AB	g_CSPI	r_CSPI	i_CSPI	B_CSPI	V_3014	Y_RC	J_RC1	H_RC
-Max entropy filter : B_CSPI 
+Filters used:g_AB	r_AB	i_AB	V_3014	Y_RC	J_RC1	H_RC
+Max entropy filter : V_3014 
 Number of data points : 8 
-Data points time range : (6.070,39.050) 
-Peak at 17.14 days past explosion.
-Number of data points before/after apparent peak (after 10 days past t_0) : (2/6)
+Data points time range : (5.080,39.050) 
+Peak at 12.20 days past explosion.
+Number of data points before/after apparent peak (after 10 days past t_0) : (1/7)
