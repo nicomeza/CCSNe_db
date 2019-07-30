@@ -9,13 +9,13 @@ sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = False
-get_peak = True
+compare_nis = True
+get_peak = False
 plot = True
 show = False
-Khatami = True
+Khatami = False
 check_t_0 = False
-check_type = True
+check_type = False
 Tail = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
@@ -278,22 +278,30 @@ if get_peak:
     Lfile.close()
 
 
-prentice_file = "BVRI_stats.dat"
-my_file = "Ni56_BVRI_peak.dat"
+prentice_file = "Full_stats.dat"
+my_file = "Ni56_BVRIYJH_peak.dat"
 
 if compare_nis:
 
     pl.close("all")
-    nis = np.genfromtxt('Prentice/%s'%prentice_file,\
-                            names=('SN','type','logLp','logLp_err1','logLp_err2','Mni','Mni_err1','Mni_err2','tp','tp_err','trise','trise_err','tdecay','tdecay_err','FWHM','FWHM_err'),\
-                            dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+    if prentice_file == "Full_stats.dat":
+        nis = np.genfromtxt('Prentice/%s'%prentice_file,\
+                                names=('SN','type','logLp','logLp_err1','logLp_err2','tp','tp_err','Mni','Mni_err1','Mni_err2'),\
+                                dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8'))
+        compare_items = [('Mni'),('logLp'),('tp')]
+    else:
+        nis = np.genfromtxt('Prentice/%s'%prentice_file,\
+                                names=('SN','type','logLp','logLp_err1','logLp_err2','Mni','Mni_err1','Mni_err2','tp','tp_err','trise','trise_err','tdecay','tdecay_err','FWHM','FWHM_err'),\
+                                dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+        compare_items = [('Mni'),('logLp'),('tp'),('trise'),('tdecay'),('FWHM')]
     my_nis = np.genfromtxt(my_file,\
-                               names=('SN','tp','Lp','logLp','Mni','Mni_K','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
-                               dtype=('S15','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+                               names=('SN','type','tp','Lp','logLp','Mni','Mni_K','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
+                               dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
     i1,i2 = overlap(my_nis['SN'],nis['SN'])
     
-    for item in [('Mni'),('logLp'),('tp'),('trise'),('tdecay'),('FWHM')]:
+    
+    for item in compare_items:
         print item 
         pl.figure()
         no_99 = np.logical_and(nis[i2][item] != 99.,my_nis[i1][item] != 99.)
@@ -316,7 +324,7 @@ if compare_nis:
             
             for sn,mni,mni2 in zip(my_nis[i1]['SN'][no_nan],my_nis[i1][item][no_nan],nis[i2][item][no_nan]):
                 pl.annotate(sn,(mni+0.005,mni2+0.005),size=7)
-            pl.savefig("%s_comp.png"%item)
+            pl.savefig("%s_%s_%s_comp.png"%(item,my_file.split('_')[1],prentice_file.split('_')[0]))
         else:
             pl.close()
     if show:

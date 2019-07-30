@@ -23,6 +23,8 @@ my_nis = np.genfromtxt(my_file,\
                            names=('SN','type','tp','Lp','logLp','Mni_peak','Mni_K','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
                            dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
+nis_II = [l.split() for l in open('SNII_Ni56.dat').readlines()[1:]]
+nis_II = [(sn,np.median(np.asarray(n.split(','),dtype='f8'))) for sn,n in nis_II]
 
 where_tail = np.where(~np.isnan(my_nis['Mni_tail']))[0]
 nis_compare = my_nis[where_tail]
@@ -40,16 +42,15 @@ ax.set_ylim(0,np.max(nis_compare['Mni_peak'])+0.05)
 pl.show()
 
 
-pl.hist(nis_compare['Mni_peak'],label='Peak',alpha=0.7)
-pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.7)
+pl.hist(nis_compare['Mni_peak'],label='Peak',alpha=0.5)
+pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
 
-pl.hist(nis_compare['Mni_K'],label='Khatami',alpha=0.7)
-pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.7)
+pl.hist(nis_compare['Mni_K'],label='Khatami',alpha=0.5)
+pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
-
 
 
 Ni_types = ['Mni_tail','Mni_K','Mni_peak'] 
@@ -90,15 +91,28 @@ for ni_type in Ni_types:
                     color=SN_plot[sn_type]['color'],label="IIb (%s)"%(len(where_type)))
     
     sn_type = "Ic"
-    where_type = np.where(np.logical_and(my_nis['type']!="IIb",~np.isnan(my_nis['%s'%ni_type])))[0]
+    where_type = np.where(np.logical_and(np.logical_and(my_nis['type']!="IIb",my_nis['type']!="Ic_GRB"),~np.isnan(my_nis['%s'%ni_type])))[0]
     if len(where_type)>1:
         print "Number of %s : %s"%(sn_type,len(where_type))
         sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
         ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
-                    color=SN_plot[sn_type]['color'],label="Ibc+GRB/BL (%s)"%len(where_type))
+                    color=SN_plot[sn_type]['color'],label="Ibc (%s)"%len(where_type))
+        
 
+    sorted_data_II = np.sort([x[1] for x in nis_II]) 
+    ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
+                color='r',label="II (%s)"%len(nis_II))
+    
     pl.title(ni_type)
     pl.legend(loc='upper left')
     ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
     pl.savefig("%s_hist_IIb-Ibc.png"%(ni_type))
     pl.show()
+
+
+
+for sn_type in SN_plot:
+    where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
+    print sn_type
+    for sn,ni_peak,ni_k,ni_tail in my_nis[['SN','Mni_peak','Mni_K','Mni_tail']][where_type]:
+        print sn,ni_peak,ni_k,ni_tail
