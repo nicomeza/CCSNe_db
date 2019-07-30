@@ -20,8 +20,8 @@ colormap = pl.cm.spectral
 
 my_file = "Ni56_BVRIYJH_peak.dat"
 my_nis = np.genfromtxt(my_file,\
-                           names=('SN','tp','Lp','logLp','Mni','Mni_K','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
-                           dtype=('S15','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+                           names=('SN','type','tp','Lp','logLp','Mni_peak','Mni_K','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
+                           dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
 
 where_tail = np.where(~np.isnan(my_nis['Mni_tail']))[0]
@@ -31,16 +31,16 @@ fig = pl.figure()
 ax = fig.add_subplot(111)
 
 nis_line = np.arange(0.0,0.5,0.1)
-ax.plot(nis_compare['Mni'],nis_compare['Mni_tail'],marker='o',linestyle='None')
+ax.plot(nis_compare['Mni_peak'],nis_compare['Mni_tail'],marker='o',linestyle='None')
 ax.plot(nis_line,nis_line)
 ax.set_xlabel(r"$\mathrm{Arnett} \ ^{56}Ni \ [M_\odot]$",size=15)
 ax.set_ylabel(r"$\mathrm{Tail} \ ^{56}Ni \ [M_\odot]$",size=15)
-ax.set_xlim(0,np.max(nis_compare['Mni'])+0.05)
-ax.set_ylim(0,np.max(nis_compare['Mni'])+0.05)
+ax.set_xlim(0,np.max(nis_compare['Mni_peak'])+0.05)
+ax.set_ylim(0,np.max(nis_compare['Mni_peak'])+0.05)
 pl.show()
 
 
-pl.hist(nis_compare['Mni'],label='Peak',alpha=0.7)
+pl.hist(nis_compare['Mni_peak'],label='Peak',alpha=0.7)
 pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.7)
 pl.legend()
 pl.show()
@@ -50,3 +50,55 @@ pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.7)
 pl.legend()
 pl.show()
 
+
+
+Ni_types = ['Mni_tail','Mni_K','Mni_peak'] 
+
+
+for ni_type in Ni_types:
+
+    fig = pl.figure()
+    ax = fig.add_subplot(111)
+
+    for sn_type in SN_plot:
+        
+        #if sn_type not in ['Ic_BL','Ic_GRB','Ibc','Ib']:
+        where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
+        if len(where_type)>1:
+            sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
+            ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,color=SN_plot[sn_type]['color'],label="%s (%s)"%(sn_type,len(where_type)))
+            #ax.hist(my_nis['%s'%ni_type][where_type],color=SN_plot[sn_type]['color'],label=sn_type,alpha=0.1,ls='dashed',cumulative=True,normed=True,fill=None)
+
+    pl.title(ni_type)
+    pl.legend(loc='upper left')
+    pl.savefig("%s_hist_subtypes.png"%(ni_type))
+    pl.show()
+
+    
+    
+for ni_type in Ni_types:
+
+    fig = pl.figure()
+    ax = fig.add_subplot(111)
+   
+    sn_type = "IIb"
+    where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
+    if len(where_type)>1:
+        print "Number of %s : %s"%(sn_type,len(where_type))
+        sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
+        ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color=SN_plot[sn_type]['color'],label="IIb (%s)"%(len(where_type)))
+    
+    sn_type = "Ic"
+    where_type = np.where(np.logical_and(my_nis['type']!="IIb",~np.isnan(my_nis['%s'%ni_type])))[0]
+    if len(where_type)>1:
+        print "Number of %s : %s"%(sn_type,len(where_type))
+        sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
+        ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color=SN_plot[sn_type]['color'],label="Ibc+GRB/BL (%s)"%len(where_type))
+
+    pl.title(ni_type)
+    pl.legend(loc='upper left')
+    ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
+    pl.savefig("%s_hist_IIb-Ibc.png"%(ni_type))
+    pl.show()

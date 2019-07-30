@@ -73,7 +73,7 @@ if get_peak:
 
     Lfile = open('Ni56_%s_peak.dat'%band_string[0],'w')
     Lfile.write("###############%s#######################\n"%band_string[0])
-    Lfile.write("# SN # tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t M_ni_tail t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
+    Lfile.write("# SN \t SN type \t tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t M_ni_tail t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
         band_string = ("BVRIYJH","BVRIYJH")
         #band_string = ("BVRI","BVRcI")
@@ -264,7 +264,7 @@ if get_peak:
                     else:
                         pl.close("all")
                     
-                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,tp,10**Lp,Lp,M_p,Ni_Khatami,Ni_tail,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
+                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,sn_type,tp,10**Lp,Lp,M_p,Ni_Khatami,Ni_tail,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
                 print s 
                 Lfile.write(s)
                 os.chdir(current_dir)
