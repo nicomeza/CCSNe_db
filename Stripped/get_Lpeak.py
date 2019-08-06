@@ -9,13 +9,13 @@ sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
-compare_nis = True
+compare_nis = False
 get_peak = False
 plot = True
 show = False
 Khatami = False
-check_t_0 = False
-check_type = False
+check_t_0 = True
+check_type = True
 Tail = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
@@ -368,7 +368,7 @@ if compare_nis:
 
 if Khatami:    
 
-    betas = np.arange(0.1,2.0,0.05)
+    betas = np.arange(0.6,2.1,0.05)
 
     t_peak = 20
     Lps = np.arange(41.5,43,1)
@@ -419,7 +419,7 @@ if Khatami:
 
 
     Lp = 42.5
-    t_ps = np.arange(15,40,5)
+    t_ps = np.arange(5,40,5)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
     pl.gca().set_color_cycle(filters_colors)
     
@@ -436,8 +436,12 @@ if Khatami:
                 Ks.append(0.0)
 
         pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp)
-    
+        
     #pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
+        
+    for beta_SN,beta_label in [(9/8.,"Ibc"),(0.82,"IIb/pec"),(2.0,'Generic/Mixed'),(0.7,'Central/Helium')]:
+        pl.axvline(beta_SN,linestyle='--',linewidth=4,color='k',alpha=0.7)
+        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.07,1.3),size=20,rotation=90)
 
     pl.xlabel(r'$\beta$',size=18)
     pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$',size=18)
@@ -552,15 +556,15 @@ if check_t_0:
     pl.legend(loc='best',prop={'size':10},ncol=2)
     pl.show()
                 
-    trs = np.arange(15,30,2.5)
+    trs = np.arange(7.5,30,2.5)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(trs))]       
     pl.gca().set_color_cycle(filters_colors)
-    delta_ts = np.arange(-7,6,1)
+    delta_ts = np.arange(-7,8,1)
     for tr in trs:
 
         pl.plot(delta_ts,Q_t(tr,1)/Q_t(tr-delta_ts,1),label=r"$t_{rise} \ =\ %2.1f $"%tr)
         
-    pl.legend(loc='best',prop={"size":15}) 
+    pl.legend(loc='best',prop={"size":15},ncol=2) 
     pl.xlabel(r"$\Delta t_0$",size=18)
     pl.ylabel(r"$M(^{56}\mathrm{Ni})(t_{rise}-\Delta t_0)/M(^{56}\mathrm{Ni})(t_{rise})$",size=18)
     pl.show()

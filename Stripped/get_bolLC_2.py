@@ -72,7 +72,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
     return scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter]
 
 
-def get_boundaries(FILTER_ZPS,show=False,plot=True):
+def get_boundaries(FILTER_ZPS,show=False,plot=True,SN_name="None"):
     
     tmin_max,tmax_min = 10000. , -1.0
     max_cadence,min_cadence = 0.,100.0
@@ -106,7 +106,18 @@ def get_boundaries(FILTER_ZPS,show=False,plot=True):
         t = scope['jd_%s'%lco_name]
         
         if plot:
-            pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label=lco_filter)
+            split_filter = lco_filter.split('_')
+            if len(split_filter)>1:
+                if split_filter[1] in ['CSPI','3014','3009','9844']:
+                    pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label="%s (%s)"%(split_filter[0],"Swope"))
+                elif split_filter[1] in ['WIRC']:
+                    pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label="%s (%s)"%(split_filter[0],"du Pont"))
+                elif split_filter[1] in ['RC','RC1','RC2']:
+                    pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label="%s (%s)"%(split_filter[0],"RetroCam"))
+                else:
+                    pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label="%s (%s)"%(split_filter[0],split_filter[1]))
+            else:
+                pl.errorbar(t,mag+offset,yerr=err,fmt='o',linestyle='None',label=lco_filter)
             offset += 1.0
 
         tmax,tmin = np.max(t),np.min(t)
@@ -134,6 +145,9 @@ def get_boundaries(FILTER_ZPS,show=False,plot=True):
     if plot:
         pl.axvline(tmin_max,linestyle='--',color='k')
         pl.axvline(tmax_min,linestyle='--',color='k')
+        pl.xlabel(r'$\mathrm{Time \ since \ explosion}$')
+        pl.ylabel(r'$\mathrm{Magnitude \ (arbitrary)}$')
+        pl.title(r'$%s$'%(SN_name))
         pl.legend(loc='best',ncol=2,prop={'size':9})
         pl.gca().invert_yaxis()
         pl.savefig("%s_lcs.png"%SN)
@@ -317,7 +331,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         
         print "# ---------- FILTER_ZPS filters ----------------------------"
 
-        tmax_min,tmin_max,max_entropy_filter = get_boundaries(FILTER_ZPS)
+        tmax_min,tmin_max,max_entropy_filter = get_boundaries(FILTER_ZPS,SN_name=SN)
         
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         #inter_t = scope['jd_%s'%min_cadence_filt]
@@ -460,7 +474,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
             
             flux = np.asarray(flux)
             ax.errorbar(sorted_lambdas,flux*c_cms/((sorted_lambdas*1e-4)**2.),\
-                        yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.2f'%epoch)
+                        yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.2f'%epoch,alpha=0.7)
             
         trans = ax.get_xaxis_transform()
 
@@ -472,7 +486,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
             band_string+=str(band[0].split('_')[0])
             print band,lam,max_flux
             ax.axvline(lam,linestyle='--',color='k',alpha=0.4)
-            ax.annotate(str(band[0][0:2]),(lam+5,1.05),xycoords=trans,size=8,rotation=90)
+            ax.annotate(str(band[0].split("_")[0]),(lam+5,1.07),xycoords=trans,size=11,rotation=90)
             
         ax.set_title(SN)
         ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$')

@@ -3,6 +3,8 @@ import pyqt_fit.nonparam_regression as smooth
 from pyqt_fit import npr_methods
 from scipy.misc import derivative
 from scipy.optimize import newton,brentq
+from astroML.plotting import hist
+
 
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
@@ -27,6 +29,8 @@ nis_II = [l.split() for l in open('SNII_Ni56.dat').readlines()[1:]]
 nis_II = [(sn,np.median(np.asarray(n.split(','),dtype='f8'))) for sn,n in nis_II]
 
 where_tail = np.where(~np.isnan(my_nis['Mni_tail']))[0]
+where_rise = np.where(~np.isnan(my_nis['tp']))[0]
+nis_rise = my_nis[where_rise]
 nis_compare = my_nis[where_tail]
 
 fig = pl.figure()
@@ -52,9 +56,27 @@ pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
 
+## Rise time distributions ##
+
+for sn_type in SN_plot:
+    
+    where_type = np.where(nis_rise['type']==sn_type)[0]
+    if len(where_type)>0:
+        print sn_type, len(where_type)
+        if len(where_type)>3:
+            hist(nis_rise['tp'][where_type],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='knuth')
+        else:
+            hist(nis_rise['tp'][where_type],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='blocks')
+        pl.axvline(np.median(nis_rise['tp'][where_type]),linestyle='--',color=SN_plot[sn_type]['color'],linewidth=5)
+    
+pl.legend(loc='best')
+pl.xlabel(r'$\mathrm{Rise \ time \ [days]}$',size=15)
+pl.savefig("rise_hist_subtypes.png")
+pl.show()
+
+## Nickel distributions ####
 
 Ni_types = ['Mni_tail','Mni_K','Mni_peak'] 
-
 
 for ni_type in Ni_types:
 
