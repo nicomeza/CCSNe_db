@@ -37,12 +37,39 @@ fig = pl.figure()
 ax = fig.add_subplot(111)
 
 nis_line = np.arange(0.0,0.5,0.1)
-ax.plot(nis_compare['Mni_peak'],nis_compare['Mni_tail'],marker='o',linestyle='None')
-ax.plot(nis_line,nis_line)
+
+for sn_type in SN_plot:
+    where_type = np.where(nis_compare['type']==sn_type)[0]
+    if len(where_type)>0:
+        ax.plot(nis_compare['Mni_peak'][where_type],nis_compare['Mni_tail'][where_type],\
+                    marker=SN_plot[sn_type]["marker"],color=SN_plot[sn_type]["color"],linestyle='None',label=r"%s"%SN_plot[sn_type]["string"],markersize=10,alpha=0.8)
+
+ax.plot(nis_line,nis_line,color='k',linestyle='--')
 ax.set_xlabel(r"$\mathrm{Arnett} \ ^{56}Ni \ [M_\odot]$",size=15)
 ax.set_ylabel(r"$\mathrm{Tail} \ ^{56}Ni \ [M_\odot]$",size=15)
-ax.set_xlim(0,np.max(nis_compare['Mni_peak'])+0.05)
-ax.set_ylim(0,np.max(nis_compare['Mni_peak'])+0.05)
+ax.set_xlim(0,np.max(nis_compare['Mni_peak'])+0.01)
+ax.set_ylim(0,np.max(nis_compare['Mni_peak'])+0.01)
+pl.legend(loc='best')
+pl.show()
+
+
+fig = pl.figure()
+ax = fig.add_subplot(111)
+
+nis_line = np.arange(0.0,0.5,0.1)
+
+for sn_type in SN_plot:
+    where_type = np.where(my_nis['type']==sn_type)[0]
+    if len(where_type)>0:
+        ax.plot(my_nis['Mni_peak'][where_type],my_nis['Mni_K'][where_type],\
+                    marker=SN_plot[sn_type]["marker"],color=SN_plot[sn_type]["color"],linestyle='None',label=r"%s"%SN_plot[sn_type]["string"],markersize=10,alpha=0.8)
+
+ax.plot(nis_line,nis_line,color='k',linestyle='--')
+ax.set_xlabel(r"$\mathrm{Arnett} \ ^{56}Ni \ [M_\odot]$",size=15)
+ax.set_ylabel(r"$\mathrm{Khatami} \ ^{56}Ni \ [M_\odot]$",size=15)
+ax.set_xlim(0,np.max(my_nis['Mni_peak'])+0.01)
+ax.set_ylim(0,np.max(my_nis['Mni_peak'])+0.01)
+pl.legend(loc='best')
 pl.show()
 
 
@@ -57,6 +84,24 @@ pl.legend()
 pl.show()
 
 ## Rise time distributions ##
+
+for sn_type in SN_plot:
+    
+    where_type = np.where(SN_DATA['type']==sn_type)[0]
+    if len(where_type)>0:
+        print sn_type, len(where_type)
+        if len(where_type)>3:
+            hist(SN_DATA[where_type]['hostredshift'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='knuth')
+        else:
+            hist(SN_DATA[where_type]['hostredshift'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='blocks')
+        pl.axvline(np.median(SN_DATA[where_type]['hostredshift']),linestyle='--',color=SN_plot[sn_type]['color'],linewidth=5)
+    
+pl.legend(loc='best')
+pl.xlabel(r'$\mathrm{Redshift}$',size=15)
+pl.savefig("z_hist_subtypes.png")
+pl.show()
+
+## redshift distributions ##
 
 for sn_type in SN_plot:
     
@@ -92,8 +137,8 @@ for ni_type in Ni_types:
             ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,color=SN_plot[sn_type]['color'],label="%s (%s)"%(sn_type,len(where_type)))
             #ax.hist(my_nis['%s'%ni_type][where_type],color=SN_plot[sn_type]['color'],label=sn_type,alpha=0.1,ls='dashed',cumulative=True,normed=True,fill=None)
 
-    pl.title(ni_type)
-    pl.legend(loc='upper left')
+    pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
+    pl.legend(loc='best')
     pl.savefig("%s_hist_subtypes.png"%(ni_type))
     pl.show()
 
@@ -125,8 +170,8 @@ for ni_type in Ni_types:
     ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
                 color='r',label="II (%s)"%len(nis_II))
     
-    pl.title(ni_type)
-    pl.legend(loc='upper left')
+    pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
+    pl.legend(loc='best')
     ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
     pl.savefig("%s_hist_IIb-Ibc.png"%(ni_type))
     pl.show()

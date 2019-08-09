@@ -14,9 +14,9 @@ get_peak = False
 plot = True
 show = False
 Khatami = False
-check_t_0 = True
+check_t_0 = False
 check_type = True
-Tail = True
+Tail = False
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
@@ -578,6 +578,7 @@ ax1 = fig1.add_subplot(111)
 fig2 = pl.figure()
 ax2 = fig2.add_subplot(111)
 
+
 if check_type:
 
     
@@ -638,6 +639,11 @@ if check_type:
                 ax1.plot(M_p_0,Ni_Khatami_0,marker=SN_plot[SN_type]["marker"],color=SN_plot[SN_type]["color"],markersize=9,alpha=0.9)
                 ax2.plot(np.log10(M_p_0),np.log10(M_p_0)-np.log10(Ni_Khatami_0),marker=SN_plot[SN_type]["marker"],color=SN_plot[SN_type]["color"],markersize=9,alpha=0.9)
                 os.chdir(current_dir)
+
+                if SN_plot[SN_type].has_key("N"):
+                    SN_plot[SN_type]["N"] += 1
+                else:
+                    SN_plot[SN_type]["N"] = 1
             except:
                 os.chdir(current_dir)
                 print "Failed"
@@ -648,8 +654,9 @@ if check_type:
         
     for type in SN_plot:
         
-        ax1.plot(-1,-1,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
-        ax2.plot(-10,-10,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
+        if SN_plot[type].has_key("N"):
+            ax1.plot(-1,-1,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
+            ax2.plot(-10,-10,marker=SN_plot[type]["marker"],color=SN_plot[type]["color"],label=r"%s"%SN_plot[type]["string"],linestyle='None',markersize=10)
 
     ax1.legend(loc='best',prop={'size':18})
     ax2.legend(loc='best',prop={'size':18})
