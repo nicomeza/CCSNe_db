@@ -16,7 +16,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
         print filter_file,filter
         try:
             scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
-            if t_0<1000:
+            if t_0<1000 and t_0>0.0:
                 if t_non>1000 and t_discov>1000:
                     t_0 = 0.5*(t_non + t_discov)
                     print "Taking t_0 as midpoint between last non detection and discovery"
@@ -310,9 +310,9 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
     #use_filters = ['B','V','R','I','R_c']
     #use_filters = ['B_uvot','V_uvot','R','I','R_c']
     try: 
-    
-        os.chdir("%s/"%SN)
         sn_log = open("%s.log"%SN,'w')
+        os.chdir("%s/"%SN)
+        
         # ---------------------LOAD PHOTOMETRY ----------------------------------------------------
 
         for filter in zip(use_filters):

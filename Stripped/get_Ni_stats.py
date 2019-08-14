@@ -83,7 +83,7 @@ pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
 
-## Rise time distributions ##
+## redshift distributions ##
 
 for sn_type in SN_plot:
     
@@ -101,8 +101,47 @@ pl.xlabel(r'$\mathrm{Redshift}$',size=15)
 pl.savefig("z_hist_subtypes.png")
 pl.show()
 
-## redshift distributions ##
+## reddening distributions ##
 
+for sn_type in SN_plot:
+    
+    where_type = np.where(SN_DATA['type']==sn_type)[0]
+    if len(where_type)>0:
+        print sn_type, len(where_type)
+        if len(where_type)>3:
+            hist(SN_DATA[where_type]['sn_ebv'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='knuth')
+        else:
+            hist(SN_DATA[where_type]['sn_ebv'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='blocks')
+        pl.axvline(np.median(SN_DATA[where_type]['sn_ebv']),linestyle='--',color=SN_plot[sn_type]['color'],linewidth=5)
+    
+pl.legend(loc='best')
+pl.xlabel(r'$E(B-V)$',size=15)
+pl.savefig("EBV_hist_subtypes.png")
+pl.show()
+
+## deltat distributions ##
+
+for sn_type in SN_plot:
+    
+    where_type = SN_DATA['type']==sn_type
+    where_t_0 = np.logical_and(SN_DATA['t_non_det']>99.,SN_DATA['t_discov']>99.)
+    where_type = np.where(np.logical_and(where_t_0,where_type))[0]
+    if len(where_type)>0:
+        print sn_type, len(where_type)
+        if len(where_type)>3:
+            hist(SN_DATA[where_type]['t_non_det']-SN_DATA[where_type]['t_discov'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='knuth')
+        else:
+            hist(SN_DATA[where_type]['t_non_det']-SN_DATA[where_type]['t_discov'],label="%s (%s)"%(sn_type,len(where_type)),color=SN_plot[sn_type]['color'],alpha=0.5,bins='blocks')
+        pl.axvline(np.median(SN_DATA[where_type]['t_non_det']-SN_DATA[where_type]['t_discov']),linestyle='--',color=SN_plot[sn_type]['color'],linewidth=5)
+    
+pl.legend(loc='best')
+pl.xlabel(r'$\Delta t$',size=15)
+pl.savefig("dt_hist_subtypes.png")
+pl.show()
+
+
+
+## Rise time distributions ##
 for sn_type in SN_plot:
     
     where_type = np.where(nis_rise['type']==sn_type)[0]
