@@ -7,6 +7,7 @@ import argparse
 import pyqt_fit.nonparam_regression as smooth
 from pyqt_fit import npr_methods
 from scipy.stats import entropy
+import bisect 
 
 def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
     
@@ -32,6 +33,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
                         print scope['jd_%s'%filter][no_nebular]-t_0
                         filter_removed = use_filters.pop(use_filters.index(filter))
                         print "LACK OF DATA : filter %s removed"%(filter_removed)
+
                 else:
                     print "Cant use. No t_0 and no discovery/non detection"
                     filter_removed = use_filters.pop(use_filters.index(filter))
@@ -90,10 +92,7 @@ def get_boundaries(FILTER_ZPS,show=False,plot=True,SN_name="None"):
         lco_name = lco_filter#lcogt_names[lcogt_filters.index(lco_filter)]
         print lco_filter
         print filter['lambda']
-        
-        x0 = 1/(filter['lambda']*1e-4)
-        R_x = (R_V*a_x(x0)+b_x(x0))
-        
+                
         try:
             scope['mag_%s'%lco_name]
             if len(scope['mag_%s'%lco_name])<=1:
@@ -101,10 +100,10 @@ def get_boundaries(FILTER_ZPS,show=False,plot=True,SN_name="None"):
         except:
             continue
         
-        mag = scope['mag_%s'%lco_name] - R_x*E_B_V   # Deredenned magnitudes 
+        mag = scope['mag_%s'%lco_name] 
         err = scope['err_%s'%lco_name]
         t = scope['jd_%s'%lco_name]
-        
+
         if plot:
             split_filter = lco_filter.split('_')
             if len(split_filter)>1:
@@ -143,6 +142,7 @@ def get_boundaries(FILTER_ZPS,show=False,plot=True,SN_name="None"):
             min_cadence = len(t)/dtmax
     
     if plot:
+
         pl.axvline(tmin_max,linestyle='--',color='k')
         pl.axvline(tmax_min,linestyle='--',color='k')
         pl.xlabel(r'$\mathrm{Time \ since \ explosion}$')
@@ -281,8 +281,8 @@ CSP_SN = np.genfromtxt('./CSP/CSP_SN.dat',usecols=np.arange(len(csp_names)),dtyp
 print " Convert photometry to fluxes to obtain SED "
 
 
-sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
-sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','mw_ebv','host_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
 SN_DATA = np.genfromtxt(IN_FILE,dtype={'names':sn_labels,'formats':sn_formats})
 
@@ -301,8 +301,9 @@ Lps = []
 tps = []
 
 show = False
+host_redd = True
 
-for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
+for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','mw_ebv','host_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
 
     print "####### %s ########## \n"%SN
     use_filters = ['B_CSPI','B','B_AB','V','V_3014','V_3009','V_9844','V_AB','R','R_AB','I','I_AB','g','g_CSPI','g_AB','r','r_CSPI','r_AB','i','i_CSPI','i_AB','R_c',\
@@ -331,12 +332,51 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         
         print "# ---------- FILTER_ZPS filters ----------------------------"
 
-        tmax_min,tmin_max,max_entropy_filter = get_boundaries(FILTER_ZPS,SN_name=SN)
+        tmax_min,tmin_max,max_entropy_filter = get_boundaries(FILTER_ZPS,SN_name=SN,plot=False)
         
         baseline = np.arange(int(tmax_min)+1,int(tmin_max),1)
         #inter_t = scope['jd_%s'%min_cadence_filt]
         inter_t = scope['jd_%s'%max_entropy_filter]
+        max_t_inter,min_t_inter = np.max(inter_t),np.min(inter_t)
         where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
+
+        if max_t_inter>tmin_max: 
+            next_inter = inter_t[where_inter[-1]+1]
+            if (next_inter - inter_t[where_inter[-1]])<15.:
+                new_mag,new_err = inter_sample(tmin_max,inter_t,scope['mag_%s'%max_entropy_filter],yerr=scope['err_%s'%max_entropy_filter],\
+                                                            n_sample=500,plot=False,confidence=False,honest_mean=True)
+                print "Inserting (%2.2f,%2.2f,%2.2f) in %s"%(tmin_max,new_mag,new_err,max_entropy_filter)
+                scope['jd_%s'%max_entropy_filter] = list(scope['jd_%s'%max_entropy_filter])
+                scope['mag_%s'%max_entropy_filter] = list(scope['mag_%s'%max_entropy_filter])
+                scope['err_%s'%max_entropy_filter] = list(scope['err_%s'%max_entropy_filter])
+                bisect.insort(scope['jd_%s'%max_entropy_filter],tmin_max) 
+                insert_index = scope['jd_%s'%max_entropy_filter].index(tmin_max)
+                scope['jd_%s'%max_entropy_filter] = np.array(scope['jd_%s'%max_entropy_filter])
+                scope['mag_%s'%max_entropy_filter] = np.array(scope['mag_%s'%max_entropy_filter][0:insert_index]+[new_mag]+scope['mag_%s'%max_entropy_filter][insert_index:])
+                scope['err_%s'%max_entropy_filter] = np.array(scope['err_%s'%max_entropy_filter][0:insert_index]+[new_err]+scope['err_%s'%max_entropy_filter][insert_index:])
+
+        inter_t = scope['jd_%s'%max_entropy_filter]
+        where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
+        
+        if min_t_inter<tmax_min: 
+            
+            prev_inter = inter_t[where_inter[0]-1]
+            if (-prev_inter + inter_t[where_inter[0]])<10.:
+                new_mag,new_err = inter_sample(tmax_min,inter_t,scope['mag_%s'%max_entropy_filter],yerr=scope['err_%s'%max_entropy_filter],\
+                                                            n_sample=500,plot=False,confidence=False,honest_mean=True)
+                print "Inserting (%2.2f,%2.2f,%2.2f) in %s"%(tmax_min,new_mag,new_err,max_entropy_filter)
+                scope['jd_%s'%max_entropy_filter] = list(scope['jd_%s'%max_entropy_filter])
+                scope['mag_%s'%max_entropy_filter] = list(scope['mag_%s'%max_entropy_filter])
+                scope['err_%s'%max_entropy_filter] = list(scope['err_%s'%max_entropy_filter])
+                bisect.insort(scope['jd_%s'%max_entropy_filter],tmax_min) 
+                insert_index = scope['jd_%s'%max_entropy_filter].index(tmax_min)
+                scope['jd_%s'%max_entropy_filter] = np.array(scope['jd_%s'%max_entropy_filter])
+                scope['mag_%s'%max_entropy_filter] = np.array(scope['mag_%s'%max_entropy_filter][0:insert_index]+[new_mag]+scope['mag_%s'%max_entropy_filter][insert_index:])
+                scope['err_%s'%max_entropy_filter] = np.array(scope['err_%s'%max_entropy_filter][0:insert_index]+[new_err]+scope['err_%s'%max_entropy_filter][insert_index:])
+                
+        inter_t = scope['jd_%s'%max_entropy_filter]
+        where_inter = np.where(np.logical_and(inter_t <= tmin_max + 0.8 ,inter_t >= tmax_min - 0.8))[0]
+        
         sn_log.write("Filters used:")
         sn_log.write("\t".join(FILTER_ZPS['filter'])+"\n")
         sn_log.write("Max entropy filter : %s \n"%max_entropy_filter)
@@ -368,7 +408,10 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
             R_x = (R_V*a_x(x0)+b_x(x0))
     
             try:
-                mag = scope['mag_%s'%lco_name] - R_x*E_B_V   # Deredenned magnitudes 
+                if host_E_B_V<99 and host_redd:
+                    mag = scope['mag_%s'%lco_name] - R_x*(mw_E_B_V+host_E_B_V)   # Deredenned magnitudes 
+                else:
+                    mag = scope['mag_%s'%lco_name] - R_x*mw_E_B_V   # Deredenned magnitudes 
             except:
                 continue
                 print "Fail"
@@ -428,7 +471,7 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
                 
         pl.axvline(tmin_max,linestyle='--',color='k')
         pl.axvline(tmax_min,linestyle='--',color='k')
-        pl.legend()
+        pl.legend(loc='best',ncol=2,prop={'size':8})
         pl.gca().invert_yaxis()
         pl.savefig("%s_inter_lcs.png"%SN)
         if show:
@@ -517,8 +560,8 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         L_bol = []
         M_bol = []
         Lfile = open('%s_Lbol_%s.dat'%(SN,band_string),'w')
-        Lfile.write("## SN \t z \t E_B_V_total \t d [Mpc] \t t_0 \n")
-        Lfile.write("## %s \t %s \t %s \t %s \t %s \n"%(SN,z_SN,E_B_V,d_L,t_0))
+        Lfile.write("## SN \t z \t MW_E_B_V \t host E_B_V d [Mpc] \t t_0 \n")
+        Lfile.write("## %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,z_SN,mw_E_B_V,host_E_B_V,d_L,t_0))
         Lfile.write("###############%s#######################\n"%band_string)
         Lfile.write("# t-t_0 \t Lbol [erg/s] \t log(Lbol) \t M_ni\n")
         int_nu = False
@@ -576,8 +619,10 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         try:
             os.chdir(current_dir)
             sn_log.close()
+            pl.close()
         except:
             sn_log.close()
+            pl.close()
             print "No diretory %s"%current_dir
 
     except:
@@ -585,12 +630,13 @@ for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0',
         print "No directory %s/"%SN
         os.chdir(current_dir)
         sn_log.close()
+        pl.close()
         continue
 
 try: 
 
     os.chdir(current_dir)
-
+    
 except:
 
     print "No diretory %s"%current_dir

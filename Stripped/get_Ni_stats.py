@@ -4,7 +4,7 @@ from pyqt_fit import npr_methods
 from scipy.misc import derivative
 from scipy.optimize import newton,brentq
 from astroML.plotting import hist
-
+from scipy import stats
 
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
@@ -166,12 +166,13 @@ for ni_type in Ni_types:
 
     fig = pl.figure()
     ax = fig.add_subplot(111)
-
+    print ni_type
     for sn_type in SN_plot:
-        
+        print sn_type
         #if sn_type not in ['Ic_BL','Ic_GRB','Ibc','Ib']:
         where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
         if len(where_type)>1:
+            print stats.ks_2samp(my_nis['%s'%ni_type][where_type],[x[1] for x in nis_II])
             sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
             ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,color=SN_plot[sn_type]['color'],label="%s (%s)"%(sn_type,len(where_type)))
             #ax.hist(my_nis['%s'%ni_type][where_type],color=SN_plot[sn_type]['color'],label=sn_type,alpha=0.1,ls='dashed',cumulative=True,normed=True,fill=None)
@@ -216,9 +217,36 @@ for ni_type in Ni_types:
     pl.show()
 
 
+sorted_data_II = np.sort([x[1] for x in nis_II]) 
+
+for ni_type in Ni_types:
+
+    fig = pl.figure()
+    ax = fig.add_subplot(111)
+   
+    sn_type = "Ic"
+    where_type = np.where(np.logical_and(np.logical_and(my_nis['type']!="Ic_BL",my_nis['type']!="Ic_GRB"),~np.isnan(my_nis['%s'%ni_type])))[0]
+    if len(where_type)>1:
+        print "Number of %s : %s"%(sn_type,len(where_type))
+        sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
+        ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color=SN_plot[sn_type]['color'],label="Ibc (%s)"%len(where_type))
+        
+    print stats.ks_2samp(my_nis['%s'%ni_type][where_type],sorted_data_II)    
+    ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
+                color='r',label="II (%s)"%len(nis_II))
+    
+    pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
+    pl.legend(loc='best')
+    ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
+    pl.savefig("%s_hist_SESN.png"%(ni_type))
+    pl.show()
+
+
 
 for sn_type in SN_plot:
     where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
     print sn_type
+    print stats.ks_2samp(my_nis['Mni_tail'][where_type],[x[1] for x in nis_II])
     for sn,ni_peak,ni_k,ni_tail in my_nis[['SN','Mni_peak','Mni_K','Mni_tail']][where_type]:
         print sn,ni_peak,ni_k,ni_tail

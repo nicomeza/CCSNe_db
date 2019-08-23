@@ -3,6 +3,11 @@ import pyqt_fit.nonparam_regression as smooth
 from pyqt_fit import npr_methods
 from scipy.misc import derivative
 from scipy.optimize import newton,brentq
+import itertools 
+from matplotlib.lines import Line2D
+
+prop_cycle = pl.rcParams['axes.color_cycle']
+plot_pairs = list(itertools.product(prop_cycle,Line2D.filled_markers))
 
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
@@ -13,9 +18,9 @@ compare_nis = False
 get_peak = False
 plot = True
 show = False
-Khatami = False
+Khatami = True
 check_t_0 = False
-check_type = True
+check_type = False
 Tail = False
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
@@ -27,7 +32,7 @@ colormap = pl.cm.spectral
 def L_peak_explicit(x,Mni=0.1,t_peak=20):
 
     A,B,C,D,E,F = 1.0402,-2.4935,-84.23,-0.28336,-0.75684,86.72
-    t_ni = 8.8        # niquel decay [days]                                                                                                                                        
+    t_ni = 8.8        # niquel decay [days]                                                                                       
     t_co = 111.3      # Cobalt decay [days]  
     x_ni = x/t_ni
     x_co = x/t_co
@@ -45,6 +50,23 @@ def Ni_K(Lpeak,tpeak,beta,Ni_min=0.01,Ni_max = 1.0):
     return brentq(F,Ni_min,Ni_max)'''
     F =  lambda x : L_peak(x,Q_t,t_peak=tpeak,beta=beta)[0]-Lpeak
     return brentq(F,Ni_min,Ni_max)
+
+def Ni_K2(Lpeak,tpeak,L_heat,beta=1.0):
+    
+    I = 2. * integrate.quad(lambda x: x*L_heat(x,1.0), 0,beta*tpeak)[0]
+    return Lpeak * beta**2. * tpeak**2. / I 
+
+def Ni_K3(Lpeak,tpeak,beta=1.0):
+    t_ni = 8.8        # niquel decay [days]                                                                                       
+    t_co = 111.3      # Cobalt decay [days]  
+    x = beta*tpeak
+    x_ni = x/t_ni
+    x_co = x/t_co
+    e_ni = 6.395*1e43
+    e_co = 1.362*1e43
+    corcho1 = e_ni*t_ni*(t_ni*(1-np.exp(-x_ni)) - x*np.exp(-x_ni))
+    corcho2 = e_co*t_co*(t_co*(1-np.exp(-x_co)) - x*np.exp(-x_co))
+    return x**2 * Lpeak / 2. / (corcho1+corcho2)
 
 def weird_Ni(t,Mni,t_m=1.0):
     
@@ -70,14 +92,25 @@ inflection = False
 pl.close("all")
 
 if get_peak:
+    
+    if plot:
+        fig1 = pl.figure()
+        ax1 = fig1.add_subplot(111)
+        np.random.shuffle(plot_pairs)
 
     Lfile = open('Ni56_%s_peak.dat'%band_string[0],'w')
     Lfile.write("###############%s#######################\n"%band_string[0])
     Lfile.write("# SN \t SN type \t tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t M_ni_tail t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
+        
         band_string = ("BVRIYJH","BVRIYJH")
         #band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
+
+        if plot:
+            fig2 = pl.figure()
+            ax2 = fig2.add_subplot(111)
+    
         try: 
             os.chdir("%s/"%SN)
             t_half_1,t_half_2,der_at_inf,der_at_inf_2,Ni_tail= None,None,None,None,None
@@ -152,19 +185,20 @@ if get_peak:
 
                 if plot:
 
-                    pl.figure()
-                    pl.plot(grid_full,y_grid_full,linestyle='--',color='g')
-                    pl.plot(grid,y_grid,color='b')
-                    pl.plot(t,logL,marker='o',color='k',linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
-                    pl.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
+                    color,marker = plot_pairs[np.where(SN_DATA['sn']==SN)[0][0]]
+                    ax2.plot(grid_full,y_grid_full,linestyle='--',color='g')
+                    ax2.plot(grid,y_grid,color='b')
+                    ax2.plot(t,logL,marker='o',color='k',linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
+                    ax1.plot(t,logL,marker=marker,color=color,linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
+                    ax2.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
                     
                     if Tail:
 
-                        pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
-                        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.2),size=20)
-                        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.12),size=20)
+                        ax2.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.2),size=20)
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.12),size=20)
                     else:
-                        pl.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(t[-1]*0.7,log_Q_t(np.max([t[-1]*0.7,20]),M_p)+0.2),size=20)
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(t[-1]*0.7,log_Q_t(np.max([t[-1]*0.7,20]),M_p)+0.2),size=20)
                     #pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
                     #pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
                     #pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
@@ -230,7 +264,7 @@ if get_peak:
                     if plot:
                         if inflection:
                             for t_m,color in zip([5,10,20,30],['g','r','b','orange']):
-                                pl.plot(ni_t,np.log10(weird_Ni(ni_t,M_p,t_m=t_m)),linestyle='--',color=color,label='t_m = %s'%t_m)                    
+                                ax2.plot(ni_t,np.log10(weird_Ni(ni_t,M_p,t_m=t_m)),linestyle='--',color=color,label='t_m = %s'%t_m)                    
                 except:
                     print "No inflection"
                     
@@ -241,11 +275,13 @@ if get_peak:
                     FWHM = 99
 
                 if plot:
-                    pl.xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
-                    pl.ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
-                    pl.legend(prop={'size':15})
-                    pl.ylim(np.min(logL)-0.1,Lp+0.2)
-                    pl.savefig("../%s_%s_Lbol.png"%(SN,band_string))
+
+                    ax2.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
+                    ax2.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
+                    ax2.legend(prop={'size':15})
+                    ax2.set_ylim(np.min(logL)-0.1,Lp+0.2)
+                    fig2.savefig("../%s_%s_Lbol.png"%(SN,band_string))
+                    
                     if show:
                         pl.show()
 
@@ -273,8 +309,12 @@ if get_peak:
                 os.chdir(current_dir)
         except:
             print "No directory %s/"%SN
-        
-        
+    
+    if plot:
+        ax1.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
+        ax1.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
+        ax1.legend(prop={'size':9},ncol=2,bbox_to_anchor=(1.15, 1))
+        fig1.savefig("All_bolos.png")
     Lfile.close()
 
 
@@ -371,7 +411,8 @@ if Khatami:
     betas = np.arange(0.6,2.1,0.05)
 
     t_peak = 20
-    Lps = np.arange(41.5,43,1)
+    Lps = np.arange(41.5,43,0.5)
+
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
     pl.gca().set_color_cycle(filters_colors)
     
@@ -383,7 +424,7 @@ if Khatami:
         for beta in betas:
             
             try:
-                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K_0)
+                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
             except:
                 print "failed at %s"%beta
                 Ks.append(0.0)
@@ -404,7 +445,7 @@ if Khatami:
         for beta in betas:
             
             try:
-                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0)/Ni_K_0)
+                Ks.append(Ni_K(10**Lp,t_peak,beta=beta,Ni_min=0.005,Ni_max = 1.0))
             except:
                 print "failed at %s"%beta
                 Ks.append(0.0)
@@ -448,7 +489,138 @@ if Khatami:
     pl.legend(loc='best',prop={'size':15},ncol=2)
     pl.show()
 
+    
+    for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
+    
+        band_string = ("BVRIYJH","BVRIYJH")
+        #band_string = ("BVRI","BVRcI")
+        print "####### %s ########## \n"%SN
+        
+        try: 
+            os.chdir("%s/"%SN)
+            t_half_1,t_half_2,der_at_inf,der_at_inf_2,Ni_tail= None,None,None,None,None
+            Tail = True
+            try:
+                
+                try:
+                    print band_string
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
+                    where_nan = np.where(~np.isnan(L))[0]
+                    t,L,logL,Mni = t[where_nan],L[where_nan],logL[where_nan],Mni[where_nan] 
+                    band_string = band_string[0]
+                except:
+                    print band_string
+                    t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
+                    band_string = band_string[1]
 
+                t = t/(1+z_SN)
+                xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
+                t,logL = xs,ys
+                print sn_type
+                if sn_type=="IIb":
+                    where_peak = np.where(np.logical_and(xs>10.,xs<45.))[0]
+                else:
+                    where_peak = np.where(xs<45.)[0]
+                
+                xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
+                #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
+                k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=2))
+                if len(t)>9:
+                    k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=7))
+                else:
+                    k0_full = smooth.NonParamRegression(t,(10**logL)*1e-42, method = npr_methods.LocalPolynomialKernel(q=3))
+                k0.fit()
+                k0_full.fit()
+                k0_res = k0(xs)-ys
+                k0_res_full = k0_full(t)-(10**logL)*1e-42
+                #pl.plot(xs,k0_res)
+                #pl.show()
+            
+                #print k0_res,k0_res_full
+            
+                grid = np.arange(np.min(xs),np.max(xs),0.2)
+                grid_full = np.arange(np.min(t),np.max(t),0.2)
+                y_grid = np.log10(k0(grid))+42
+                y_grid,grid = y_grid[~np.isnan(y_grid)],grid[~np.isnan(y_grid)]
+                y_grid_full = np.log10(k0_full(grid_full))+42
+                y_grid_full,grid_full = y_grid_full[~np.isnan(y_grid_full)],grid_full[~np.isnan(y_grid_full)]
+                where_peak = np.argmax(y_grid)
+                tp,Lp = grid[where_peak],y_grid[where_peak]
+                M_p = M_ni(tp,10**Lp)
+                Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
+                ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
+                print tp,Lp,M_p,Ni_Khatami
+            
+                Ks = []
+                betas = np.arange(0.6,2.1,0.05)
+                for beta in betas:
+                
+                    try:
+                        Ks.append(Ni_K(10**Lp,tp,beta=beta,Ni_min=0.005,Ni_max = 1.0)/M_p)
+                    except:
+                        print "failed at %s"%beta
+                        Ks.append(0.0)
+
+                pl.plot(betas,Ks,label=r'$log(L_{peak}(t_{peak}=%2.2f) = %2.2f)$'%(tp,Lp))
+        
+            except:
+                print "No directory %s/"%SN            
+                
+        except:
+            os.chdir(current_dir)
+            print "No directory %s/"%SN
+
+    pl.axvline(4/3.,linestyle='--',color='k')
+    pl.axhline(1,linestyle='--',color='k')
+    for beta_SN,beta_label in [(9/8.,"Ibc"),(0.82,"IIb/pec"),(2.0,'Generic/Mixed'),(0.7,'Central/Helium')]:
+        pl.axvline(beta_SN,linestyle='--',linewidth=4,color='k',alpha=0.7)
+        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.07,1.3),size=20,rotation=90)
+
+    pl.xlabel(r'$\beta$')
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})$')
+    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.show()
+    os.chdir(current_dir)
+
+    def Ni_K_A(beta,tpeak):
+        
+        t_ni = 8.8        # niquel decay [days]                                          
+        t_co = 111.3      # Cobalt decay [days]                                            
+        x = beta*tpeak
+        x_ni = x/t_ni
+        x_co = x/t_co
+        e_ni = 6.395*1e43
+        e_co = 1.362*1e43
+        corcho1 = e_ni*t_ni*(t_ni*(1-np.exp(-x_ni)) - x*np.exp(-x_ni))
+        corcho2 = e_co*t_co*(t_co*(1-np.exp(-x_co)) - x*np.exp(-x_co))
+        return x**2. * Q_t(tpeak,M_ni=1.0) / 2. / (corcho1+corcho2)
+
+    tps = np.arange(10,30,1)
+    X,Y = meshgrid(betas, tps) # grid of point
+    Z = Ni_K_A(X,Y)
+    im = pl.imshow(Z,cmap=cm.RdBu) # drawing the function
+    # adding the Contour lines with labels
+    cset = pl.contour(Z,np.arange(0.5,1.5,0.1),linewidths=2,cmap=cm.Set2)
+    pl.clabel(cset,inline=True,fmt='%1.1f',fontsize=10)
+    cb = pl.colorbar(im) # adding the colobar on the right
+    cb.set_label(r'$\mathrm{M(Ni_{Khatami})/M(Ni_{Arnett})}$',size=15)
+    nx = betas.shape[0]
+    no_labels = 5 # how many labels to see on axis x
+    step_x = int(nx / (no_labels - 1)) # step between consecutive labels
+    x_positions = np.arange(0,nx,step_x) # pixel count at label position
+    x_labels = ["%2.2f"%b for b in betas[::step_x]] # labels you want to see
+    pl.xticks(x_positions, x_labels)
+    
+    ny = tps.shape[0]
+    no_labels = 5 # how many labels to see on axis x
+    step_y = int(ny / (no_labels - 1)) # step between consecutive labels
+    y_positions = np.arange(0,ny,step_y) # pixel count at label position
+    y_labels = ["%2.2f"%b for b in tps[::step_y]] # labels you want to see
+    pl.yticks(y_positions, y_labels)
+    pl.xlabel(r"$\beta$",size=25)
+    pl.ylabel(r"$t_{peak}$",size=25)
+    pl.show()
+    
 if check_t_0:
     
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(SN_DATA))]       

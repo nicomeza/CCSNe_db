@@ -1,0 +1,15 @@
+import subprocess
+
+
+for SN,z_SN,E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
+
+    print "####### %s ########## \n"%SN
+    try:
+
+        os.chdir("%s/"%SN)
+        last_file = subprocess.check_output("ls -ltr | grep dat | tail -1 | awk '{print $NF}'", shell=True).split()[0]
+        print last_file
+        os.chdir(current_dir)
+    except:
+        os.chdir(current_dir)
+                    
