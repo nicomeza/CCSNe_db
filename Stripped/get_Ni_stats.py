@@ -9,7 +9,7 @@ from scipy import stats
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_test_total.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 
 SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},'Ib':{"marker":"p","color":"g",'string':'$\mathrm{Ib}$'},'Ic':{"marker":"s","color":"k",'string'\
@@ -17,12 +17,13 @@ SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},'Ib':{"mar
 olor":"r",'string':'$\mathrm{Ic_{BL}}$'}}
 
 
-
 colormap = pl.cm.spectral
 
-my_file = "Ni56_BVRIYJH_peak.dat"
+my_file = "Ni56_BVRIYJH_local_peak.dat"
+save_name = "BVRIYJH_local"
+
 my_nis = np.genfromtxt(my_file,\
-                           names=('SN','type','tp','Lp','logLp','Mni_peak','Mni_K','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
+                           names=('SN','type','tp','Lp','logLp','Mni_peak','Mni_Khatami','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
                            dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
 
 nis_II = [l.split() for l in open('SNII_Ni56.dat').readlines()[1:]]
@@ -61,7 +62,7 @@ nis_line = np.arange(0.0,0.5,0.1)
 for sn_type in SN_plot:
     where_type = np.where(my_nis['type']==sn_type)[0]
     if len(where_type)>0:
-        ax.plot(my_nis['Mni_peak'][where_type],my_nis['Mni_K'][where_type],\
+        ax.plot(my_nis['Mni_peak'][where_type],my_nis['Mni_Khatami'][where_type],\
                     marker=SN_plot[sn_type]["marker"],color=SN_plot[sn_type]["color"],linestyle='None',label=r"%s"%SN_plot[sn_type]["string"],markersize=10,alpha=0.8)
 
 ax.plot(nis_line,nis_line,color='k',linestyle='--')
@@ -78,7 +79,7 @@ pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
 
-pl.hist(nis_compare['Mni_K'],label='Khatami',alpha=0.5)
+pl.hist(nis_compare['Mni_Khatami'],label='Khatami',alpha=0.5)
 pl.hist(nis_compare['Mni_tail'],label='Tail',alpha=0.5)
 pl.legend()
 pl.show()
@@ -160,7 +161,7 @@ pl.show()
 
 ## Nickel distributions ####
 
-Ni_types = ['Mni_tail','Mni_K','Mni_peak'] 
+Ni_types = ['Mni_tail','Mni_Khatami','Mni_peak'] 
 
 for ni_type in Ni_types:
 
@@ -174,15 +175,16 @@ for ni_type in Ni_types:
         if len(where_type)>1:
             print stats.ks_2samp(my_nis['%s'%ni_type][where_type],[x[1] for x in nis_II])
             sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
-            ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,color=SN_plot[sn_type]['color'],label="%s (%s)"%(sn_type,len(where_type)))
+            ax.step(np.concatenate([[0],sorted_data]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,color=SN_plot[sn_type]['color'],label="%s (%s)"%(sn_type,len(where_type)))
             #ax.hist(my_nis['%s'%ni_type][where_type],color=SN_plot[sn_type]['color'],label=sn_type,alpha=0.1,ls='dashed',cumulative=True,normed=True,fill=None)
 
     pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
     pl.legend(loc='best')
-    pl.savefig("%s_hist_subtypes.png"%(ni_type))
+    pl.savefig("%s_%s_hist_subtypes.png"%(save_name,ni_type))
     pl.show()
 
-    
+
+sorted_data_II = np.sort([x[1] for x in nis_II])     
     
 for ni_type in Ni_types:
 
@@ -195,7 +197,7 @@ for ni_type in Ni_types:
         print "Number of %s : %s"%(sn_type,len(where_type))
         sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
         ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
-                    color=SN_plot[sn_type]['color'],label="IIb (%s)"%(len(where_type)))
+                    color=SN_plot[sn_type]['color'],label="IIb (%s)"%(len(where_type)),linestyle='--')
     
     sn_type = "Ic"
     where_type = np.where(np.logical_and(np.logical_and(my_nis['type']!="IIb",my_nis['type']!="Ic_GRB"),~np.isnan(my_nis['%s'%ni_type])))[0]
@@ -203,50 +205,94 @@ for ni_type in Ni_types:
         print "Number of %s : %s"%(sn_type,len(where_type))
         sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
         ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
-                    color=SN_plot[sn_type]['color'],label="Ibc (%s)"%len(where_type))
+                    color=SN_plot[sn_type]['color'],label="Ibc (%s)"%len(where_type),linestyle='--')
         
-
-    sorted_data_II = np.sort([x[1] for x in nis_II]) 
-    ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
-                color='r',label="II (%s)"%len(nis_II))
-    
-    pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
-    pl.legend(loc='best')
-    ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
-    pl.savefig("%s_hist_IIb-Ibc.png"%(ni_type))
-    pl.show()
-
-
-sorted_data_II = np.sort([x[1] for x in nis_II]) 
-
-for ni_type in Ni_types:
-
-    fig = pl.figure()
-    ax = fig.add_subplot(111)
-   
-    sn_type = "Ic"
+    sn_type = "SE-CCSNe"
     where_type = np.where(np.logical_and(np.logical_and(my_nis['type']!="Ic_BL",my_nis['type']!="Ic_GRB"),~np.isnan(my_nis['%s'%ni_type])))[0]
     if len(where_type)>1:
         print "Number of %s : %s"%(sn_type,len(where_type))
         sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
-        ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
-                    color=SN_plot[sn_type]['color'],label="Ibc (%s)"%len(where_type))
+        ax.step(np.concatenate([[0],sorted_data]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color='magenta',label="IIb/Ibc (%s)"%len(where_type),linewidth=3)
         
-    print stats.ks_2samp(my_nis['%s'%ni_type][where_type],sorted_data_II)    
-    ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
-                color='r',label="II (%s)"%len(nis_II))
+
+
+    ax.step(np.concatenate([[0],sorted_data_II]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
+                color='r',label="II (%s)"%len(nis_II),linewidth=3)
     
     pl.title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
     pl.legend(loc='best')
-    ax.set_xlabel(r"$\mathrm{Nickel \ Mass}$")
-    pl.savefig("%s_hist_SESN.png"%(ni_type))
+    ax.set_xlabel(r"$\mathrm{Nickel \ Mass} \ M_\odot$",size=15)
+    pl.savefig("%s_%s_hist_IIb-Ibc.png"%(save_name,ni_type))
     pl.show()
+
+
+
+
+fig2 = pl.figure()
+ax2 = fig2.add_subplot(111)   
+ax2.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
+            color='r',label="II (%s)"%len(nis_II),linewidth=2)
+    
+for ni_type,sn_type in zip(Ni_types,['Ib','IIb','Ic']):
+    
+    print ni_type,sn_type
+    KS_test = []
+    fig = pl.figure()
+    ax = fig.add_subplot(111)
+    where_type = np.where(np.logical_and(np.logical_and(my_nis['type']!="Ic_BL",my_nis['type']!="Ic_GRB"),~np.isnan(my_nis['%s'%ni_type])))[0]
+    if len(where_type)>1:
+        #print "Number of %s : %s"%(sn_type,len(where_type))
+        sorted_data = np.sort(my_nis['%s'%ni_type][where_type]) 
+        ax.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color=SN_plot[sn_type]['color'],label="IIb+Ibc (%s)"%len(where_type),linewidth=2)
+        ax2.step(np.concatenate([sorted_data,[0]]),np.arange(0.0,sorted_data.size+1)/sorted_data.size,\
+                    color=SN_plot[sn_type]['color'],label="IIb+Ibc : %s (%s)"%(ni_type.split('_')[1],len(where_type)),linewidth=2)
+        
+        mask = [True]*len(where_type)
+        for index in np.arange(0,len(where_type)):
+            mask[index] = False
+            ks = stats.ks_2samp(my_nis['%s'%ni_type][where_type[mask]],sorted_data_II)
+            if ~np.isnan(ks[1]):
+                KS_test.append(stats.ks_2samp(my_nis['%s'%ni_type][where_type[mask]],sorted_data_II))
+            else:
+                print "NaN value at %s"%my_nis['SN'][where_type[index]]
+            mask[index] = True
+        
+    D,KS = [ks[0] for ks in KS_test],[ks[1] for ks in KS_test]   
+    KS_mean,KS_std =  np.mean(KS),np.std(KS)
+    D_mean,D_std =  np.mean(D),np.std(D)
+    print stats.ks_2samp(my_nis['%s'%ni_type][where_type],sorted_data_II)
+    D_interval = stats.t.interval(0.99,len(KS)-1,loc=D_mean,scale=D_std)
+    KS_interval = stats.t.interval(0.99,len(KS)-1,loc=KS_mean,scale=KS_std)
+    print "KS \t D "
+    if KS_mean>1e-3:
+        print " %3.3f  (%3.3f,%3.3f) & %3.3f (%3.3f, %3.3f) \\"%(KS_mean,(KS_interval)[0],(KS_interval)[1],D_mean,D_interval[0],D_interval[1])
+    else:
+        print " %3.3E  (%3.3E,%3.3E) & %3.3f (%3.3f,%3.3f) \\"%(KS_mean,(KS_interval)[0],(KS_interval)[1],D_mean,D_interval[0],D_interval[1])
+
+    ax.step(np.concatenate([sorted_data_II,[0]]),np.arange(0.0,sorted_data_II.size+1)/sorted_data_II.size,\
+                color='r',label="II (%s)"%len(nis_II),linewidth=2)
+    
+    ax.set_title(r"$^{56}Ni \ %s$"%ni_type.split('_')[1],size=15)
+    ax.legend(loc='best')
+    ax.set_xlabel(r"$\mathrm{Nickel \ Mass} \ M_\odot$",size=15)
+    fig.savefig("%s_%s_hist_SESN.png"%(save_name,ni_type))
+    
+
+ax2.legend(loc='best')
+ax2.set_xlabel(r"$\mathrm{Nickel \ Mass} \ M_\odot$",size=15)
+fig2.savefig("%s_all_hist_SESN.png"%save_name)
+pl.show()
 
 
 
 for sn_type in SN_plot:
     where_type = np.where(np.logical_and(my_nis['type']==sn_type,~np.isnan(my_nis['%s'%ni_type])))[0]
     print sn_type
-    print stats.ks_2samp(my_nis['Mni_tail'][where_type],[x[1] for x in nis_II])
-    for sn,ni_peak,ni_k,ni_tail in my_nis[['SN','Mni_peak','Mni_K','Mni_tail']][where_type]:
+    for ni_type in Ni_types:
+        print ni_type
+        print stats.ks_2samp(my_nis["%s"%ni_type][where_type],sorted_data_II)
+
+    for sn,ni_peak,ni_k,ni_tail in my_nis[['SN','Mni_peak','Mni_Khatami','Mni_tail']][where_type]:
         print sn,ni_peak,ni_k,ni_tail

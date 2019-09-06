@@ -278,12 +278,16 @@ CSP_SN = np.genfromtxt('./CSP/CSP_SN.dat',usecols=np.arange(len(csp_names)),dtyp
 
 # -------------SN METADATA --------------------
 
+show = False
+host_redd = True
+
 print " Convert photometry to fluxes to obtain SED "
 
 
 sn_labels = ['sn','type','host','hostredshift','hostlumdist','mw_ebv','host_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
 sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
+    
 SN_DATA = np.genfromtxt(IN_FILE,dtype={'names':sn_labels,'formats':sn_formats})
 
 current_dir = os.getcwd()
@@ -300,8 +304,6 @@ Ni_56 = []
 Lps = []
 tps = []
 
-show = False
-host_redd = True
 
 for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','mw_ebv','host_ebv','t_0','hostlumdist','t_discov','t_non_det']]:
 
@@ -560,8 +562,12 @@ for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','
         L_bol = []
         M_bol = []
         Lfile = open('%s_Lbol_%s.dat'%(SN,band_string),'w')
-        Lfile.write("## SN \t z \t MW_E_B_V \t host E_B_V d [Mpc] \t t_0 \n")
-        Lfile.write("## %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,z_SN,mw_E_B_V,host_E_B_V,d_L,t_0))
+        if host_redd:
+            Lfile.write("## SN \t z \t MW_E_B_V \t host E_B_V d [Mpc] \t t_0 \n")
+            Lfile.write("## %s \t %s \t %s \t  %s \t %s \t %s\n"%(SN,z_SN,mw_E_B_V,host_E_B_V,d_L,t_0))
+        else:
+            Lfile.write("## SN \t z \t MW_E_B_V \t d [Mpc] \t t_0 \n")
+            Lfile.write("## %s \t %s \t  %s \t %s \t %s\n"%(SN,z_SN,mw_E_B_V,d_L,t_0))
         Lfile.write("###############%s#######################\n"%band_string)
         Lfile.write("# t-t_0 \t Lbol [erg/s] \t log(Lbol) \t M_ni\n")
         int_nu = False

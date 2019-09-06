@@ -1,0 +1,13 @@
+\begin{deluxetable}{ccccc}
+
+\tablecaption{ASASSN $V$ photometry and non-detections of ASASSN-14jb.\label{tab:table}}
+
+\tablehead{\colhead{UT Date} & \colhead{MJD} & \colhead{$t-t_0$} & \colhead{V} & \colhead{Telescope} }
+\colnumbers
+\startdata
+2014-10-13 & 56943.098 & -3.002 >18.27 & ASAS-SN \\ 
+
+\enddata
+ \tablenotetext{a}{note.}
+ \tablecomments{comment.}
+\end{deluxetable}

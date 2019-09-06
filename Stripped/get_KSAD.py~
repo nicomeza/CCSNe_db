@@ -1,0 +1,33 @@
+from astro_utils import *
+import pyqt_fit.nonparam_regression as smooth
+from pyqt_fit import npr_methods
+from scipy.misc import derivative
+from scipy.optimize import newton,brentq
+from astroML.plotting import hist
+from scipy import stats
+
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
+
+SN_DATA = np.genfromtxt('sn_test_total.dat',dtype={'names':sn_labels,'formats':sn_formats})
+
+
+SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},\
+               'Ib':{"marker":"p","color":"g",'string':'$\mathrm{Ib}$'},\
+               'Ic':{"marker":"s","color":"k",'string':'$\mathrm{Ic}$'},\
+               'Ibc':{"marker":"x","color":"k",'string':'$\mathrm{Ibc}$'},\
+               'Ic_GRB':{"marker":"*","color":"r",'string':'$\mathrm{Ic-GRB}$'},\
+               'Ic_BL':{"marker":"s","color":"r",'string':'$\mathrm{Ic_{BL}}$'}}
+
+
+colormap = pl.cm.spectral
+
+my_file = "Ni56_BVRIYJH_local_peak.dat"
+save_name = "BVRIYJH_local"
+
+my_nis = np.genfromtxt(my_file,\
+                           names=('SN','type','tp','Lp','logLp','Mni_peak','Mni_Khatami','Mni_tail','trise','tdecay','FWHM','t_inf','L_dot_inf'),\
+                           dtype=('S15','S10','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8'))
+
+nis_II = [l.split() for l in open('SNII_Ni56.dat').readlines()[1:]]
+nis_II = [(sn,np.median(np.asarray(n.split(','),dtype='f8'))) for sn,n in nis_II]

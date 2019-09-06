@@ -15,10 +15,10 @@ sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
-get_peak = False
+get_peak = True
 plot = True
 show = False
-Khatami = True
+Khatami = False
 check_t_0 = False
 check_type = False
 Tail = False
@@ -85,7 +85,8 @@ def weird_Ni_der(t,Mni,t_m=1.0):
 
 ########################################################
 
-band_string = ("BVRIYJH","BVRIYJH")
+#band_string = ("BVRIYJH_local","BVRIYJH_local")
+band_string = ("BVRIYJH_total","BVRIYJH_total")
 #band_string = ("BVRI","BVRcI")
 
 inflection = False
@@ -103,7 +104,8 @@ if get_peak:
     Lfile.write("# SN \t SN type \t tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t M_ni_tail t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
     for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
         
-        band_string = ("BVRIYJH","BVRIYJH")
+        band_string = ("BVRIYJH_local","BVRIYJH_local")
+        band_string = ("BVRIYJH_total","BVRIYJH_total")
         #band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
 
@@ -137,6 +139,11 @@ if get_peak:
                 else:
                     where_peak = np.where(xs<45.)[0]
 
+                if sn_type in ["Ib","Ic","Ibc","Ic_GRB","Ic_BL"]:
+                    beta_SN = 9/8.
+                else:
+                    beta_SN = 0.82
+
                 xs,ys = xs[where_peak],(10**ys[where_peak])*1e-42
                 #k0 = smooth.NonParamRegression(xs, ys, method=npr_methods.SpatialAverage())
                 k0 = smooth.NonParamRegression(xs, ys, method = npr_methods.LocalPolynomialKernel(q=2))
@@ -162,7 +169,7 @@ if get_peak:
                 where_peak = np.argmax(y_grid)
                 tp,Lp = grid[where_peak],y_grid[where_peak]
                 M_p = M_ni(tp,10**Lp)
-                Ni_Khatami = Ni_K(10**Lp,tp,beta=4/3.)
+                Ni_Khatami = Ni_K(10**Lp,tp,beta=beta_SN)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
                 print tp,Lp,M_p,Ni_Khatami
 
@@ -300,7 +307,8 @@ if get_peak:
                     else:
                         pl.close("all")
                     
-                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"%(SN,sn_type,tp,10**Lp,Lp,M_p,Ni_Khatami,Ni_tail,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
+                s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"\
+                    %(SN,sn_type,tp,10**Lp,Lp,M_p,Ni_Khatami,Ni_tail,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
                 print s 
                 Lfile.write(s)
                 os.chdir(current_dir)
@@ -596,14 +604,14 @@ if Khatami:
         return x**2. * Q_t(tpeak,M_ni=1.0) / 2. / (corcho1+corcho2)
 
     tps = np.arange(10,30,1)
-    X,Y = meshgrid(betas, tps) # grid of point
+    X,Y = np.meshgrid(betas, tps) # grid of point
     Z = Ni_K_A(X,Y)
-    im = pl.imshow(Z,cmap=cm.RdBu) # drawing the function
+    im = pl.imshow(Z,cmap=pl.cm.winter) # drawing the function
     # adding the Contour lines with labels
-    cset = pl.contour(Z,np.arange(0.5,1.5,0.1),linewidths=2,cmap=cm.Set2)
-    pl.clabel(cset,inline=True,fmt='%1.1f',fontsize=10)
+    cset = pl.contour(Z,np.arange(0.5,1.5,0.1),linewidths=2,cmap=pl.cm.Wistia,origin='lower')
+    pl.clabel(cset,inline=True,fmt='%1.1f',fontsize=14)
     cb = pl.colorbar(im) # adding the colobar on the right
-    cb.set_label(r'$\mathrm{M(Ni_{Khatami})/M(Ni_{Arnett})}$',size=15)
+    cb.set_label(r'$\mathrm{M(Ni_{Khatami})/M(Ni_{Arnett})}$',size=20)
     nx = betas.shape[0]
     no_labels = 5 # how many labels to see on axis x
     step_x = int(nx / (no_labels - 1)) # step between consecutive labels
@@ -619,6 +627,7 @@ if Khatami:
     pl.yticks(y_positions, y_labels)
     pl.xlabel(r"$\beta$",size=25)
     pl.ylabel(r"$t_{peak}$",size=25)
+    pl.tight_layout()
     pl.show()
     
 if check_t_0:
