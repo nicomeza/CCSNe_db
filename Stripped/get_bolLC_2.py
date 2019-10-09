@@ -9,7 +9,7 @@ from pyqt_fit import npr_methods
 from scipy.stats import entropy
 import bisect 
 
-def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
+def get_lc(filter_file,use_filters,t_0,t_non,t_discov,t_upper=90.):
     
     scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = None,None,None
 
@@ -21,7 +21,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
                 if t_non>1000 and t_discov>1000:
                     t_0 = 0.5*(t_non + t_discov)
                     print "Taking t_0 as midpoint between last non detection and discovery"
-                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.35))[0]
+                    no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+t_upper),scope['err_%s'%filter]<0.35))[0]
                     if len(no_nebular)>1:
                         
                         scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = \
@@ -40,7 +40,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
                     print "LACK OF DATA : filter %s removed"%(filter_removed)
                     
             else:    
-                no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+90.),scope['err_%s'%filter]<0.35))[0]
+                no_nebular = np.where(np.logical_and(scope['jd_%s'%filter]<(t_0+t_upper),scope['err_%s'%filter]<0.35))[0]
                 
                 if len(no_nebular)>1:
                     
@@ -62,7 +62,7 @@ def get_lc(filter_file,use_filters,t_0,t_non,t_discov):
             filter_removed = use_filters.pop(use_filters.index(filter))
             print "filter %s removed"%(filter_removed)
             scope['jd_%s'%filter],scope['mag_%s'%filter],scope['err_%s'%filter] = np.genfromtxt(filter_file,usecols=[0,1,2]).T
-            no_nebular = np.where(scope['jd_%s'%filter]<(t_0+90.))[0]
+            no_nebular = np.where(scope['jd_%s'%filter]<(t_0+t_upper))[0]
             if len(no_nebular)>2:
                 scope['jd_%s'%filter],scope['mag_%s'%filter] = scope['jd_%s'%filter][no_nebular]-t_0,scope['mag_%s'%filter][no_nebular]
             
@@ -499,9 +499,9 @@ for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','
             ax.errorbar(c_cms/(sorted_lambdas*1e-8),flux,yerr=flux_err,linestyle='--',label='%2.2f'%epoch)
                      
         ax.set_title(SN)
-        ax.set_xlabel('Frequency [Hz]')
-        ax.set_ylabel('Flux in ergs/s/cm2/Hz')
-        ax.legend(loc='best',ncol=2,prop={'size':9})
+        ax.set_xlabel('Frequency [Hz]',size=22)
+        ax.set_ylabel('Flux in ergs/s/cm2/Hz',size=22)
+        ax.legend(loc='best',ncol=2,prop={'size':10})
         fig.savefig('./SED_nu_%s.png'%R_V)
 
         if show:
@@ -509,18 +509,19 @@ for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','
         else:
             pl.close()
 
-        fig = pl.figure(figsize=(10,6))
+        fig = pl.figure(figsize=(10,8))
         ax = fig.add_subplot(111)
 
         colormap = pl.cm.spectral
         fig.gca().set_color_cycle([colormap(i) for i in np.linspace(0.1, 0.9, len(where_inter))])
-
+        prev_epoch = -10
         for epoch,flux,flux_err in zip(inter_t[where_inter],fluxes,fluxes_err):
-            
-            flux = np.asarray(flux)
-            ax.errorbar(sorted_lambdas,flux*c_cms/((sorted_lambdas*1e-4)**2.),\
-                        yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.2f'%epoch,alpha=0.7)
-            
+            if (epoch-prev_epoch)>0.5:  
+                flux = np.asarray(flux)
+                ax.errorbar(sorted_lambdas,flux*c_cms/((sorted_lambdas*1e-4)**2.),\
+                                yerr=c_cms*np.asarray(flux_err)/((sorted_lambdas*1e-4)**2.),marker='o',linestyle='--',label='%2.1f'%epoch,alpha=0.7)
+                prev_epoch = epoch
+
         trans = ax.get_xaxis_transform()
 
         band_string = ""
@@ -531,13 +532,20 @@ for SN,z_SN,mw_E_B_V,host_E_B_V,t_0,d_L,t_discov,t_non in SN_DATA[['sn','sn_z','
             band_string+=str(band[0].split('_')[0])
             print band,lam,max_flux
             ax.axvline(lam,linestyle='--',color='k',alpha=0.4)
-            ax.annotate(str(band[0].split("_")[0]),(lam+5,1.07),xycoords=trans,size=11,rotation=90)
+            ax.annotate(r"$\mathrm{%s}$"%str(band[0].split("_")[0]),(lam+5,1.03),xycoords=trans,size=21,rotation=0)
             
-        ax.set_title(SN)
-        ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$')
-        ax.set_ylabel('Flux in ergs/s/cm2/A')
-        ax.legend(loc='best',ncol=2,prop={'size':8})
-        fig.savefig('./SED_lam_%s_%s.png'%(band_string,str(R_V)))
+        max_flux = np.max(np.array(fluxes)*c_cms/((sorted_lambdas*1e-4)**2.))
+        print "upper limit = %s"%max_flux
+        #ax.set_title(r"$\mathrm{%s}$"%SN,size=17)
+        ax.annotate(r"$\mathrm{%s}$"%SN,(8100,0.95),xycoords=trans,size=22)
+        ax.set_xlabel(r'$\mathrm{Rest \ Wavelength \ [\AA]}$',size=22)
+        ax.set_ylabel(r'$\mathrm{Flux \ in \ ergs/s/cm^2/\AA}$',size=22)
+        ax.set_xlim(4000,16500)
+        ax.set_ylim(0,1.05*max_flux)
+        ax.legend(loc='best',ncol=2,prop={'size':15})
+        fig.subplots_adjust(left=0.07,right=0.97,bottom=0.1,top=0.94)
+        ax.tick_params(labelsize=17)
+        fig.savefig('./SED_lam_%s_%s.png'%(band_string,str(R_V)),dpi=300)
         if show:
             pl.show()
         pl.close()

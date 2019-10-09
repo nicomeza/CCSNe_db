@@ -9,10 +9,10 @@ from matplotlib.lines import Line2D
 prop_cycle = pl.rcParams['axes.color_cycle']
 plot_pairs = list(itertools.product(prop_cycle,Line2D.filled_markers))
 
-sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
-sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8']
+sn_labels = ['sn','type','host','hostredshift','hostlumdist','sn_ebv','sn_host','sn_z','t_0','t_discov','m_discov','t_non_det','m_non_det']
+sn_formats = ['S15','S10','S20','f8','f8','f8','f8','f8','f8','f8','f8','f8','f8']
 
-SN_DATA = np.genfromtxt('sn_test.dat',dtype={'names':sn_labels,'formats':sn_formats})
+SN_DATA = np.genfromtxt('sn_test_total.dat',dtype={'names':sn_labels,'formats':sn_formats})
 
 compare_nis = False
 get_peak = True
@@ -21,7 +21,7 @@ show = False
 Khatami = False
 check_t_0 = False
 check_type = False
-Tail = False
+Tail = True
 
 M_ni = lambda t_r,L_bol : L_bol/Q_t(t_r,1)
 
@@ -95,49 +95,58 @@ pl.close("all")
 if get_peak:
     
     if plot:
-        fig1 = pl.figure()
+        fig1 = pl.figure(figsize=(14,6))
         ax1 = fig1.add_subplot(111)
+        fig3 = pl.figure()
+        ax3 = fig3.add_subplot(111)
         np.random.shuffle(plot_pairs)
 
     Lfile = open('Ni56_%s_peak.dat'%band_string[0],'w')
     Lfile.write("###############%s#######################\n"%band_string[0])
     Lfile.write("# SN \t SN type \t tpeak \t Lpeak [erg/s] \t log(Lpeak) \t M_ni \t M_ni_Khatami \t M_ni_tail t_1/2(<tp) \t t_1/2(>tp) \t FWHM \t t_inflection \t L_dot(inflection)\n")
-    for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
+    for SN,z_SN,E_B_V,t_0,d_L,sn_type,t_d,t_nd in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type','t_non_det','t_discov']]:
         
         band_string = ("BVRIYJH_local","BVRIYJH_local")
         band_string = ("BVRIYJH_total","BVRIYJH_total")
+#        band_string = ("BVRIJH","BVRIJH")
         #band_string = ("BVRI","BVRcI")
         print "####### %s ########## \n"%SN
 
         if plot:
             fig2 = pl.figure()
             ax2 = fig2.add_subplot(111)
-    
+            
         try: 
             os.chdir("%s/"%SN)
-            t_half_1,t_half_2,der_at_inf,der_at_inf_2,Ni_tail= None,None,None,None,None
+            t_half_1,t_half_2,der_at_inf,der_at_inf_2,Ni_tail,FWHM= None,None,None,None,None,None
             Tail = True
             try:
                 
                 try:
-                    print band_string
+                    #print band_string
+                    
                     t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[0])).T
-                    where_nan = np.where(~np.isnan(L))[0]
-                    t,L,logL,Mni = t[where_nan],L[where_nan],logL[where_nan],Mni[where_nan] 
+                    where_nan = np.intersect1d(np.where(~np.isnan(L))[0],np.unique(t,return_index=True)[1])
+                    t,L,logL,Mni = t[where_nan],L[where_nan],logL[where_nan],Mni[where_nan]
+                    #t_ = t+t_0-
                     band_string = band_string[0]
+                    print '%s_Lbol_%s.dat'%(SN,band_string)
                 except:
-                    print band_string
+                    #print band_string
                     t,L,logL,Mni = np.genfromtxt('%s_Lbol_%s.dat'%(SN,band_string[1])).T
+                    where_nan = np.intersect1d(np.where(~np.isnan(L))[0],np.unique(t,return_index=True)[1])
+                    t,L,logL,Mni = t[where_nan],L[where_nan],logL[where_nan],Mni[where_nan] 
                     band_string = band_string[1]
+                    print '%s_Lbol_%s.dat'%(SN,band_string)
 
                 t = t/(1+z_SN)
                 xs,ys = t[np.argsort(t)],logL[np.argsort(t)]
                 t,logL = xs,ys
                 print sn_type
                 if sn_type=="IIb":
-                    where_peak = np.where(np.logical_and(xs>10.,xs<45.))[0]
+                    where_peak = np.where(np.logical_and(xs>10.,xs<55.))[0]
                 else:
-                    where_peak = np.where(xs<45.)[0]
+                    where_peak = np.where(xs<55.)[0]
 
                 if sn_type in ["Ib","Ic","Ibc","Ic_GRB","Ic_BL"]:
                     beta_SN = 9/8.
@@ -172,44 +181,6 @@ if get_peak:
                 Ni_Khatami = Ni_K(10**Lp,tp,beta=beta_SN)
                 ni_t = np.arange(np.argmin([tp-20,0]),np.max(t)+5,0.01)
                 print tp,Lp,M_p,Ni_Khatami
-
-                if Tail:
-                    try: 
-                        Tail = False
-                        where_tail = np.where(t>tp+25)[0]
-                        if len(where_tail)>2:
-                            x_tail,y_tail = t[where_tail][len(where_tail)-3:len(where_tail)],logL[where_tail][len(where_tail)-3:len(where_tail)]
-                            Ni_tail,Ni_tail_err = curve_fit(log_Q_t,x_tail,y_tail)
-                            Ni_tail,Ni_tail_err = Ni_tail[0],Ni_tail_err[0][0]
-                            Tail = True
-                            print "Tail fit : %s +- %s"%(Ni_tail,Ni_tail_err)
-                        else:
-                            print "Tail fit failed"
-                            Tail = False
-                    except:
-                        print "Tail fit failed"
-                
-
-                if plot:
-
-                    color,marker = plot_pairs[np.where(SN_DATA['sn']==SN)[0][0]]
-                    ax2.plot(grid_full,y_grid_full,linestyle='--',color='g')
-                    ax2.plot(grid,y_grid,color='b')
-                    ax2.plot(t,logL,marker='o',color='k',linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
-                    ax1.plot(t,logL,marker=marker,color=color,linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.6)
-                    ax2.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k')
-                    
-                    if Tail:
-
-                        ax2.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle='-.',color='k')
-                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.2),size=20)
-                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.12),size=20)
-                    else:
-                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(t[-1]*0.7,log_Q_t(np.max([t[-1]*0.7,20]),M_p)+0.2),size=20)
-                    #pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
-                    #pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
-                    #pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
-                    
                 after_p,before_p = np.where(grid>tp+2)[0],np.where(grid<=tp-2)[0]
                 after_p_full,before_p_full = np.where(grid_full>tp+2)[0],np.where(grid_full<=tp-2)[0]
                 order = 5
@@ -281,32 +252,100 @@ if get_peak:
                 except:
                     FWHM = 99
 
+
+                if Tail:
+                    try: 
+                        Tail = False
+                        if t_half_2>0.:
+                            where_tail = np.where(t>np.min([tp+2*t_half_2,tp+25.]))[0]
+                        else:
+                            where_tail = np.where(t>tp+25)[0]
+                        if len(where_tail)>2:
+                            x_tail,y_tail = t[where_tail][len(where_tail)-3:len(where_tail)],logL[where_tail][len(where_tail)-3:len(where_tail)]
+                            Ni_tail,Ni_tail_err = curve_fit(log_Q_t,x_tail,y_tail)
+                            Ni_tail,Ni_tail_err = Ni_tail[0],Ni_tail_err[0][0]
+                            Tail = True
+                            print "Tail fit : %s +- %s"%(Ni_tail,Ni_tail_err)
+                            
+                        else:
+                            print "Tail fit failed"
+                            Tail = False
+                    except:
+                        print "Tail fit failed"
+                
+
                 if plot:
 
-                    ax2.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
-                    ax2.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
-                    ax2.legend(prop={'size':15})
+                    color,marker = plot_pairs[np.where(SN_DATA['sn']==SN)[0][0]]
+                    ax2.plot(grid_full,y_grid_full,linestyle='--',color='g',linewidth=4)
+                    #ax2.plot(grid,y_grid,color='b')
+                    ax2.plot(t,logL,marker='o',color='k',linestyle='None',label=r"$\mathrm{%s}$"%SN,alpha=0.4,markersize=10)
+                    if sn_type=="Ic_BL" or sn_type=="Ic_GRB":
+                        ax1.plot(t,logL,marker=marker,color=color,linestyle='None',\
+                                     label=r"$\mathrm{%s (%s-%s)}$"%(SN[0:2]+SN[4:],sn_type.split('_')[0],sn_type.split('_')[1]),alpha=0.6)
+                    else:
+                        ax1.plot(t,logL,marker=marker,color=color,linestyle='None',label=r"$\mathrm{%s (%s)}$"%('SN'+SN[4:],sn_type),alpha=0.4,markersize=9)
+
+                    ax2.plot(ni_t,np.log10(Q_t(ni_t,M_p)),linestyle='-.',color='k',linewidth=3) # Arnett's rule
+                    ax2.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='--',color='k',linewidth=3) # Khatami rule
+                    
+                    ax1.plot(ni_t,np.log10(Q_t(ni_t,0.26)),linestyle='--',color='gray',linewidth=2,alpha=0.3) 
+                    ax1.plot(ni_t,np.log10(Q_t(ni_t,0.13)),linestyle='--',color='gray',linewidth=2,alpha=0.3) 
+                    ax1.plot(ni_t,np.log10(Q_t(ni_t,0.06)),linestyle='--',color='gray',linewidth=2,alpha=0.3) 
+                    ax1.plot(ni_t,np.log10(Q_t(ni_t,0.03)),linestyle='--',color='gray',linewidth=2,alpha=0.3) 
+                    ax1.plot(ni_t,np.log10(Q_t(ni_t,0.015)),linestyle='--',color='gray',linewidth=2,alpha=0.3) 
+                    
+                    if Tail:
+
+                        ax2.plot(ni_t,np.log10(Q_t(ni_t,Ni_tail)),linestyle=':',color='k',linewidth=3)  # Tail value
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.2),size=22)
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{tail} \ = \ %2.2f$"%(Ni_tail),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.12),size=22)
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{k&k} \ = \ %2.2f$"%(Ni_Khatami),(x_tail[-1]*0.7,log_Q_t(np.max([x_tail[-1]*0.7,20]),M_p)+0.04),size=22)
+                        #ax3.plot(t,L/Q_t(t,Ni_tail),linestyle='--',color='k',label=SN)
+                        #L_dot = 1e42*derivative(k0_full,grid_full, dx=0.5, n=1, order=order)
+                        k0_tail = smooth.NonParamRegression(t,logL, method = npr_methods.LocalPolynomialKernel(q=2))
+                        k0_tail.fit()
+                        L_dot = np.gradient(10**k0_tail(t),t)
+                        Q_dot = Q_t_dot(t,Ni_tail)
+                        ax3.plot(t-tp,(L_dot-Q_dot)/(-Q_dot),linestyle='--',color=color,label=r"$\mathrm{%s}$"%SN,marker=marker,alpha=0.5,markersize=9)
+                    else:
+                        ax2.annotate(r"$^{56}\mathrm{Ni} \ L_{peak} = \ %2.2f$"%(M_p),(t[-1]*0.7,log_Q_t(np.max([t[-1]*0.7,20]),M_p)+0.2),size=22)
+                    #pl.plot(ni_t,np.log10(Q_t(ni_t,Ni_Khatami)),linestyle='-.',color='k')
+                    #pl.axhline(Lp-np.log10(2),linestyle='--',color='k')
+                    #pl.annotate("Half max",(np.max(t)-5,Lp-np.log10(2)+0.05),size=8)
+                    
+
+                if plot:
+
+                    ax2.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=22)
+                    ax2.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string.split('_')[0]),size=22)
+                    ax2.legend(prop={'size':17})
                     ax2.set_ylim(np.min(logL)-0.1,Lp+0.2)
-                    fig2.savefig("../%s_%s_Lbol.png"%(SN,band_string))
+                    ax2.tick_params(labelsize=17)
+                    fig2.subplots_adjust(top=0.98,bottom=0.11,right=0.97)
+                    fig2.savefig("../%s_%s_Lbol.png"%(SN,band_string),dpi=400)
                     
                     if show:
                         pl.show()
-
-                    pl.figure()
-                    pl.plot(t,Mni,marker='o',color='y',linestyle='None')
-                    pl.plot(grid,M_ni(grid,10**y_grid),color='y',linestyle='--')
-                    pl.xlabel('t-t_0')
-                    pl.ylabel('M(Ni56)')
-                    pl.axvline(tp,color='k')
-                    pl.axvline(inf_t2,color='k')
-                    pl.axhline(M_p,color='k')
-                    pl.xlim(np.max([0,np.min(t)-5]),np.max(t)+5)
-                    pl.savefig('%s_%s_Ni.png'%(SN,band_string))
+                        
+                        
+                    fig4 = pl.figure()
+                    ax4 = fig4.add_subplot(111)
+                    ax4.plot(t,Mni,marker='o',color='y',linestyle='None')
+                    ax4.plot(grid,M_ni(grid,10**y_grid),color='y',linestyle='--')
+                    ax4.set_xlabel('t-t_0')
+                    ax4.set_ylabel('M(Ni56)')
+                    ax4.axvline(tp,color='k')
+                    ax4.axvline(inf_t2,color='k')
+                    ax4.axhline(M_p,color='k')
+                    ax4.set_xlim(np.max([0,np.min(t)-5]),np.max(t)+5)
+                    ax4.tick_params(labelsize=17)
+                    fig4.savefig('%s_%s_Ni.png'%(SN,band_string))
                     if show:
                         pl.show()
                     else:
                         pl.close("all")
-                    
+                        
                 s = "%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n"\
                     %(SN,sn_type,tp,10**Lp,Lp,M_p,Ni_Khatami,Ni_tail,t_half_1,t_half_2,FWHM,inf_t2,der_at_inf_2*1e-38)
                 print s 
@@ -319,10 +358,36 @@ if get_peak:
             print "No directory %s/"%SN
     
     if plot:
-        ax1.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=15)
-        ax1.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string),size=20)
-        ax1.legend(prop={'size':9},ncol=2,bbox_to_anchor=(1.15, 1))
-        fig1.savefig("All_bolos.png")
+
+        ax1.set_xlabel(r'$\mathrm{Time \ since \ estimated \ explosion}$',size=22)
+        ax1.set_ylabel(r'$\mathrm{\log{L_{bol}(%s)}}$'%(band_string.split('_')[0]),size=22)
+        ax1.set_ylim(41,42.75)
+        ax1.set_xlim(0,90)
+        box = ax1.get_position()
+        ax1.set_position([box.x0, box.y0, box.width * 0.6, box.height])
+        ax1.legend(ncol=2,bbox_to_anchor=(1.61,1.),loc='upper right',prop={'size':8.45})
+        pl.setp(fig1.gca().get_legend().get_texts(), fontsize='16') 
+        ax1.tick_params(labelsize=17)
+        fig1.subplots_adjust(left=0.08)
+        fig1.subplots_adjust(right=0.65)
+        fig1.subplots_adjust(top=0.98,bottom=0.11)
+        
+        fig1.savefig("All_bolos.pdf",format='pdf',dpi=1000)
+
+        ax3.axhline(0.0,linestyle='--',color='k')
+        ax3.axvline(0.0,linestyle='--',color='k')
+        ax3.set_xlabel(r'$\mathrm{Time \ since \ estimated \ peak}$',size=22)
+        ax3.set_ylabel(r'$\mathrm{(\dot{L}_{bol}(%s)-\dot{Q_t})}/|\dot{Q_t}|}$'%(band_string.split('_')[0]),size=22)
+        box = ax3.get_position()
+        ax3.set_position([box.x0, box.y0, box.width * 0.96, box.height])
+        ax3.legend(ncol=1,bbox_to_anchor=(1.4,1.065),loc='upper right',prop={'size':11})
+        ax3.tick_params(labelsize=17)
+        fig3.subplots_adjust(left=0.12)
+        fig3.subplots_adjust(right=0.75)
+        fig3.subplots_adjust(top=0.95)
+        pl.setp(fig3.gca().get_legend().get_texts(), fontsize='16') 
+        fig3.savefig("All_decay.pdf",format='pdf',dpi=1000)
+
     Lfile.close()
 
 
@@ -422,6 +487,8 @@ if Khatami:
     Lps = np.arange(41.5,43,0.5)
 
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+    
+    pl.figure(figsize=(12,6))
     pl.gca().set_color_cycle(filters_colors)
     
     
@@ -437,12 +504,11 @@ if Khatami:
                 print "failed at %s"%beta
                 Ks.append(0.0)
         pl.plot(betas,Ks,label=r'$log(L_{peak} = %2.2f)$'%Lp)
-
-
         pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
 
     t_peak = 40
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(Lps))]       
+    
     pl.gca().set_color_cycle(filters_colors)
     
     for Lp in Lps:
@@ -461,15 +527,22 @@ if Khatami:
 
 
     pl.plot(0,0,label=r'$t_{peak} = %s$'%t_peak,linestyle='--',color='k')
-    pl.xlabel(r'$\beta$')
-    pl.ylabel(r'$M(^{56}\mathrm{Ni})$')
-    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.xlabel(r'$\beta$',size=22)
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})$',size=22)
+    pl.tick_params(labelsize=17)
+    #pl.subplots_adjust(left=0.12)
+    #pl.subplots_adjust(right=0.75)
+    #pl.subplots_adjust(top=0.95)
+    pl.setp(pl.legend().get_texts(), fontsize='16') 
+    pl.legend(loc='best',prop={'size':12},ncol=2)
     pl.show()
-
+    
 
     Lp = 42.5
     t_ps = np.arange(5,40,5)
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(t_ps))]       
+
+    pl.figure()
     pl.gca().set_color_cycle(filters_colors)
     
     for tp in t_ps:
@@ -484,19 +557,25 @@ if Khatami:
                 print "failed at %s"%beta
                 Ks.append(0.0)
 
-        pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp)
+        pl.plot(betas,Ks,linestyle='-',label=r'$t_{peak} = %2.1f$'%tp,linewidth=2.5,alpha=0.7)
         
     #pl.plot(0,0,label=r'$log(L_{peak}) = %s$'%Lp,linestyle='-',color='k')
         
     for beta_SN,beta_label in [(9/8.,"Ibc"),(0.82,"IIb/pec"),(2.0,'Generic/Mixed'),(0.7,'Central/Helium')]:
         pl.axvline(beta_SN,linestyle='--',linewidth=4,color='k',alpha=0.7)
-        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.07,1.3),size=20,rotation=90)
+        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.1,1.3),size=21,rotation=90)
 
-    pl.xlabel(r'$\beta$',size=18)
-    pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$',size=18)
-    pl.legend(loc='best',prop={'size':15},ncol=2)
-    pl.show()
+    pl.xlabel(r'$\beta$',size=22)
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})/M(^{56}\mathrm{Ni})(\beta=1.0)$',size=22)
+    pl.xlim(0.5,2.75)
+    pl.tick_params(labelsize=18)
+    pl.subplots_adjust(top=0.97,bottom=0.11,right=0.98)
+    pl.legend(loc='best',prop={'size':18},ncol=1)
+    #pl.tight_layout()
+    pl.setp(pl.legend().get_texts(), fontsize='19') 
+    pl.savefig("Khatami_beta.pdf",format='pdf',dpi=400)
 
+    pl.figure(figsize=(12,6))
     
     for SN,z_SN,E_B_V,t_0,d_L,sn_type in SN_DATA[['sn','sn_z','sn_ebv','t_0','hostlumdist','type']]:
     
@@ -582,12 +661,19 @@ if Khatami:
     pl.axhline(1,linestyle='--',color='k')
     for beta_SN,beta_label in [(9/8.,"Ibc"),(0.82,"IIb/pec"),(2.0,'Generic/Mixed'),(0.7,'Central/Helium')]:
         pl.axvline(beta_SN,linestyle='--',linewidth=4,color='k',alpha=0.7)
-        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.07,1.3),size=20,rotation=90)
+        pl.annotate(r"$\mathrm{%s}$"%(beta_label),(beta_SN-0.07,1.3),size=22,rotation=90)
 
-    pl.xlabel(r'$\beta$')
-    pl.ylabel(r'$M(^{56}\mathrm{Ni})$')
-    pl.legend(loc='best',prop={'size':10},ncol=2)
+    pl.xlabel(r'$\beta$',size=22)
+    pl.ylabel(r'$M(^{56}\mathrm{Ni})$',size=22)
+    pl.legend(loc='best',prop={'size':17},ncol=2)
+    pl.tick_params(labelsize=17)
+    #pl.subplots_adjust(left=0.12)
+    #pl.subplots_adjust(right=0.75)
+    #pl.subplots_adjust(top=0.95)
+    pl.setp(pl.legend().get_texts(), fontsize='16') 
+    #pl.savefig("Khatami_beta_sne.pdf",dpi=400,format='pdf')
     pl.show()
+    pl.close()
     os.chdir(current_dir)
 
     def Ni_K_A(beta,tpeak):
@@ -609,30 +695,36 @@ if Khatami:
     im = pl.imshow(Z,cmap=pl.cm.winter) # drawing the function
     # adding the Contour lines with labels
     cset = pl.contour(Z,np.arange(0.5,1.5,0.1),linewidths=2,cmap=pl.cm.Wistia,origin='lower')
-    pl.clabel(cset,inline=True,fmt='%1.1f',fontsize=14)
-    cb = pl.colorbar(im) # adding the colobar on the right
-    cb.set_label(r'$\mathrm{M(Ni_{Khatami})/M(Ni_{Arnett})}$',size=20)
+    pl.clabel(cset,inline=True,fmt='%1.1f',fontsize=15)
+    cb = pl.colorbar(im,fraction=0.046, pad=0.04,shrink=0.65) # adding the colobar on the right
+    cb.set_label(r'$\mathrm{M(Ni_{Khatami})/M(Ni_{Arnett})}$',size=22)
+    cb.ax.tick_params(labelsize=15)
+
     nx = betas.shape[0]
     no_labels = 5 # how many labels to see on axis x
     step_x = int(nx / (no_labels - 1)) # step between consecutive labels
     x_positions = np.arange(0,nx,step_x) # pixel count at label position
     x_labels = ["%2.2f"%b for b in betas[::step_x]] # labels you want to see
-    pl.xticks(x_positions, x_labels)
-    
+    pl.xticks(x_positions, x_labels)    
     ny = tps.shape[0]
     no_labels = 5 # how many labels to see on axis x
     step_y = int(ny / (no_labels - 1)) # step between consecutive labels
     y_positions = np.arange(0,ny,step_y) # pixel count at label position
     y_labels = ["%2.2f"%b for b in tps[::step_y]] # labels you want to see
     pl.yticks(y_positions, y_labels)
-    pl.xlabel(r"$\beta$",size=25)
-    pl.ylabel(r"$t_{peak}$",size=25)
-    pl.tight_layout()
-    pl.show()
+    pl.tick_params(labelsize=17)
+    pl.xlabel(r"$\beta$",size=23)
+    pl.ylabel(r"$t_{peak}$",size=23)
+    pl.subplots_adjust(top=1.0)
+    pl.subplots_adjust(bottom=0.01)
+    pl.subplots_adjust(left=0.15)
+    pl.subplots_adjust(right=0.87)
+    pl.savefig("tpeak_beta.pdf",format='pdf',dpi=500)
     
 if check_t_0:
     
     filters_colors = [colormap(i) for i in np.linspace(0.1, 0.9,len(SN_DATA))]       
+    pl.figure()
     pl.gca().set_color_cycle(filters_colors)
     
     for SN,SN_type,z_SN,E_B_V,t_0,d_L,t_disc,m_disc,t_non,m_non in SN_DATA[['sn','type','sn_z','sn_ebv','t_0','hostlumdist','t_discov','m_discov','t_non_det','m_non_det']]:
@@ -745,10 +837,12 @@ if check_t_0:
 
         pl.plot(delta_ts,Q_t(tr,1)/Q_t(tr-delta_ts,1),label=r"$t_{rise} \ =\ %2.1f $"%tr)
         
-    pl.legend(loc='best',prop={"size":15},ncol=2) 
-    pl.xlabel(r"$\Delta t_0$",size=18)
-    pl.ylabel(r"$M(^{56}\mathrm{Ni})(t_{rise}-\Delta t_0)/M(^{56}\mathrm{Ni})(t_{rise})$",size=18)
-    pl.show()
+    pl.legend(loc='best',prop={"size":16},ncol=2) 
+    pl.xlabel(r"$\Delta t_0$",size=22)
+    pl.ylabel(r"$M(^{56}\mathrm{Ni})(t_{rise}-\Delta t_0)/M(^{56}\mathrm{Ni})(t_{rise})$",size=22)
+    pl.tick_params(labelsize=17)
+    pl.savefig("peak_shift.pdf",format='pdf',dpi=400)
+    
 
 SN_plot = {'IIb':{"marker":"o","color":"b",'string':'$\mathrm{IIb}$'},'Ib':{"marker":"p","color":"g",'string':'$\mathrm{Ib}$'},'Ic':{"marker":"s","color":"k",'string':'$\mathrm{Ic}$'},'Ibc':{"marker":"x","color":"k",'string':'$\mathrm{Ibc}$'},'Ic_GRB':{"marker":"*","color":"r",'string':'$\mathrm{Ic-GRB}$'},'Ic_BL':{"marker":"s","color":"r",'string':'$\mathrm{Ic_{BL}}$'}}
 
